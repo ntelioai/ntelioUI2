@@ -1,0 +1,103 @@
+/**
+ * Dark navbar theme (alternative)
+ *
+ * Load this INSTEAD of navbar.css for a dark navbar:
+ *   ResourceLoader.loadCss('css/application/navbar-dark.css', import.meta.url)
+ */
+
+.vertical-navbar {
+    display: flex;
+    flex-direction: column;
+    background: #212529;
+    color: #fff;
+    width: 60px;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
+
+.vertical-navbar:hover {
+    width: 200px;
+}
+
+.vertical-navbar .sidebar-header {
+    padding: 12px 16px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #343a40;
+    white-space: nowrap;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+}
+
+.vertical-navbar .sidebar-menu {
+    flex: 1;
+    padding: 8px 0;
+}
+
+.vertical-navbar .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    cursor: pointer;
+    color: #adb5bd;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+    gap: 12px;
+}
+
+.vertical-navbar .menu-item:hover {
+    background: #343a40;
+    color: #fff;
+}
+
+.vertical-navbar .menu-item.active {
+    background: var(--nui-primary, #0c7aa3);
+    color: #fff;
+}
+
+.vertical-navbar .menu-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vertical-navbar .menu-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.vertical-navbar .menu-label {
+    font-size: 0.85rem;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.vertical-navbar:hover .menu-label {
+    opacity: 1;
+}
+
+.vertical-navbar .sidebar-bottom {
+    border-top: 1px solid #343a40;
+    padding: 8px 0;
+}
+
+.vertical-navbar .menu-separator {
+    border: 0;
+    border-top: 1px solid #343a40;
+    margin: 4px 0;
+}
+
+/* Push content to the right when sidebar is present */
+body.with-sidebar .ntelioApp {
+    margin-left: 60px;
+}

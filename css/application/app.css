@@ -1,0 +1,75 @@
+/* Application Shell */
+
+html, body {
+    font-family: var(--bs-body-font-family);
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f8f9fa;
+}
+
+.ntelioApp {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #f8f9fa;
+}
+
+#content-wrapper {
+    flex: 1;
+    display: flex;
+    overflow: auto;
+    position: relative;
+    width: 100%;
+    margin-bottom: 0.5em;
+    padding: 10px;
+}
+
+#content-wrapper > [widgetid] {
+    width: 100%;
+}
+
+#footer {
+    flex-shrink: 0;
+    height: 1.5em;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    width: 100%;
+}
+
+#footer .footer-text {
+    text-align: center;
+    font-size: 0.8em;
+    color: #6c757d;
+}
+
+#footer .footer-text a {
+    color: #6c757d;
+    text-decoration: none;
+}
+
+#footer .footer-text a:hover {
+    text-decoration: underline;
+}
+
+/* Page base styling */
+.page {
+    width: 100%;
+    padding: 1rem;
+}
+
+/* Custom scrollbar */
+#content-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+#content-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#content-wrapper::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}

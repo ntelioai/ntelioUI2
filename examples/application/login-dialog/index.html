@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoginDialog Examples - ntelioUI2</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link href="../../../css/ntelioUI.css" rel="stylesheet">
+
+    <style>
+        .demo-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .demo-section h4 {
+            margin-bottom: 1rem;
+        }
+        .result-box {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #e9ecef;
+            border-radius: 4px;
+            font-family: monospace;
+            min-height: 40px;
+        }
+        .credentials-hint {
+            font-size: 0.85em;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../../index.html">Examples</a></li>
+                <li class="breadcrumb-item"><a href="#">Application</a></li>
+                <li class="breadcrumb-item active">LoginDialog</li>
+            </ol>
+        </nav>
+
+        <h1>LoginDialog Examples</h1>
+        <p class="lead">Modal login form with injectable authentication. Decoupled from any specific auth provider.</p>
+        <hr>
+
+        <!-- Basic login -->
+        <div class="demo-section">
+            <h4>1. Basic Login</h4>
+            <p>Login dialog with a mock authenticate function. Try wrong credentials to see the error state.</p>
+            <button id="btn-basic-login" class="btn btn-primary">Open Login</button>
+            <div class="credentials-hint">Use <strong>admin</strong> / <strong>secret</strong> to log in</div>
+            <div class="result-box" id="result-basic">Click the button to open the login dialog...</div>
+        </div>
+
+        <!-- With terms -->
+        <div class="demo-section">
+            <h4>2. Login with Terms &amp; Conditions</h4>
+            <p>Includes a clickable terms link that loads content via <code>Modal.showContent()</code>.</p>
+            <button id="btn-terms-login" class="btn btn-primary">Open Login with Terms</button>
+            <div class="credentials-hint">Use <strong>admin</strong> / <strong>secret</strong> to log in</div>
+            <div class="result-box" id="result-terms">Click the button to open the login dialog...</div>
+        </div>
+
+        <!-- Custom title, no remember-me -->
+        <div class="demo-section">
+            <h4>3. Custom Options</h4>
+            <p>Custom title, remember-me hidden, simulated slow auth (1.5s delay to show loading state).</p>
+            <button id="btn-custom-login" class="btn btn-primary">Open Custom Login</button>
+            <div class="credentials-hint">Use <strong>admin</strong> / <strong>secret</strong> to log in</div>
+            <div class="result-box" id="result-custom">Click the button to open the login dialog...</div>
+        </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>

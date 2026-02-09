@@ -1,0 +1,17 @@
+/**
+ * Base Widget Styles
+ */
+
+[widgetid] {
+    position: relative;
+}
+
+/* Don't override positioning on elements that have their own positioning (e.g. Bootstrap modals) */
+[widgetid].modal {
+    position: fixed;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}

@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 application/Application.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>application/Application.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Application - Multi-page SPA shell with sidebar navigation and page routing
+ *
+ * Provides:
+ * - Hash-based page routing via PageRouter
+ * - Configurable sidebar navigation (VerticalNavbar or custom)
+ * - Dynamic page loading via ModuleManager
+ * - Footer customization
+ * - Optional auth integration (injected, not built-in)
+ *
+ * @example
+ * class MyApp extends Application {
+ *     static routesMap = {
+ *         '/': 'pages/Dashboard',
+ *         '/users': 'pages/Users'
+ *     }
+ *     static menu = [
+ *         { icon: '&lt;svg>...&lt;/svg>', label: 'Dashboard', path: '/dashboard' },
+ *         { icon: '&lt;svg>...&lt;/svg>', label: 'Users', path: '/users' }
+ *     ]
+ *     static application = {
+ *         classPath: new URL('.', import.meta.url).href,
+ *         pathMap: MyApp.routesMap,
+ *         menu: MyApp.menu,
+ *         title: 'My App'
+ *     }
+ *     constructor() { super(MyApp.application) }
+ *     static load() { super.load(MyApp, 'body') }
+ * }
+ * MyApp.load()
+ */
+import { Widget } from '../core/Widget.js'
+import { ResourceLoader } from '../core/ResourceLoader.js'
+import { PageRouter } from './PageRouter.js'
+import { PageNotFound } from './PageNotFound.js'
+import { ModuleManager } from '../utils/ModuleManager.js'
+import { BreadCrumbs } from '../widgets/navigation/BreadCrumbs.js'
+
+const $ = window.jQuery || window.$
+
+/** @category Application */
+export class Application extends Widget {
+    static currentPage = null
+
+    static template = `
+        &lt;div id="page-container" class="ntelioApp">
+            &lt;div id="navbar">&lt;/div>
+            &lt;div id="breadcrumbs">&lt;/div>
+            &lt;div id="content-wrapper">&lt;/div>
+            &lt;div id="footer">
+                &lt;footer>
+                    &lt;div class="container h-100 d-flex align-items-center justify-content-center">
+                        &lt;p class="mb-0">&lt;/p>
+                    &lt;/div>
+                &lt;/footer>
+            &lt;/div>
+        &lt;/div>
+        &lt;div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container">&lt;/div>
+    `
+
+    /**
+     * @param {Object} attrs - Configuration
+     * @param {string} attrs.title - Application title
+     * @param {Object} attrs.pathMap - Route map { path: className }
+     * @param {Object} [attrs.labelsMap] - Breadcrumb labels { path: label }
+     * @param {Array}  [attrs.menu] - Sidebar menu items
+     * @param {string} [attrs.classPath] - Base URL for dynamic page loading
+     * @param {string} [attrs.footer] - Footer HTML
+     * @param {Function} [attrs.NavbarCls] - Custom navbar class (default: simple sidebar)
+     * @param {string} [attrs.cssClass] - Additional CSS class for the app container
+     */
+    constructor(attrs = {}) {
+        super({ template: Application.template, autoInit: false, ...attrs })
+
+        this.title = attrs.title
+        this.menu = attrs.menu || []
+        this.bottomMenu = attrs.bottomMenu || []
+        this.footer = attrs.footer || '&lt;div class="footer-text">Powered by &lt;a href="https://ntelio.ai" target="_blank">ntelio.ai&lt;/a>&lt;/div>'
+        this.classPath = attrs.classPath || ''
+        this.NavbarCls = attrs.NavbarCls || null
+        this.PageErrorCls = attrs.PageErrorCls || PageNotFound
+
+        if (attrs.pathMap) PageRouter.registerRoutes(attrs.pathMap, attrs.labelsMap)
+
+        if (attrs.cssClass) {
+            this.get().addClass(attrs.cssClass)
+        }
+    }
+
+    /**
+     * Initialize the application shell: load CSS, build navbar, breadcrumbs,
+     * footer, and start the page router.
+     * @returns {Promise&lt;void>}
+     */
+    async init() {
+        await ResourceLoader.loadCss('../css/application/app.css', import.meta.url)
+
+        // Build the navbar if a class was provided
+        if (this.NavbarCls) {
+            this.navbar = new this.NavbarCls({ title: this.title })
+            this.navbar.appendTo(this.find('#navbar'))
+            if (this.navbar.init) this.navbar.init()
+            if (this.navbar.setMenuItems) {
+                this._buildNavbarMenu()
+            }
+            if (this.bottomMenu.length &amp;&amp; this.navbar.setBottomItems) {
+                this._buildNavbarMenu(this.bottomMenu, this.navbar.setBottomItems.bind(this.navbar))
+            }
+        }
+
+        // Build breadcrumbs
+        this.breadcrumbs = new BreadCrumbs({ homeUrl: '#/' })
+        this.breadcrumbs.appendTo(this.find('#breadcrumbs'))
+        await this.breadcrumbs.init()
+
+        // Set footer
+        this.setFooterHtml(this.footer)
+
+        // Start page routing
+        this._initPageListener()
+    }
+
+    /**
+     * Build the navbar menu from this.menu config.
+     * Can be called again to refresh menu items (e.g. after auth changes).
+     */
+    _buildNavbarMenu(menuItems, setter) {
+        const items = menuItems || this.menu
+        const navItems = items.map(item => {
+            if (item.type === 'separator') return { type: 'separator' }
+            return {
+                icon: item.icon,
+                label: item.label,
+                url: item.path,
+                customClickHandler: item.onClick || (() => {
+                    PageRouter.navigate(item.path)
+                    return false
+                })
+            }
+        })
+        const fn = setter || this.navbar.setMenuItems.bind(this.navbar)
+        fn(navItems)
+    }
+
+    /**
+     * Update the sidebar menu items at runtime.
+     * @param {Array} items - New menu items array
+     */
+    setMenu(items) {
+        this.menu = items
+        if (this.navbar?.setMenuItems) {
+            this._buildNavbarMenu(items)
+        }
+    }
+
+    /**
+     * Set footer content.
+     * @param {string} html - Footer HTML
+     */
+    setFooterHtml(html) {
+        this.find('#footer .container p').html(html)
+    }
+
+    /**
+     * Start listening for hash-based route changes.
+     * @private
+     */
+    _initPageListener() {
+        PageRouter.onPageChange((className, subPath) => {
+            this.changePage(className, subPath)
+            this._updateBreadcrumbs()
+        })
+    }
+
+    /**
+     * Update breadcrumbs based on the current hash path and labelsMap.
+     * @private
+     */
+    _updateBreadcrumbs() {
+        if (!this.breadcrumbs) return
+
+        const components = PageRouter.getPathComponents()
+        const crumbs = []
+        let builtPath = ''
+
+        for (const segment of components) {
+            if (!segment) continue
+            builtPath += '/' + segment
+            const label = PageRouter.getLabel(builtPath) || segment.charAt(0).toUpperCase() + segment.slice(1)
+            crumbs.push({ label, url: '#' + builtPath })
+        }
+
+        this.breadcrumbs.set(crumbs)
+    }
+
+    /**
+     * Insert a page widget into the content area.
+     * @param {Widget} page
+     * @private
+     */
+    _insertPageInDOM(page) {
+        page.appendTo(this.find('#content-wrapper'))
+    }
+
+    /**
+     * Route to a new page. Destroys the current page and loads the next one.
+     *
+     * The route map value can be:
+     * - A class reference (e.g. DashboardPage) → instantiated directly
+     * - A string path (e.g. 'pages/Dashboard') → loaded via ModuleManager
+     *
+     * @param {Function|string|null} pageRef - Page class or module path from the route map
+     * @param {string} [subPath] - Extra path components after the matched route
+     */
+    changePage(pageRef, subPath) {
+        if (this.currentPage) {
+            this.currentPage.destroy()
+            this.currentPage = null
+        }
+
+        if (pageRef === null) {
+            this.currentPage = new this.PageErrorCls({
+                message: `No route found for the current path`
+            })
+            this._insertPageInDOM(this.currentPage)
+            return
+        }
+
+        // Class reference — use directly
+        if (typeof pageRef === 'function') {
+            try {
+                this.currentPage = new pageRef({ subPath })
+                this._insertPageInDOM(this.currentPage)
+                // init() is called automatically by Widget's autoInit (default: true).
+                // Do NOT call init() here — it would double-init pages that create child widgets.
+            } catch (e) {
+                console.error('Application: Error creating page', pageRef.name, e)
+                this.currentPage = new this.PageErrorCls({ message: `${e}` })
+                this._insertPageInDOM(this.currentPage)
+            }
+            return
+        }
+
+        // String path — load via ModuleManager
+        ModuleManager.load(this.classPath, pageRef, {
+            onload: (module) => {
+                try {
+                    const classParts = pageRef.split('/')
+                    const classKey = classParts[classParts.length - 1]
+                    this.currentPage = new module[classKey]({ subPath })
+                    this._insertPageInDOM(this.currentPage)
+                } catch (e) {
+                    console.error('Application: Error loading page', pageRef, e)
+                    this.currentPage = new this.PageErrorCls({ message: `${e}` })
+                    this._insertPageInDOM(this.currentPage)
+                }
+            },
+            onerror: (err) => {
+                console.error('Application: Module load error', pageRef, err)
+                this.currentPage = new this.PageErrorCls({ message: `${err}` })
+                this._insertPageInDOM(this.currentPage)
+            }
+        })
+    }
+
+    /**
+     * Bootstrap the application. Call from your Main.js entry point.
+     *
+     * @param {Function} cls - Application subclass constructor
+     * @param {string} nodeSelector - CSS selector to mount on (e.g. 'body')
+     */
+    static load(cls, nodeSelector) {
+        $(document).ready(function() {
+            const app = new cls()
+            app.appendTo(nodeSelector)
+            app.init()
+        })
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

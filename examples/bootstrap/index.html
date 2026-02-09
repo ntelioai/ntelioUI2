@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badges, Buttons, Spinners, Alerts etc. - ntelioUI2</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <link href="../../css/ntelioUI.css" rel="stylesheet">
+
+    <style>
+        .demo-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .demo-section h4 {
+            margin-bottom: 0.25rem;
+        }
+        .demo-section .hint {
+            color: #6c757d;
+            font-size: 0.85em;
+            margin-bottom: 1rem;
+        }
+        .demo-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .code-snippet {
+            margin-top: 0.75rem;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        .code-snippet .tag { color: #569cd6; }
+        .code-snippet .attr { color: #9cdcfe; }
+        .code-snippet .str { color: #ce9178; }
+        .notice-box {
+            background: linear-gradient(135deg, #e8f4fd, #f0e6ff);
+            border-left: 4px solid #0d6efd;
+            padding: 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 2rem;
+        }
+        .notice-box h5 { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4 mb-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../index.html">Examples</a></li>
+                <li class="breadcrumb-item active">Bootstrap Quick Reference</li>
+            </ol>
+        </nav>
+
+        <h1>Badges, Buttons, Spinners, Alerts etc.</h1>
+        <p class="lead">Essential Bootstrap 5.3 constructs you can use directly in ntelioUI2 widget templates.</p>
+
+        <div class="notice-box">
+            <h5>Why no Button widget? No Badge widget?</h5>
+            <p class="mb-1">ntelioUI2 does <strong>not</strong> wrap basic HTML/CSS elements in Widget subclasses. Bootstrap 5.3 is loaded globally and provides all standard UI primitives out of the box — buttons, badges, alerts, spinners, cards, form inputs, and more.</p>
+            <p class="mb-0"><strong>Rule of thumb:</strong> If Bootstrap already does it, use Bootstrap directly in your templates. Only create a Widget when you need lifecycle management, state, events, or complex behavior.</p>
+        </div>
+
+        <!-- ═══ LIVE WIDGET DEMO ═══ -->
+        <div class="demo-section" style="background: linear-gradient(135deg, #f0fdf4, #ecfdf5); border: 1px solid #bbf7d0;">
+            <h4>When <em>do</em> you need a Widget?</h4>
+            <p class="hint">When your component has state, timers, events, or cleanup logic — things Bootstrap alone can't manage.</p>
+
+            <div class="row g-4 align-items-start">
+                <div class="col-md-5">
+                    <p class="mb-2" style="font-size: 0.9em;">This <strong>ActivityMonitor</strong> is a Widget. It uses Bootstrap cards, badges, progress bars, list groups, and buttons for its look — but it <em>needs</em> Widget because of:</p>
+                    <ul style="font-size: 0.85em;" class="mb-2">
+                        <li><strong>Lifecycle</strong> — <code>destroy()</code> clears the interval timer so it doesn't leak</li>
+                        <li><strong>State</strong> — tracks event count, running/paused status across methods</li>
+                        <li><strong>Events</strong> — emits <code>started</code>, <code>stopped</code>, <code>complete</code> so parents can react</li>
+                        <li><strong>API</strong> — exposes <code>start()</code>, <code>stop()</code>, <code>reset()</code> for external control</li>
+                    </ul>
+                    <p style="font-size: 0.85em;" class="mb-2 text-muted">Click <strong>Create Widget</strong>, then <strong>Start</strong>. Events appear in the log and console.</p>
+                    <div class="d-flex gap-2 mt-3">
+                        <button id="btn-create" class="btn btn-primary btn-sm">Create Widget</button>
+                        <button id="btn-destroy" class="btn btn-outline-danger btn-sm" disabled>Destroy Widget</button>
+                    </div>
+                    <div id="event-output" class="mt-2" style="font-size: 0.8em; color: #6c757d;"></div>
+                </div>
+                <div class="col-md-7">
+                    <div id="monitor-container" style="min-height: 80px;"></div>
+                </div>
+            </div>
+
+            <div class="code-snippet mt-3" style="font-size: 0.78rem;"><span class="tag">import</span> { Widget } <span class="tag">from</span> <span class="str">'../../core/Widget.js'</span>
+
+<span class="tag">export class</span> <span class="attr">ActivityMonitor</span> <span class="tag">extends</span> Widget {
+
+    <span class="tag">async</span> <span class="attr">init</span>() {
+        <span class="tag">this</span>.find(<span class="str">'.nui-btn-start'</span>).on(<span class="str">'click'</span>, () => <span class="tag">this</span>.start())
+    }
+
+    <span class="attr">start</span>() {
+        <span class="tag">this</span>._interval = setInterval(() => <span class="tag">this</span>._tick(), <span class="tag">this</span>._speed)
+        <span class="tag">this</span>.emit(<span class="str">'started'</span>)                 <span style="color:#6a9955">// Custom event → parents can listen</span>
+    }
+
+    <span class="attr">_tick</span>() {
+        <span class="tag">this</span>._count++                             <span style="color:#6a9955">// Internal state</span>
+        <span class="tag">this</span>.find(<span class="str">'.nui-progress'</span>).css(<span class="str">'width'</span>, pct)  <span style="color:#6a9955">// Update Bootstrap element</span>
+        <span class="tag">this</span>.emit(<span class="str">'event'</span>, { count, level, message })
+    }
+
+    <span class="attr">destroy</span>() {
+        clearInterval(<span class="tag">this</span>._interval)          <span style="color:#6a9955">// Lifecycle cleanup!</span>
+        <span class="tag">super</span>.destroy()                         <span style="color:#6a9955">// Widget removes DOM, unbinds events</span>
+    }
+}</div>
+        </div>
+        <hr>
+
+        <!-- ═══ BUTTONS ═══ -->
+        <div class="demo-section">
+            <h4>Buttons</h4>
+            <p class="hint">Variants, sizes, outlines, icon buttons, groups</p>
+
+            <div class="demo-row mb-2">
+                <button class="btn btn-primary">Primary</button>
+                <button class="btn btn-secondary">Secondary</button>
+                <button class="btn btn-success">Success</button>
+                <button class="btn btn-danger">Danger</button>
+                <button class="btn btn-warning">Warning</button>
+                <button class="btn btn-info">Info</button>
+                <button class="btn btn-dark">Dark</button>
+                <button class="btn btn-link">Link</button>
+            </div>
+            <div class="demo-row mb-2">
+                <button class="btn btn-outline-primary">Outline</button>
+                <button class="btn btn-primary btn-sm">Small</button>
+                <button class="btn btn-primary btn-lg">Large</button>
+                <button class="btn btn-primary" disabled>Disabled</button>
+                <button class="btn btn-primary"><i class="fas fa-save me-1"></i> With Icon</button>
+                <button class="btn btn-outline-secondary btn-sm"><i class="fas fa-trash"></i></button>
+            </div>
+            <div class="demo-row">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-primary active">Day</button>
+                    <button class="btn btn-outline-primary">Week</button>
+                    <button class="btn btn-outline-primary">Month</button>
+                </div>
+            </div>
+
+            <div class="code-snippet">&lt;<span class="tag">button</span> <span class="attr">class</span>=<span class="str">"btn btn-primary"</span>&gt;Save&lt;/<span class="tag">button</span>&gt;
+&lt;<span class="tag">button</span> <span class="attr">class</span>=<span class="str">"btn btn-outline-danger btn-sm"</span>&gt;Delete&lt;/<span class="tag">button</span>&gt;
+&lt;<span class="tag">button</span> <span class="attr">class</span>=<span class="str">"btn btn-primary"</span>&gt;&lt;<span class="tag">i</span> <span class="attr">class</span>=<span class="str">"fas fa-save me-1"</span>&gt;&lt;/<span class="tag">i</span>&gt; Save&lt;/<span class="tag">button</span>&gt;</div>
+        </div>
+
+        <!-- ═══ ALERTS ═══ -->
+        <div class="demo-section">
+            <h4>Alerts</h4>
+            <p class="hint">Contextual messages, dismissible</p>
+
+            <div class="alert alert-success py-2" role="alert"><i class="fas fa-check-circle me-1"></i> Changes saved successfully.</div>
+            <div class="alert alert-danger py-2" role="alert"><i class="fas fa-exclamation-circle me-1"></i> Failed to load data.</div>
+            <div class="alert alert-warning alert-dismissible fade show py-2" role="alert">
+                <i class="fas fa-exclamation-triangle me-1"></i> Your session expires in 5 minutes.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="padding: 0.5rem 0.75rem;"></button>
+            </div>
+
+            <div class="code-snippet">&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"alert alert-success"</span>&gt;Saved!&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"alert alert-danger alert-dismissible fade show"</span>&gt;
+  Error! &lt;<span class="tag">button</span> <span class="attr">class</span>=<span class="str">"btn-close"</span> <span class="attr">data-bs-dismiss</span>=<span class="str">"alert"</span>&gt;&lt;/<span class="tag">button</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</div>
+        </div>
+
+        <!-- ═══ BADGES ═══ -->
+        <div class="demo-section">
+            <h4>Badges &amp; Pills</h4>
+            <p class="hint">Inline labels, status indicators, counters</p>
+
+            <div class="demo-row mb-2">
+                <span class="badge bg-primary">Primary</span>
+                <span class="badge bg-success">Active</span>
+                <span class="badge bg-warning text-dark">Pending</span>
+                <span class="badge bg-danger">Error</span>
+                <span class="badge bg-secondary">Draft</span>
+                <span class="badge bg-info text-dark">Info</span>
+            </div>
+            <div class="demo-row">
+                <span class="badge rounded-pill bg-primary">Pill 42</span>
+                <button class="btn btn-primary btn-sm">Inbox <span class="badge bg-light text-dark">3</span></button>
+            </div>
+
+            <div class="code-snippet">&lt;<span class="tag">span</span> <span class="attr">class</span>=<span class="str">"badge bg-success"</span>&gt;Active&lt;/<span class="tag">span</span>&gt;
+&lt;<span class="tag">span</span> <span class="attr">class</span>=<span class="str">"badge rounded-pill bg-danger"</span>&gt;5&lt;/<span class="tag">span</span>&gt;</div>
+        </div>
+
+        <!-- ═══ SPINNERS ═══ -->
+        <div class="demo-section">
+            <h4>Spinners</h4>
+            <p class="hint">Loading indicators</p>
+
+            <div class="demo-row">
+                <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                <div class="spinner-border text-secondary spinner-border-sm" role="status"></div>
+                <div class="spinner-grow text-success spinner-grow-sm" role="status"></div>
+                <button class="btn btn-primary btn-sm" disabled>
+                    <span class="spinner-border spinner-border-sm me-1" role="status"></span> Loading...
+                </button>
+            </div>
+
+            <div class="code-snippet">&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"spinner-border text-primary"</span>&gt;&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"spinner-border spinner-border-sm"</span>&gt;&lt;/<span class="tag">div</span>&gt;  &lt;!-- small --&gt;
+&lt;<span class="tag">button</span> <span class="attr">class</span>=<span class="str">"btn btn-primary"</span> <span class="attr">disabled</span>&gt;
+  &lt;<span class="tag">span</span> <span class="attr">class</span>=<span class="str">"spinner-border spinner-border-sm me-1"</span>&gt;&lt;/<span class="tag">span</span>&gt; Loading...
+&lt;/<span class="tag">button</span>&gt;</div>
+        </div>
+
+        <!-- ═══ CARDS ═══ -->
+        <div class="demo-section">
+            <h4>Cards</h4>
+            <p class="hint">Content containers with header, body, footer</p>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Simple Card</h5>
+                            <p class="card-text text-muted">Just a body with text content.</p>
+                            <button class="btn btn-primary btn-sm">Action</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">Header</div>
+                        <div class="card-body">
+                            <p class="card-text">Card with header and footer.</p>
+                        </div>
+                        <div class="card-footer text-muted">Updated 3 mins ago</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-success">
+                        <div class="card-body text-success">
+                            <h5 class="card-title"><i class="fas fa-check-circle me-1"></i> Status OK</h5>
+                            <p class="card-text">Colored border variant.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-snippet">&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"card"</span>&gt;
+  &lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"card-header"</span>&gt;Title&lt;/<span class="tag">div</span>&gt;
+  &lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"card-body"</span>&gt;Content here&lt;/<span class="tag">div</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</div>
+        </div>
+
+        <!-- ═══ FORM INPUTS ═══ -->
+        <div class="demo-section">
+            <h4>Form Inputs</h4>
+            <p class="hint">Text, select, checkbox, switch, floating labels</p>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Text input</label>
+                    <input type="text" class="form-control" placeholder="Enter text...">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Select</label>
+                    <select class="form-select">
+                        <option selected>Choose...</option>
+                        <option>Option A</option>
+                        <option>Option B</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="floatEmail" placeholder="name@example.com">
+                        <label for="floatEmail">Floating label</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Textarea</label>
+                    <textarea class="form-control" rows="2" placeholder="Write something..."></textarea>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="chk1" checked>
+                        <label class="form-check-label" for="chk1">Checkbox</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radios" id="rad1" checked>
+                        <label class="form-check-label" for="rad1">Radio A</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radios" id="rad2">
+                        <label class="form-check-label" for="rad2">Radio B</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="switch1" checked>
+                        <label class="form-check-label" for="switch1">Toggle switch</label>
+                    </div>
+                    <div class="input-group mt-2">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Search...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-snippet">&lt;<span class="tag">input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">class</span>=<span class="str">"form-control"</span> <span class="attr">placeholder</span>=<span class="str">"Enter text"</span>&gt;
+&lt;<span class="tag">select</span> <span class="attr">class</span>=<span class="str">"form-select"</span>&gt;...&lt;/<span class="tag">select</span>&gt;
+&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"form-check form-switch"</span>&gt;
+  &lt;<span class="tag">input</span> <span class="attr">class</span>=<span class="str">"form-check-input"</span> <span class="attr">type</span>=<span class="str">"checkbox"</span>&gt;
+  &lt;<span class="tag">label</span> <span class="attr">class</span>=<span class="str">"form-check-label"</span>&gt;Toggle&lt;/<span class="tag">label</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</div>
+        </div>
+
+        <!-- ═══ PROGRESS ═══ -->
+        <div class="demo-section">
+            <h4>Progress Bars</h4>
+            <p class="hint">Determinate and animated</p>
+
+            <div class="progress mb-2" style="height: 20px;">
+                <div class="progress-bar" style="width: 45%;">45%</div>
+            </div>
+            <div class="progress mb-2" style="height: 8px;">
+                <div class="progress-bar bg-success" style="width: 70%;"></div>
+            </div>
+            <div class="progress" style="height: 20px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 60%;">Uploading...</div>
+            </div>
+
+            <div class="code-snippet">&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"progress"</span>&gt;
+  &lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"progress-bar"</span> <span class="attr">style</span>=<span class="str">"width: 45%"</span>&gt;45%&lt;/<span class="tag">div</span>&gt;
+&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"progress"</span>&gt;
+  &lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"progress-bar progress-bar-striped progress-bar-animated"</span> <span class="attr">style</span>=<span class="str">"width: 60%"</span>&gt;&lt;/<span class="tag">div</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</div>
+        </div>
+
+        <!-- ═══ LIST GROUP ═══ -->
+        <div class="demo-section">
+            <h4>List Groups</h4>
+            <p class="hint">Data lists, selectable items, with badges</p>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action active">
+                            <div class="d-flex justify-content-between">Dashboard <span class="badge bg-light text-dark">3</span></div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex justify-content-between">Users <span class="badge bg-primary rounded-pill">28</span></div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">Settings</a>
+                        <a href="#" class="list-group-item list-group-item-action disabled">Locked</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="list-group">
+                        <div class="list-group-item list-group-item-success"><i class="fas fa-check me-2"></i>Build passed</div>
+                        <div class="list-group-item list-group-item-danger"><i class="fas fa-times me-2"></i>Tests failed</div>
+                        <div class="list-group-item list-group-item-warning"><i class="fas fa-exclamation me-2"></i>Warnings</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-snippet">&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"list-group"</span>&gt;
+  &lt;<span class="tag">a</span> <span class="attr">class</span>=<span class="str">"list-group-item list-group-item-action active"</span>&gt;Active Item&lt;/<span class="tag">a</span>&gt;
+  &lt;<span class="tag">a</span> <span class="attr">class</span>=<span class="str">"list-group-item list-group-item-action"</span>&gt;Normal Item&lt;/<span class="tag">a</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</div>
+        </div>
+
+        <!-- ═══ TABLES ═══ -->
+        <div class="demo-section">
+            <h4>Tables</h4>
+            <p class="hint">Striped, hover, bordered, responsive</p>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Alice</td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td><button class="btn btn-outline-primary btn-sm">Edit</button></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Bob</td>
+                            <td><span class="badge bg-warning text-dark">Pending</span></td>
+                            <td><button class="btn btn-outline-primary btn-sm">Edit</button></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Carol</td>
+                            <td><span class="badge bg-secondary">Inactive</span></td>
+                            <td><button class="btn btn-outline-primary btn-sm">Edit</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="code-snippet">&lt;<span class="tag">table</span> <span class="attr">class</span>=<span class="str">"table table-striped table-hover"</span>&gt;
+  &lt;<span class="tag">thead</span>&gt;&lt;<span class="tag">tr</span>&gt;&lt;<span class="tag">th</span>&gt;Name&lt;/<span class="tag">th</span>&gt;&lt;<span class="tag">th</span>&gt;Status&lt;/<span class="tag">th</span>&gt;&lt;/<span class="tag">tr</span>&gt;&lt;/<span class="tag">thead</span>&gt;
+  &lt;<span class="tag">tbody</span>&gt;&lt;<span class="tag">tr</span>&gt;&lt;<span class="tag">td</span>&gt;Alice&lt;/<span class="tag">td</span>&gt;&lt;<span class="tag">td</span>&gt;Active&lt;/<span class="tag">td</span>&gt;&lt;/<span class="tag">tr</span>&gt;&lt;/<span class="tag">tbody</span>&gt;
+&lt;/<span class="tag">table</span>&gt;</div>
+        </div>
+
+        <!-- ═══ USEFUL UTILITIES ═══ -->
+        <div class="demo-section">
+            <h4>Useful Utilities</h4>
+            <p class="hint">Spacing, flex, text, display — the classes you'll use most</p>
+
+            <table class="table table-sm" style="font-size: 0.85rem;">
+                <thead><tr><th>Class</th><th>What it does</th></tr></thead>
+                <tbody>
+                    <tr><td><code>d-flex</code>, <code>d-none</code>, <code>d-block</code></td><td>Display: flex / none / block</td></tr>
+                    <tr><td><code>justify-content-between</code>, <code>align-items-center</code></td><td>Flex alignment</td></tr>
+                    <tr><td><code>gap-2</code>, <code>gap-3</code></td><td>Flex/grid gap (0.5rem, 1rem)</td></tr>
+                    <tr><td><code>mt-3</code>, <code>mb-2</code>, <code>p-3</code>, <code>px-4</code></td><td>Margin/padding (t/b/s/e/x/y = top/bottom/start/end/horizontal/vertical)</td></tr>
+                    <tr><td><code>text-muted</code>, <code>text-danger</code>, <code>text-success</code></td><td>Text color</td></tr>
+                    <tr><td><code>fw-bold</code>, <code>fs-5</code>, <code>text-center</code></td><td>Font weight, size, alignment</td></tr>
+                    <tr><td><code>rounded</code>, <code>rounded-pill</code>, <code>shadow-sm</code></td><td>Border radius, shadows</td></tr>
+                    <tr><td><code>w-100</code>, <code>w-50</code>, <code>h-100</code></td><td>Width/height percentages</td></tr>
+                    <tr><td><code>visually-hidden</code></td><td>Hidden but accessible to screen readers</td></tr>
+                    <tr><td><code>overflow-auto</code>, <code>overflow-hidden</code></td><td>Overflow control</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="notice-box" style="border-left-color: #198754;">
+            <h5>Full Bootstrap 5.3 Docs</h5>
+            <p class="mb-0">This page covers the essentials. For the complete reference, see
+                <a href="https://getbootstrap.com/docs/5.3/" target="_blank" rel="noopener">getbootstrap.com/docs/5.3</a>.
+                Everything in Bootstrap works in ntelioUI2 — just use the classes directly in your widget templates.</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { ActivityMonitor } from './ActivityMonitor.js'
+
+        const $ = window.jQuery
+        let monitor = null
+
+        document.getElementById('btn-create').addEventListener('click', async () => {
+            if (monitor) return
+
+            monitor = new ActivityMonitor({ autoInit: false, speed: 500 })
+            monitor.appendTo($('#monitor-container'))
+            await monitor.init()
+
+            // Listen to widget events — this is what Widget gives you
+            monitor.on('started', () => log('🟢 started event fired'))
+            monitor.on('stopped', () => log('🟡 stopped event fired'))
+            monitor.on('complete', (e) => log(`🔵 complete — ${e.total} events processed`))
+            monitor.on('event', (e) => {
+                if (e.level === 'error') log(`🔴 error event: ${e.message}`)
+            })
+
+            document.getElementById('btn-create').disabled = true
+            document.getElementById('btn-destroy').disabled = false
+            log('Widget created. Click Start inside the card.')
+        })
+
+        document.getElementById('btn-destroy').addEventListener('click', () => {
+            if (!monitor) return
+            monitor.destroy()   // Clears interval, removes DOM, unbinds everything
+            monitor = null
+
+            document.getElementById('btn-create').disabled = false
+            document.getElementById('btn-destroy').disabled = true
+            log('Widget destroyed. Timer cleared, DOM removed.')
+        })
+
+        function log(msg) {
+            const el = document.getElementById('event-output')
+            el.innerHTML = msg + '<br>' + el.innerHTML
+            // Keep only last 5 lines
+            const lines = el.innerHTML.split('<br>')
+            if (lines.length > 6) el.innerHTML = lines.slice(0, 5).join('<br>')
+        }
+    </script>
+</body>
+</html>

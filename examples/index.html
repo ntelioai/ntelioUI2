@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ntelioUI2 Examples</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; }
+        .category { margin-bottom: 30px; }
+        .category h3 { border-bottom: 2px solid #dee2e6; padding-bottom: 10px; }
+        .example-list { list-style: none; padding: 0; }
+        .example-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .example-list a {
+            text-decoration: none;
+            color: #0d6efd;
+        }
+        .example-list a:hover { text-decoration: underline; }
+        .example-list .description {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .badge-todo {
+            background: #ffc107;
+            color: #000;
+            font-size: 0.7em;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">ntelioUI2 Examples</h1>
+        <p class="lead">Interactive examples demonstrating ntelioUI2 components.</p>
+
+        <div class="category">
+            <h3>Core</h3>
+            <ul class="example-list">
+                <li>
+                    <a href="core/widget-basics/">Widget Basics</a>
+                    <span class="description">Lifecycle, events, destroy patterns</span>
+                </li>
+                <li>
+                    <a href="core/reactive-state/">Reactive State</a>
+                    <span class="description">State proxy, auto-render, batching, setState()</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h3>Application</h3>
+            <ul class="example-list">
+                <li>
+                    <a href="application/simple-spa/">Simple SPA</a>
+                    <span class="description">Sidebar navigation, hash routing, page switching</span>
+                </li>
+                <li>
+                    <a href="application/page-not-found/">PageNotFound</a>
+                    <span class="description">404 error page widget with custom messages</span>
+                </li>
+                <li>
+                    <a href="application/login-dialog/">LoginDialog</a>
+                    <span class="description">Modal login with injectable auth, terms link, error handling</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h3>Widgets — Navigation</h3>
+            <ul class="example-list">
+                <li>
+                    <a href="widgets/navigation/">BreadCrumbs & Sidebar</a>
+                    <span class="description">Arrow breadcrumbs and categorical sub-navigation</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h3>Widgets — Containers</h3>
+            <ul class="example-list">
+                <li>
+                    <a href="widgets/containers/collapsible-pane/">CollapsiblePane</a>
+                    <span class="description">Resizable, collapsible multi-pane layout (left/center/right)</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h3>Widgets — Dialogs</h3>
+            <ul class="example-list">
+                <li>
+                    <a href="widgets/dialogs/modal-examples/">Modal, ConfirmDialog & AlertDialog</a>
+                    <span class="description">Modals, confirmations, alerts, remote content, checkbox acceptance</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h3>Widgets — Feedback</h3>
+            <ul class="example-list">
+                <li>
+                    <a href="widgets/feedback/toast-examples/">Toast Notifications</a>
+                    <span class="description">Type variants, auto-dismiss, stacking</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h3>Grid</h3>
+            <ul class="example-list">
+                <li>
+                    <a href="grid/data-control/">DataControl</a>
+                    <span class="description">CRUD grid with tabular, list, and form views, pagination, search, sort</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h3>Forms</h3>
+            <ul class="example-list">
+                <li>
+                    <a href="forms/auto-form/">Autoform</a>
+                    <span class="description">Declarative form generation with all field types, validation, and registry</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h3>Bootstrap — Built-in UI Elements</h3>
+            <ul class="example-list">
+                <li>
+                    <a href="bootstrap/">Badges, Buttons, Spinners, Alerts etc.</a>
+                    <span class="description">Buttons, alerts, badges, cards, forms, tables — no wrapper widgets needed</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

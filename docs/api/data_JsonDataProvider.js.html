@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 data/JsonDataProvider.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>data/JsonDataProvider.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { DataProvider } from './DataProvider.js'
+
+/**
+ * In-browser JSON data provider for demos and prototyping.
+ *
+ * Stores data in memory (optionally backed by localStorage).
+ * Supports pagination, sorting, text search across all fields,
+ * and full CRUD with auto-generated keys.
+ *
+ * @extends DataProvider
+ * @category Data
+ *
+ * @example
+ * const dp = new JsonDataProvider({
+ *     data: [
+ *         { id: '1', name: 'Alice', email: 'alice@example.com' },
+ *         { id: '2', name: 'Bob',   email: 'bob@example.com' }
+ *     ],
+ *     keyField: 'id',
+ *     columns: [
+ *         { name: 'name',  title: 'Full Name' },
+ *         { name: 'email', title: 'Email Address' }
+ *     ],
+ *     pageSize: 10
+ * })
+ */
+export class JsonDataProvider extends DataProvider {
+    /**
+     * @param {Object} config
+     * @param {Object[]}    config.data       - Initial array of row objects
+     * @param {string}      [config.keyField='key'] - Field name used as unique key
+     * @param {ColumnDef[]} [config.columns]  - Column definitions (auto-derived if omitted)
+     * @param {number}      [config.pageSize=20]
+     * @param {string}      [config.storageKey] - localStorage key for persistence (optional)
+     */
+    constructor(config = {}) {
+        super(config)
+        this._keyField = config.keyField || 'key'
+        this._columns = config.columns || null
+        this._storageKey = config.storageKey || null
+
+        // Load data from localStorage or use provided data
+        if (this._storageKey) {
+            const stored = localStorage.getItem(this._storageKey)
+            this._data = stored ? JSON.parse(stored) : [...(config.data || [])]
+        } else {
+            this._data = [...(config.data || [])]
+        }
+
+        this._nextId = this._data.length + 1
+    }
+
+    // ─── Columns ─────────────────────────────────────────────────
+
+    /** @returns {import('./DataProvider.js').ColumnDef[]} */
+    getColumns() {
+        if (this._columns) return this._columns
+
+        // Auto-derive from first row
+        if (this._data.length === 0) return []
+        return Object.keys(this._data[0])
+            .filter(k => k !== this._keyField)
+            .map(name => ({ name, title: name, sortable: true, visible: true }))
+    }
+
+    // ─── Data Access ─────────────────────────────────────────────
+
+    getKey(row) {
+        return String(row[this._keyField])
+    }
+
+    async getDocument(key) {
+        const row = this._data.find(r => String(r[this._keyField]) === String(key))
+        if (!row) throw new Error(`Record not found: ${key}`)
+        return { ...row }
+    }
+
+    async save(data) {
+        const key = data[this._keyField]
+
+        if (key) {
+            // Update existing
+            const idx = this._data.findIndex(r => String(r[this._keyField]) === String(key))
+            if (idx === -1) throw new Error(`Record not found: ${key}`)
+            this._data[idx] = { ...this._data[idx], ...data }
+            this._persist()
+            this._notifyDataChange('update', this._data[idx])
+            return { ...this._data[idx] }
+        } else {
+            // Create new
+            const newRecord = { ...data, [this._keyField]: String(this._nextId++) }
+            this._data.push(newRecord)
+            this._persist()
+            this._notifyDataChange('create', newRecord)
+            return { ...newRecord }
+        }
+    }
+
+    async delete(key) {
+        const idx = this._data.findIndex(r => String(r[this._keyField]) === String(key))
+        if (idx === -1) throw new Error(`Record not found: ${key}`)
+        const removed = this._data.splice(idx, 1)[0]
+        this._persist()
+        this._notifyDataChange('delete', removed)
+    }
+
+    // ─── Pagination ──────────────────────────────────────────────
+
+    async getNumberOfPages() {
+        const filtered = this._getFilteredData()
+        const size = this.getEffectivePageSize()
+        return Math.max(1, Math.ceil(filtered.length / size))
+    }
+
+    /** @returns {Promise&lt;import('./DataProvider.js').PageResult>} */
+    async getPage() {
+        const filtered = this._getFilteredData()
+        const sorted = this._applySorting(filtered)
+        const size = this.getEffectivePageSize()
+        const totalPages = Math.max(1, Math.ceil(sorted.length / size))
+
+        // Clamp page
+        if (this._page > totalPages) this._page = totalPages
+
+        const start = (this._page - 1) * size
+        const rows = sorted.slice(start, start + size)
+
+        return {
+            rows,
+            page: this._page,
+            totalPages,
+            totalRows: sorted.length
+        }
+    }
+
+    // ─── Internal ────────────────────────────────────────────────
+
+    /** @private */
+    _getFilteredData() {
+        if (!this._query) return [...this._data]
+
+        const q = this._query.toLowerCase()
+        return this._data.filter(row =>
+            Object.values(row).some(val =>
+                val != null &amp;&amp; String(val).toLowerCase().includes(q)
+            )
+        )
+    }
+
+    /** @private */
+    _applySorting(data) {
+        if (!this._sort || this._sort.order === 'none') return data
+
+        const { column, order } = this._sort
+        const dir = order === 'desc' ? -1 : 1
+
+        return [...data].sort((a, b) => {
+            const va = a[column] ?? ''
+            const vb = b[column] ?? ''
+
+            // Numeric comparison if both are numbers
+            if (typeof va === 'number' &amp;&amp; typeof vb === 'number') {
+                return (va - vb) * dir
+            }
+
+            return String(va).localeCompare(String(vb)) * dir
+        })
+    }
+
+    /** @private */
+    _persist() {
+        if (this._storageKey) {
+            localStorage.setItem(this._storageKey, JSON.stringify(this._data))
+        }
+    }
+
+    // ─── Utility ─────────────────────────────────────────────────
+
+    /** Get total record count (unfiltered). @returns {number} */
+    getTotalCount() {
+        return this._data.length
+    }
+
+    /** Replace all data. @param {Object[]} data */
+    setData(data) {
+        this._data = [...data]
+        this._page = 1
+        this._persist()
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

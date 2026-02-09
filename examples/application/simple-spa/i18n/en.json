@@ -1,0 +1,35 @@
+{
+    "app.title": "Demo SPA",
+    "app.footer": "ntelioUI2 Simple SPA Example",
+
+    "nav.dashboard": "Dashboard",
+    "nav.users": "Users",
+    "nav.settings": "Settings",
+
+    "dashboard.title": "Dashboard",
+    "dashboard.subtitle": "Welcome to the dashboard. This is the default route (<code>#/</code>).",
+    "dashboard.users": "Users",
+    "dashboard.orders": "Orders",
+    "dashboard.revenue": "Revenue",
+    "dashboard.tryIt": "Click the sidebar menu items or type in the console:",
+
+    "users.title": "Users",
+    "users.subtitle": "User management page. Route: <code>#/users</code>",
+    "users.col.id": "#",
+    "users.col.name": "Name",
+    "users.col.email": "Email",
+    "users.col.role": "Role",
+    "users.role.admin": "Admin",
+    "users.role.user": "User",
+
+    "settings.title": "Settings",
+    "settings.subtitle": "Application settings. Route: <code>#/settings</code>",
+    "settings.cat.general": "General",
+    "settings.cat.account": "Account",
+    "settings.appName": "Application Name",
+    "settings.menuStyle": "Menu Style",
+    "settings.menuStyle.light": "Transparent White",
+    "settings.menuStyle.dark": "Opaque Dark",
+    "settings.notifications": "Enable notifications",
+    "settings.save": "Save Settings"
+}

@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 data/DataProvider.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>data/DataProvider.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @typedef {Object} PageResult
+ * @property {Object[]} rows       - Array of row objects for the current page
+ * @property {number}   page       - Current page number (1-based)
+ * @property {number}   totalPages - Total number of pages
+ * @property {number}   totalRows  - Total number of rows across all pages
+ */
+
+/**
+ * @typedef {Object} SortConfig
+ * @property {string} column - Column name to sort by
+ * @property {'asc'|'desc'|'none'} order - Sort direction
+ */
+
+/**
+ * @typedef {Object} ColumnDef
+ * @property {string}   name       - Field name in row objects
+ * @property {string}   [title]    - Display header (defaults to name)
+ * @property {function(*, Object):string} [formatter] - Value formatter (value, row) => display string
+ * @property {boolean}  [sortable=true] - Whether column supports sorting
+ * @property {boolean}  [visible=true]  - Whether column is shown
+ * @property {string}   [width]    - CSS width (e.g. '150px', '20%')
+ */
+
+/**
+ * DataProvider — abstract base class for grid data sources.
+ *
+ * Subclasses must implement the abstract methods marked with `throw`.
+ * All data methods return Promises for consistent async usage.
+ *
+ * @category Data
+ * @abstract
+ */
+export class DataProvider {
+    _page = 1
+    _pageSize = 20
+    _singleRowMode = false
+    _query = ''
+    _sort = null
+    _listeners = { pageChange: [], dataChange: [] }
+
+    /**
+     * @param {Object} [config]
+     * @param {number} [config.pageSize=20] - Rows per page
+     */
+    constructor(config = {}) {
+        this._pageSize = config.pageSize || 20
+    }
+
+    // ─── Page Navigation ─────────────────────────────────────────
+
+    /** @returns {Promise&lt;PageResult>} */
+    async getPage() {
+        throw new Error('DataProvider.getPage() must be implemented by subclass')
+    }
+
+    /** @returns {number} */
+    getPageNumber() { return this._page }
+
+    /** @returns {Promise&lt;number>} */
+    async getNumberOfPages() {
+        throw new Error('DataProvider.getNumberOfPages() must be implemented by subclass')
+    }
+
+    /** Navigate to first page and fire change. @returns {Promise&lt;PageResult>} */
+    async firstPage() {
+        this._page = 1
+        return this._notifyAndFetch()
+    }
+
+    /** Navigate to previous page. @returns {Promise&lt;PageResult>} */
+    async previousPage() {
+        if (this._page > 1) this._page--
+        return this._notifyAndFetch()
+    }
+
+    /** Navigate to next page. @returns {Promise&lt;PageResult>} */
+    async nextPage() {
+        const total = await this.getNumberOfPages()
+        if (this._page &lt; total) this._page++
+        return this._notifyAndFetch()
+    }
+
+    /** Navigate to last page. @returns {Promise&lt;PageResult>} */
+    async lastPage() {
+        this._page = await this.getNumberOfPages()
+        return this._notifyAndFetch()
+    }
+
+    /** Go to a specific page number. @returns {Promise&lt;PageResult>} */
+    async goToPage(page) {
+        const total = await this.getNumberOfPages()
+        this._page = Math.max(1, Math.min(page, total))
+        return this._notifyAndFetch()
+    }
+
+    /**
+     * Toggle single-row mode (one record per page for form view).
+     * @param {boolean} enabled
+     */
+    setSingleRowMode(enabled) {
+        this._singleRowMode = enabled
+        this._page = 1
+    }
+
+    /** @returns {number} Effective page size (1 in single-row mode) */
+    getEffectivePageSize() {
+        return this._singleRowMode ? 1 : this._pageSize
+    }
+
+    // ─── Columns ─────────────────────────────────────────────────
+
+    /** @returns {ColumnDef[]} */
+    getColumns() {
+        throw new Error('DataProvider.getColumns() must be implemented by subclass')
+    }
+
+    // ─── Data Access ─────────────────────────────────────────────
+
+    /**
+     * Extract unique key from a row object.
+     * @param {Object} row
+     * @returns {string}
+     */
+    getKey(row) {
+        throw new Error('DataProvider.getKey() must be implemented by subclass')
+    }
+
+    /**
+     * Load a single document by key.
+     * @param {string} key
+     * @returns {Promise&lt;Object>}
+     */
+    async getDocument(key) {
+        throw new Error('DataProvider.getDocument() must be implemented by subclass')
+    }
+
+    /**
+     * Save a new or updated record.
+     * @param {Object} data - Record data. If `key` property is present, it's an update.
+     * @returns {Promise&lt;Object>} Saved record
+     */
+    async save(data) {
+        throw new Error('DataProvider.save() must be implemented by subclass')
+    }
+
+    /**
+     * Delete a record by key.
+     * @param {string} key
+     * @returns {Promise&lt;void>}
+     */
+    async delete(key) {
+        throw new Error('DataProvider.delete() must be implemented by subclass')
+    }
+
+    // ─── Query &amp; Sort ────────────────────────────────────────────
+
+    /**
+     * Apply a filter/search query string.
+     * @param {string} query
+     */
+    setQuery(query) {
+        this._query = query
+        this._page = 1
+    }
+
+    /** @returns {string} Current query string */
+    getQuery() { return this._query }
+
+    /**
+     * Apply sort configuration.
+     * @param {SortConfig} sort
+     */
+    setSort(sort) {
+        this._sort = sort
+        this._page = 1
+    }
+
+    /** @returns {SortConfig|null} */
+    getSort() { return this._sort }
+
+    // ─── Events ──────────────────────────────────────────────────
+
+    /**
+     * Register a listener for page changes.
+     * @param {function(PageResult):void} handler
+     * @returns {function():void} Unsubscribe function
+     */
+    onPageChange(handler) {
+        this._listeners.pageChange.push(handler)
+        return () => {
+            this._listeners.pageChange = this._listeners.pageChange.filter(h => h !== handler)
+        }
+    }
+
+    /**
+     * Register a listener for data mutations (save/delete).
+     * @param {function(string, Object):void} handler - Receives (action, data)
+     * @returns {function():void} Unsubscribe function
+     */
+    onDataChange(handler) {
+        this._listeners.dataChange.push(handler)
+        return () => {
+            this._listeners.dataChange = this._listeners.dataChange.filter(h => h !== handler)
+        }
+    }
+
+    /** @private */
+    async _notifyAndFetch() {
+        const result = await this.getPage()
+        this._listeners.pageChange.forEach(h => {
+            try { h(result) } catch (e) { console.error('pageChange handler error:', e) }
+        })
+        return result
+    }
+
+    /** @private */
+    _notifyDataChange(action, data) {
+        this._listeners.dataChange.forEach(h => {
+            try { h(action, data) } catch (e) { console.error('dataChange handler error:', e) }
+        })
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

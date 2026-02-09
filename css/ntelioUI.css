@@ -1,0 +1,25 @@
+/**
+ * ntelioUI2 - Main CSS Bundle
+ *
+ * Imports all component styles
+ */
+
+/* Core */
+@import './core/widget.css';
+@import './core/loading.css';
+
+/* Themes */
+@import './themes/default.css';
+
+/* Widgets - uncomment as implemented */
+/* @import './widgets/basic/button.css'; */
+/* @import './widgets/containers/tabs.css'; */
+
+/* Dialogs */
+/* @import './dialogs/modal.css'; */
+
+/* Forms */
+/* @import './forms/form.css'; */
+
+/* Application */
+/* @import './application/app.css'; */

@@ -1,0 +1,38 @@
+{
+  "name": "ntelioui2",
+  "version": "2.0.0",
+  "description": "Modern UI widget library - jQuery + ES6 modules",
+  "type": "module",
+  "main": "index.js",
+  "author": "Rabih Nassar <opensource@ntelio.ai>",
+  "contributors": [
+    "rabih-nassar",
+    "legatoloco",
+    "carof"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ntelioai/ntelioUI2.git"
+  },
+  "homepage": "https://github.com/ntelioai/ntelioUI2#readme",
+  "bugs": {
+    "url": "https://github.com/ntelioai/ntelioUI2/issues"
+  },
+  "scripts": {
+    "docs": "jsdoc -c jsdoc.json",
+    "test": "echo \"Open tests/index.html in browser\"",
+    "examples": "echo \"Open examples/index.html in browser\""
+  },
+  "keywords": [
+    "ui",
+    "widgets",
+    "jquery",
+    "es6"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "better-docs": "^2.7.3",
+    "clean-jsdoc-theme": "^4.3.0",
+    "jsdoc": "^4.0.5"
+  }
+}

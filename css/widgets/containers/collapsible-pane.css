@@ -1,0 +1,167 @@
+/**
+ * CollapsiblePane - Resizable collapsible pane for multi-pane layouts
+ */
+
+/* ── Container hint ─────────────────────────────────────────────────
+   The parent of CollapsiblePane widgets should be a flex row:
+   display: flex; height: 100%; overflow: hidden;
+   ──────────────────────────────────────────────────────────────── */
+
+.nui-collapsible-pane {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background: var(--nui-pane-bg, #ffffff);
+    border: 1px solid var(--nui-pane-border-color, var(--nui-border-color, #dee2e6));
+    transition: flex-basis 0.3s ease, min-width 0.3s ease;
+}
+
+/* ── Direction: LEFT / RIGHT ────────────────────────────────────── */
+
+.nui-collapsible-pane[data-dir="left"],
+.nui-collapsible-pane[data-dir="right"] {
+    flex: 0 0 auto;
+}
+
+/* ── Direction: CENTER ──────────────────────────────────────────── */
+
+.nui-collapsible-pane[data-dir="center"] {
+    flex: 1 1 auto;
+    min-width: 120px;
+}
+
+.nui-collapsible-pane[data-dir="center"] .nui-pane-resize-handle {
+    display: none;
+}
+
+/* ── Header ─────────────────────────────────────────────────────── */
+
+.nui-pane-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5em 0.65em;
+    background: var(--nui-pane-header-bg, #f8f9fa);
+    border-bottom: 1px solid var(--nui-pane-border-color, var(--nui-border-color, #dee2e6));
+    flex-shrink: 0;
+    cursor: pointer;
+    user-select: none;
+    gap: 0.5em;
+    min-height: 38px;
+}
+
+.nui-pane-header:hover {
+    background: var(--nui-pane-header-hover-bg, #e9ecef);
+}
+
+.nui-pane-title {
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--nui-pane-title-color, var(--nui-text-primary, #212529));
+}
+
+.nui-pane-collapse-icon {
+    font-size: 0.75rem;
+    color: var(--nui-pane-icon-color, #6c757d);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+/* ── Content ────────────────────────────────────────────────────── */
+
+.nui-pane-content {
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 0;
+}
+
+/* ── Resize handle ──────────────────────────────────────────────── */
+
+.nui-pane-resize-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    cursor: col-resize;
+    z-index: 10;
+    background: transparent;
+    transition: background-color 0.15s;
+}
+
+.nui-pane-resize-handle:hover,
+.nui-pane-resize-handle.nui-active {
+    background: var(--nui-pane-handle-active-color, var(--nui-primary, #0c7aa3));
+    opacity: 0.4;
+}
+
+/* Left pane: handle on right edge */
+.nui-collapsible-pane[data-dir="left"] > .nui-pane-resize-handle {
+    right: 0;
+}
+
+/* Right pane: handle on left edge */
+.nui-collapsible-pane[data-dir="right"] > .nui-pane-resize-handle {
+    left: 0;
+}
+
+/* ── Collapsed state ────────────────────────────────────────────── */
+
+.nui-collapsible-pane.collapsed {
+    flex-basis: 30px !important;
+    min-width: 30px !important;
+    max-width: 30px;
+}
+
+.nui-collapsible-pane.collapsed .nui-pane-content {
+    display: none;
+}
+
+.nui-collapsible-pane.collapsed .nui-pane-resize-handle {
+    display: none;
+}
+
+.nui-collapsible-pane.collapsed .nui-pane-header {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    padding: 0.65em 0.3em;
+    justify-content: flex-end;
+    border-bottom: none;
+    border-right: 1px solid var(--nui-pane-border-color, var(--nui-border-color, #dee2e6));
+    height: 100%;
+}
+
+.nui-collapsible-pane[data-dir="right"].collapsed .nui-pane-header {
+    border-right: none;
+    border-left: 1px solid var(--nui-pane-border-color, var(--nui-border-color, #dee2e6));
+}
+
+.nui-collapsible-pane.collapsed .nui-pane-collapse-icon {
+    transform: rotate(-90deg);
+    margin-top: 0.4em;
+}
+
+/* ── Non-collapsible header ─────────────────────────────────────── */
+
+.nui-pane-header.nui-no-collapse {
+    cursor: default;
+}
+
+.nui-pane-header.nui-no-collapse:hover {
+    background: var(--nui-pane-header-bg, #f8f9fa);
+}
+
+.nui-pane-header.nui-no-collapse .nui-pane-collapse-icon {
+    display: none;
+}
+
+/* ── Resizing state (disable transitions) ───────────────────────── */
+
+.nui-collapsible-pane.nui-resizing,
+.nui-collapsible-pane.nui-resizing * {
+    transition: none !important;
+}

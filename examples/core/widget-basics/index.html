@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widget Basics - ntelioUI2</title>
+
+    <!-- Dependencies - jQuery MUST be loaded before ES modules -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .widget-demo {
+            border: 2px solid #dee2e6;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        .widget-demo.highlight {
+            border-color: #0d6efd;
+            background: #f8f9ff;
+        }
+        .event-log {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 13px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .event-log .event { margin: 2px 0; }
+        .event-log .event-name { color: #569cd6; }
+        .event-log .event-data { color: #ce9178; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../../index.html">Examples</a></li>
+                <li class="breadcrumb-item"><a href="#">Core</a></li>
+                <li class="breadcrumb-item active">Widget Basics</li>
+            </ol>
+        </nav>
+
+        <h1>Widget Basics</h1>
+        <p class="lead">Demonstrates core Widget functionality: lifecycle, events, and parent-child relationships.</p>
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h4>1. Create Widgets</h4>
+                <div id="widget-container" class="widget-demo">
+                    <!-- Widgets will be added here -->
+                </div>
+                <div class="mt-2">
+                    <button id="btn-add" class="btn btn-primary btn-sm">Add Child</button>
+                    <button id="btn-destroy-child" class="btn btn-warning btn-sm">Destroy Last Child</button>
+                    <button id="btn-destroy" class="btn btn-danger btn-sm">Destroy Parent</button>
+                    <button id="btn-emit" class="btn btn-info btn-sm">Emit Event</button>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h4>2. Event Log</h4>
+                <div id="event-log" class="event-log">
+                    <div class="text-muted">Events will appear here...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <h4>3. Widget Registry</h4>
+                <p>Total registered widgets: <strong id="widget-count">0</strong></p>
+                <button id="btn-refresh" class="btn btn-secondary btn-sm">Refresh Count</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 specialized/auth/LoginDialog.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Authentication</h2><h3>Classes</h3><ul><li><a href="LoginDialog.html">LoginDialog</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>specialized/auth/LoginDialog.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * LoginDialog - Modal login form with injectable authentication
+ *
+ * Decoupled from any specific auth provider. The authenticate function
+ * is injected via options, keeping the framework agnostic.
+ *
+ * @example
+ * const result = await LoginDialog.open({
+ *     authenticate: async ({ username, password, rememberMe }) => {
+ *         return await myAuthService.login(username, password, rememberMe)
+ *     },
+ *     termsUrl: './terms.html',       // optional
+ *     termsTitle: 'Terms &amp; Conditions' // optional
+ * })
+ */
+import { Widget } from '../../core/Widget.js'
+import { ResourceLoader } from '../../core/ResourceLoader.js'
+import { Modal } from '../../widgets/dialogs/Modal.js'
+
+const $ = window.jQuery || window.$
+
+/** @category Authentication */
+export class LoginDialog extends Widget {
+
+    static defaults = {
+        title: 'Please sign in',
+        termsUrl: null,
+        termsTitle: 'Terms and Conditions',
+        showRememberMe: true,
+        authenticate: null
+    }
+
+    /**
+     * Open a login dialog and return a Promise.
+     * Resolves with the authenticate() return value on success.
+     * Rejects if the dialog is dismissed.
+     *
+     * @param {Object} options
+     * @param {Function} options.authenticate - async ({ username, password, rememberMe }) => result
+     * @param {string}  [options.title]
+     * @param {string}  [options.termsUrl]
+     * @param {string}  [options.termsTitle]
+     * @param {boolean} [options.showRememberMe]
+     * @returns {Promise&lt;*>}
+     */
+    static open(options = {}) {
+        return new Promise((resolve, reject) => {
+            const dialog = new LoginDialog({
+                ...options,
+                _onSuccess: resolve,
+                _onDismiss: reject
+            })
+            dialog._open()
+        })
+    }
+
+    /**
+     * Create a new LoginDialog instance. Not typically called directly —
+     * use {@link LoginDialog.open} instead.
+     *
+     * @param {Object} params - Configuration merged with defaults
+     * @param {Function} [params.authenticate] - Async auth function
+     * @param {string} [params.title='Please sign in'] - Dialog title
+     * @param {string} [params.termsUrl] - URL to terms &amp; conditions page
+     * @param {string} [params.termsTitle='Terms and Conditions'] - Terms modal title
+     * @param {boolean} [params.showRememberMe=true] - Show "Remember me" checkbox
+     * @param {Function} [params._onSuccess] - Internal resolve callback
+     * @param {Function} [params._onDismiss] - Internal reject callback
+     */
+    constructor(params = {}) {
+        const config = { ...LoginDialog.defaults, ...params }
+        const uid = 'nui-login-' + Math.random().toString(36).substr(2, 6)
+
+        const rememberMeHtml = config.showRememberMe ? `
+            &lt;div class="form-check text-start my-3">
+                &lt;input class="form-check-input" type="checkbox" id="${uid}-remember">
+                &lt;label class="form-check-label" for="${uid}-remember">Remember me&lt;/label>
+            &lt;/div>
+        ` : ''
+
+        const termsHtml = config.termsUrl ? `
+            &lt;div class="nui-login-terms">
+                By signing in you agree to the &lt;a href="#" class="nui-login-terms-link">terms and conditions&lt;/a>.
+            &lt;/div>
+        ` : ''
+
+        const template = `
+            &lt;div class="nui-login-dialog">
+                &lt;div class="nui-login-form">
+                    &lt;div class="nui-login-error" style="display:none;">&lt;/div>
+                    &lt;div class="form-floating mb-2">
+                        &lt;input type="text" class="form-control nui-login-username"
+                               id="${uid}-username" placeholder="Username" autocomplete="username">
+                        &lt;label for="${uid}-username">Username&lt;/label>
+                    &lt;/div>
+                    &lt;div class="form-floating mb-2">
+                        &lt;input type="password" class="form-control nui-login-password"
+                               id="${uid}-password" placeholder="Password" autocomplete="current-password">
+                        &lt;label for="${uid}-password">Password&lt;/label>
+                    &lt;/div>
+                    ${rememberMeHtml}
+                    ${termsHtml}
+                &lt;/div>
+            &lt;/div>
+        `
+
+        super({ template, autoInit: false, register: false })
+
+        this._config = config
+        this._onSuccess = params._onSuccess || (() => {})
+        this._onDismiss = params._onDismiss || (() => {})
+        this._modal = null
+        this._uid = uid
+    }
+
+    /**
+     * Load the login dialog CSS stylesheet.
+     * @returns {Promise&lt;void>}
+     */
+    async init() {
+        await ResourceLoader.loadCss('../../css/specialized/auth/login-dialog.css', import.meta.url)
+    }
+
+    /**
+     * Initialize the dialog, create the underlying Modal, bind events, and show it.
+     * @returns {Promise&lt;void>}
+     * @private
+     */
+    async _open() {
+        await this.init()
+
+        this._modal = new Modal({
+            title: this._config.title,
+            body: this.node,
+            confirmLabel: 'Sign in',
+            showClose: false,
+            backdrop: 'static',
+            keyboard: false,
+            closeOnConfirm: false,
+            size: 'sm',
+            centered: true
+        })
+
+        await this._modal.init()
+
+        this._modal.on('confirm', () => this._authenticate())
+        this._modal.on('close', () => {
+            this._onDismiss(new Error('Login dismissed'))
+            this.destroy()
+        })
+
+        // Enter key submits
+        this.find('.nui-login-username, .nui-login-password').on('keypress', (e) => {
+            if (e.which === 13) {
+                e.preventDefault()
+                this._authenticate()
+            }
+        })
+
+        // Terms link
+        this.find('.nui-login-terms-link').on('click', (e) => {
+            e.preventDefault()
+            Modal.showContent(
+                this._config.termsUrl,
+                this._config.termsTitle,
+                { size: 'lg' }
+            )
+        })
+
+        this._modal.open()
+
+        this._modal.on('shown', () => {
+            this.find('.nui-login-username').focus()
+        })
+    }
+
+    /**
+     * Collect credentials, validate, call the authenticate function,
+     * and resolve/reject the promise returned by {@link LoginDialog.open}.
+     * @returns {Promise&lt;void>}
+     * @private
+     */
+    async _authenticate() {
+        if (!this._config.authenticate) {
+            this._showError('No authentication function provided')
+            return
+        }
+
+        const credentials = {
+            username: this.find('.nui-login-username').val().trim(),
+            password: this.find('.nui-login-password').val()
+        }
+
+        if (this._config.showRememberMe) {
+            credentials.rememberMe = this.find(`#${this._uid}-remember`).prop('checked')
+        }
+
+        if (!credentials.username) {
+            this._showError('Please enter your username')
+            this.find('.nui-login-username').focus()
+            return
+        }
+        if (!credentials.password) {
+            this._showError('Please enter your password')
+            this.find('.nui-login-password').focus()
+            return
+        }
+
+        this._setLoading(true)
+        this._hideError()
+
+        try {
+            const result = await this._config.authenticate(credentials)
+            this._setLoading(false)
+            this._onSuccess(result)
+            this._modal.close()
+        } catch (error) {
+            this._setLoading(false)
+            this._showError(error.message || 'Authentication failed. Please try again.')
+        }
+    }
+
+    /**
+     * Display an error message above the form fields.
+     * @param {string} message - Error text to show
+     * @private
+     */
+    _showError(message) {
+        this.find('.nui-login-error').text(message).show()
+    }
+
+    /**
+     * Hide the error message.
+     * @private
+     */
+    _hideError() {
+        this.find('.nui-login-error').hide()
+    }
+
+    /**
+     * Toggle loading state on inputs and the confirm button.
+     * @param {boolean} loading - True to disable inputs and show spinner
+     * @private
+     */
+    _setLoading(loading) {
+        const confirmBtn = this._modal.find('.modal-confirm-btn')
+        if (loading) {
+            this.find('input').prop('disabled', true)
+            confirmBtn.prop('disabled', true)
+            confirmBtn.data('original-text', confirmBtn.text())
+            confirmBtn.html('&lt;span class="spinner-border spinner-border-sm" role="status">&lt;/span> Signing in...')
+        } else {
+            this.find('input').prop('disabled', false)
+            confirmBtn.prop('disabled', false)
+            confirmBtn.text(confirmBtn.data('original-text') || 'Sign in')
+        }
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

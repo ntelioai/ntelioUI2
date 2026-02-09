@@ -1,0 +1,86 @@
+/*
+ * BreadCrumbs - Arrow-shaped navigation trail
+ */
+
+.nui-breadcrumbs {
+    margin-bottom: 0.75rem;
+}
+
+.nui-breadcrumbs nav {
+    font-size: 0.85rem;
+}
+
+.nui-breadcrumb-trail {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+/* Base crumb */
+.nui-crumb {
+    height: 28px;
+    line-height: 28px;
+    position: relative;
+    padding: 0 24px 0 20px;
+    text-decoration: none;
+    color: var(--nui-crumb-color, #555);
+    background-color: var(--nui-crumb-bg, #e8e9ea);
+    display: flex;
+    align-items: center;
+    margin-right: -6px;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%, 8px 50%);
+    white-space: nowrap;
+    cursor: pointer;
+
+    /* Slide-in animation */
+    opacity: 0;
+    transform: translateX(-12px);
+    animation: nui-crumb-slide 0.25s forwards;
+}
+
+/* First visible crumb: flat left edge */
+.nui-crumb:first-child {
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
+    border-radius: 4px 0 0 4px;
+    padding-left: 14px;
+}
+
+/* Home crumb */
+.nui-crumb-home {
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
+    border-radius: 4px 0 0 4px;
+    padding: 0 24px 0 12px;
+    background-color: var(--nui-crumb-home-bg, #dfe0e1);
+}
+
+.nui-crumb-home + .nui-crumb {
+    padding-left: 24px;
+}
+
+/* Active (last) crumb */
+.nui-crumb-active {
+    background-color: var(--nui-crumb-active-bg, var(--nui-cerulean, #0c7aa3));
+    color: var(--nui-crumb-active-color, #fff);
+}
+
+/* Hover */
+.nui-crumb:hover:not(.nui-crumb-active) {
+    background-color: var(--nui-crumb-hover-bg, #d4d5d7);
+    color: var(--nui-crumb-hover-color, #333);
+}
+
+/* Slide-in keyframes */
+@keyframes nui-crumb-slide {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.nui-crumb:nth-child(1) { animation-delay: 0.03s; }
+.nui-crumb:nth-child(2) { animation-delay: 0.06s; }
+.nui-crumb:nth-child(3) { animation-delay: 0.09s; }
+.nui-crumb:nth-child(4) { animation-delay: 0.12s; }
+.nui-crumb:nth-child(5) { animation-delay: 0.15s; }
+.nui-crumb:nth-child(6) { animation-delay: 0.18s; }

@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 grid/DataControlGrid.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>grid/DataControlGrid.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Widget } from '../core/Widget.js'
+
+/**
+ * DataControlGrid — renders data as a table (grid), continuous form (list), or single-record form.
+ *
+ * This is the view renderer used by DataControl. It does not manage data or mode switching —
+ * those are handled by the parent DataControl orchestrator.
+ *
+ * @extends Widget
+ * @category Grid
+ *
+ * @fires DataControlGrid#rowClick     - { key, row } when a row is clicked
+ * @fires DataControlGrid#sortChange   - { column, order } when a sort header is clicked
+ * @fires DataControlGrid#selectChange - { selected } map of key → boolean
+ */
+export class DataControlGrid extends Widget {
+    static template = `
+        &lt;div class="data-control-grid">
+            &lt;div class="data-section">&lt;/div>
+        &lt;/div>`
+
+    /**
+     * @param {Object} params
+     * @param {import('../data/DataProvider.js').DataProvider} params.dataProvider
+     * @param {boolean} [params.selectable=false] - Show row checkboxes
+     */
+    constructor(params = {}) {
+        super({ template: DataControlGrid.template, autoInit: false, ...params })
+        this._dataProvider = params.dataProvider
+        this._selectable = params.selectable || false
+        this._selected = {}
+        this._viewMode = 'grid'  // 'grid' | 'list' | 'form'
+        this._sort = null
+    }
+
+    async init() {}
+
+    /**
+     * Render data in the specified view mode.
+     * @param {'grid'|'list'|'form'} mode
+     * @param {import('../data/DataProvider.js').PageResult} pageResult
+     */
+    renderView(mode, pageResult) {
+        this._viewMode = mode
+        const container = this.find('.data-section')
+        container.empty()
+
+        // Update CSS class
+        container.removeClass('grid list form').addClass(mode)
+
+        if (!pageResult || pageResult.rows.length === 0) {
+            container.html('&lt;div class="no-data">No records found.&lt;/div>')
+            return
+        }
+
+        if (mode === 'grid') {
+            this._renderTable(container, pageResult)
+        } else {
+            this._renderFormView(container, pageResult)
+        }
+    }
+
+    // ─── Grid (Table) Rendering ──────────────────────────────────
+
+    /** @private */
+    _renderTable(container, pageResult) {
+        const columns = this._dataProvider.getColumns()
+        const visibleCols = columns.filter(c => c.visible !== false)
+
+        let html = '&lt;table class="table table-hover">&lt;thead>&lt;tr>'
+
+        // Header checkbox
+        if (this._selectable) {
+            html += '&lt;th class="col-select">&lt;input type="checkbox" class="select-all">&lt;/th>'
+        }
+
+        // Column headers
+        visibleCols.forEach(col => {
+            const title = col.title || col.name
+            const sortable = col.sortable !== false
+            const sortClass = this._getSortClass(col.name)
+            const widthStyle = col.width ? ` style="width:${col.width}"` : ''
+
+            if (sortable) {
+                html += `&lt;th class="sortable" data-column="${col.name}"${widthStyle}>${title} &lt;i class="sort-icon ${sortClass}">&lt;/i>&lt;/th>`
+            } else {
+                html += `&lt;th${widthStyle}>${title}&lt;/th>`
+            }
+        })
+        html += '&lt;/tr>&lt;/thead>&lt;tbody>'
+
+        // Rows
+        pageResult.rows.forEach(row => {
+            const key = this._dataProvider.getKey(row)
+            const checked = this._selected[key] ? 'checked' : ''
+            html += `&lt;tr data-key="${key}">`
+
+            if (this._selectable) {
+                html += `&lt;td class="col-select">&lt;input type="checkbox" class="row-select" data-key="${key}" ${checked}>&lt;/td>`
+            }
+
+            visibleCols.forEach(col => {
+                const rawValue = row[col.name]
+                const display = col.formatter ? col.formatter(rawValue, row) : (rawValue ?? '')
+                html += `&lt;td>${display}&lt;/td>`
+            })
+
+            html += '&lt;/tr>'
+        })
+
+        html += '&lt;/tbody>&lt;/table>'
+        container.html(html)
+        this._attachTableEvents(container)
+    }
+
+    /** @private */
+    _attachTableEvents(container) {
+        // Sort
+        container.find('th.sortable').on('click', (e) => {
+            const column = $(e.currentTarget).data('column')
+            this._toggleSort(column)
+        })
+
+        // Row click
+        container.find('tbody tr').on('click', (e) => {
+            // Ignore clicks on checkboxes
+            if ($(e.target).is('input[type="checkbox"]')) return
+
+            const key = $(e.currentTarget).data('key')
+            const row = this._findRow(key)
+            this.emit('rowClick', { key: String(key), row })
+        })
+
+        // Row checkboxes
+        if (this._selectable) {
+            container.find('.row-select').on('change', (e) => {
+                const key = $(e.target).data('key')
+                this._selected[String(key)] = e.target.checked
+                this._updateSelectAllState(container)
+                this.emit('selectChange', { selected: { ...this._selected } })
+            })
+
+            container.find('.select-all').on('change', (e) => {
+                const checked = e.target.checked
+                container.find('.row-select').each((_, el) => {
+                    el.checked = checked
+                    this._selected[String($(el).data('key'))] = checked
+                })
+                this.emit('selectChange', { selected: { ...this._selected } })
+            })
+        }
+    }
+
+    // ─── List / Form Rendering ───────────────────────────────────
+
+    /** @private */
+    _renderFormView(container, pageResult) {
+        const columns = this._dataProvider.getColumns()
+        const visibleCols = columns.filter(c => c.visible !== false)
+
+        let html = ''
+        pageResult.rows.forEach(row => {
+            const key = this._dataProvider.getKey(row)
+            html += `&lt;div class="form-record" data-key="${key}">`
+
+            visibleCols.forEach(col => {
+                const title = col.title || col.name
+                const rawValue = row[col.name]
+                const display = col.formatter ? col.formatter(rawValue, row) : (rawValue ?? '')
+                html += `
+                    &lt;div class="form-field">
+                        &lt;label>${title}&lt;/label>
+                        &lt;span class="field-value">${display}&lt;/span>
+                    &lt;/div>`
+            })
+
+            html += '&lt;/div>'
+        })
+
+        container.html(html)
+
+        // Row click in form view
+        container.find('.form-record').on('click', (e) => {
+            const key = $(e.currentTarget).data('key')
+            const row = this._findRow(key)
+            this.emit('rowClick', { key: String(key), row })
+        })
+    }
+
+    // ─── Sort ────────────────────────────────────────────────────
+
+    /** @private */
+    _toggleSort(column) {
+        if (this._sort &amp;&amp; this._sort.column === column) {
+            // Cycle: asc → desc → none
+            const next = this._sort.order === 'asc' ? 'desc' : this._sort.order === 'desc' ? 'none' : 'asc'
+            this._sort = next === 'none' ? null : { column, order: next }
+        } else {
+            this._sort = { column, order: 'asc' }
+        }
+        this.emit('sortChange', this._sort || { column, order: 'none' })
+    }
+
+    /** @private */
+    _getSortClass(column) {
+        if (!this._sort || this._sort.column !== column) return 'fas fa-sort'
+        return this._sort.order === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'
+    }
+
+    // ─── Selection ───────────────────────────────────────────────
+
+    /** @returns {string[]} Array of selected keys */
+    getSelectedKeys() {
+        return Object.entries(this._selected)
+            .filter(([_, v]) => v)
+            .map(([k]) => k)
+    }
+
+    /** Clear all selections */
+    clearSelection() {
+        this._selected = {}
+        this.find('.row-select, .select-all').prop('checked', false)
+    }
+
+    /** @private */
+    _updateSelectAllState(container) {
+        const checkboxes = container.find('.row-select')
+        const checkedCount = checkboxes.filter(':checked').length
+        const selectAll = container.find('.select-all')[0]
+        if (!selectAll) return
+
+        if (checkedCount === 0) {
+            selectAll.checked = false
+            selectAll.indeterminate = false
+        } else if (checkedCount === checkboxes.length) {
+            selectAll.checked = true
+            selectAll.indeterminate = false
+        } else {
+            selectAll.checked = false
+            selectAll.indeterminate = true
+        }
+    }
+
+    /** @private */
+    _findRow(key) {
+        // This is a simple lookup — the parent DataControl typically has the pageResult cached
+        return null
+    }
+
+    /**
+     * Provide the current page result so _findRow can look up rows.
+     * Called by DataControl after each render.
+     * @param {import('../data/DataProvider.js').PageResult} pageResult
+     */
+    setPageResult(pageResult) {
+        this._pageResult = pageResult
+    }
+
+    /** @private - override with page result lookup */
+    _findRow(key) {
+        if (!this._pageResult) return null
+        return this._pageResult.rows.find(r =>
+            String(this._dataProvider.getKey(r)) === String(key)
+        ) || null
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

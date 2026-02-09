@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+localOnly/
+*.vscode/
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.code-workspace

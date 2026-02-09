@@ -1,0 +1,539 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 widgets/dialogs/Modal.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>widgets/dialogs/Modal.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Modal - Bootstrap 5 modal dialog widget.
+ *
+ * @example
+ * const modal = new Modal({
+ *     title: 'Confirm Action',
+ *     body: 'Are you sure?',
+ *     confirmLabel: 'Yes',
+ *     closeLabel: 'Cancel'
+ * })
+ *
+ * modal.on('confirm', () => console.log('Confirmed!'))
+ * modal.on('close', () => console.log('Closed'))
+ * modal.open()
+ */
+import { Widget } from '../../core/Widget.js'
+import { ResourceLoader } from '../../core/ResourceLoader.js'
+
+const $ = window.jQuery || window.$
+
+/** @category Dialogs */
+export class Modal extends Widget {
+    static defaults = {
+        title: 'Dialog',
+        body: '',
+        confirmLabel: 'OK',
+        closeLabel: 'Cancel',
+        showConfirm: true,
+        showClose: true,
+        size: '', // '', 'sm', 'lg', 'xl'
+        centered: true,
+        backdrop: true, // true, false, 'static'
+        keyboard: true,  // Close on Escape
+        closeOnConfirm: true
+    }
+
+    /**
+     * Create a new Modal dialog.
+     *
+     * @param {Object} params - Configuration object
+     * @param {string} [params.title='Dialog'] - Modal header title
+     * @param {string|jQuery|Widget} [params.body=''] - Modal body content
+     * @param {string} [params.confirmLabel='OK'] - Confirm button text
+     * @param {string} [params.closeLabel='Cancel'] - Close/cancel button text
+     * @param {boolean} [params.showConfirm=true] - Show the confirm button
+     * @param {boolean} [params.showClose=true] - Show the close/cancel button
+     * @param {''|'sm'|'lg'|'xl'} [params.size=''] - Bootstrap modal size class
+     * @param {boolean} [params.centered=true] - Vertically center the modal
+     * @param {boolean|'static'} [params.backdrop=true] - Backdrop behaviour
+     * @param {boolean} [params.keyboard=true] - Close on Escape key
+     * @param {boolean} [params.closeOnConfirm=true] - Auto-close after confirm
+     * @param {boolean} [params.destroyOnClose=true] - Destroy widget after hidden
+     */
+    constructor(params = {}) {
+        const config = { ...Modal.defaults, ...params }
+
+        const sizeClass = config.size ? `modal-${config.size}` : ''
+        const centeredClass = config.centered ? 'modal-dialog-centered' : ''
+
+        const template = `
+            &lt;div class="modal fade" tabindex="-1" aria-hidden="true">
+                &lt;div class="modal-dialog ${sizeClass} ${centeredClass}">
+                    &lt;div class="modal-content">
+                        &lt;div class="modal-header">
+                            &lt;h5 class="modal-title">${config.title}&lt;/h5>
+                            &lt;button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&lt;/button>
+                        &lt;/div>
+                        &lt;div class="modal-body">&lt;/div>
+                        &lt;div class="modal-footer">&lt;/div>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        `
+
+        super({ template, autoInit: false, ...params })
+
+        this.config = config
+        this._bsModal = null
+    }
+
+    /**
+     * Initialize the modal: load CSS, set body content, build footer buttons,
+     * and bind event handlers.
+     * @returns {Promise&lt;void>}
+     */
+    async init() {
+        await ResourceLoader.loadCss('../../css/dialogs/modal.css', import.meta.url)
+
+        // Set body content
+        this._setBody(this.config.body)
+
+        // Build footer buttons
+        this._buildFooter()
+
+        // Bind events
+        this._bindEvents()
+    }
+
+    /**
+     * Set the modal body content from a string, jQuery element, or Widget.
+     * @param {string|jQuery|Widget} content - New body content
+     * @private
+     */
+    _setBody(content) {
+        const bodyEl = this.find('.modal-body')
+        if (content instanceof jQuery) {
+            bodyEl.empty().append(content)
+        } else if (content instanceof Widget) {
+            bodyEl.empty().append(content.get())
+        } else {
+            bodyEl.html(content)
+        }
+    }
+
+    /**
+     * Build the footer buttons (close and/or confirm) based on config.
+     * @private
+     */
+    _buildFooter() {
+        const footer = this.find('.modal-footer')
+        footer.empty()
+
+        if (this.config.showClose) {
+            const closeBtn = $(`&lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${this.config.closeLabel}&lt;/button>`)
+            footer.append(closeBtn)
+        }
+
+        if (this.config.showConfirm) {
+            const confirmBtn = $(`&lt;button type="button" class="btn btn-primary modal-confirm-btn">${this.config.confirmLabel}&lt;/button>`)
+            footer.append(confirmBtn)
+        }
+
+        // Hide footer if no buttons
+        if (!this.config.showClose &amp;&amp; !this.config.showConfirm) {
+            footer.hide()
+        }
+    }
+
+    /**
+     * Wire up confirm button click and Bootstrap modal lifecycle events.
+     * Sets up the _confirmed flag to distinguish confirm from dismiss.
+     * @private
+     */
+    _bindEvents() {
+        this._confirmed = false
+
+        // Confirm button
+        this.find('.modal-confirm-btn').on('click', () => {
+            this._confirmed = true
+            this.emit('confirm')
+            if (this.config.closeOnConfirm) {
+                this.close()
+            }
+        })
+
+        // Bootstrap modal events - 'close' only fires on dismiss (Cancel/X/Escape), not after confirm
+        this.node.on('hidden.bs.modal', () => {
+            if (!this._confirmed) {
+                this.emit('close')
+            }
+            this.emit('hidden')
+            if (this.config.destroyOnClose !== false) {
+                this.destroy()
+            }
+        })
+
+        this.node.on('shown.bs.modal', () => {
+            this.emit('shown')
+            // Focus confirm button for keyboard accessibility
+            this.find('.modal-confirm-btn').focus()
+        })
+    }
+
+    /**
+     * Open the modal. Appends to body if needed and initializes Bootstrap Modal.
+     * @returns {Modal} this (for chaining)
+     */
+    open() {
+        // Append to body if not already
+        if (!this.node.parent().length) {
+            this.node.appendTo('body')
+        }
+
+        // Initialize Bootstrap modal
+        if (!this._bsModal) {
+            this._bsModal = new bootstrap.Modal(this.node[0], {
+                backdrop: this.config.backdrop,
+                keyboard: this.config.keyboard
+            })
+        }
+
+        this._bsModal.show()
+        this.emit('open')
+        return this
+    }
+
+    /**
+     * Close the modal programmatically.
+     * @returns {Modal} this (for chaining)
+     */
+    close() {
+        if (this._bsModal) {
+            this._bsModal.hide()
+        }
+        return this
+    }
+
+    /**
+     * Update the modal title text.
+     * @param {string} title - New title
+     * @returns {Modal} this (for chaining)
+     */
+    setTitle(title) {
+        this.find('.modal-title').text(title)
+        return this
+    }
+
+    /**
+     * Update the modal body content.
+     * @param {string|jQuery|Widget} content - New body content
+     * @returns {Modal} this (for chaining)
+     */
+    setBody(content) {
+        this._setBody(content)
+        return this
+    }
+
+    /**
+     * Replace the modal body with a centered loading spinner.
+     * @returns {Modal} this (for chaining)
+     */
+    showBodyLoading() {
+        this.find('.modal-body').html(`
+            &lt;div class="d-flex justify-content-center p-4">
+                &lt;div class="spinner-border" role="status">
+                    &lt;span class="visually-hidden">Loading...&lt;/span>
+                &lt;/div>
+            &lt;/div>
+        `)
+        return this
+    }
+
+    /**
+     * Dispose the Bootstrap modal instance and clean up backdrop/body state.
+     */
+    beforeDestroy() {
+        if (this._bsModal) {
+            this._bsModal.dispose()
+            this._bsModal = null
+        }
+        // Remove any backdrop remnants
+        $('.modal-backdrop').remove()
+        $('body').removeClass('modal-open').css('overflow', '')
+    }
+
+    /**
+     * Fetch content from a URL and display it in a modal.
+     * Replaces the old ModalContentPopup class.
+     *
+     * @param {string} url - URL to fetch content from (HTML or text)
+     * @param {string} [title='Content'] - Modal title
+     * @param {Object} [options] - Additional Modal options (size, backdrop, etc.)
+     * @param {string} [options.checkboxLabel] - If set, shows a checkbox below the content.
+     *   The confirm button stays disabled until the checkbox is checked.
+     *   Useful for "I accept the Terms &amp; Conditions" flows.
+     * @param {string} [options.confirmLabel='Accept'] - Confirm button label (only shown with checkboxLabel)
+     * @returns {Promise&lt;Modal>} Resolves with the modal instance once content is loaded
+     *
+     * @example
+     * Modal.showContent('./terms.html', 'Terms &amp; Conditions')
+     * Modal.showContent('./terms.html', 'Terms', { checkboxLabel: 'I accept the terms' })
+     */
+    static async showContent(url, title = 'Content', options = {}) {
+        const hasCheckbox = !!options.checkboxLabel
+
+        const modal = new Modal({
+            title,
+            body: '',
+            showConfirm: hasCheckbox,
+            confirmLabel: options.confirmLabel || 'Accept',
+            closeLabel: options.closeLabel || (hasCheckbox ? 'Cancel' : 'Close'),
+            size: options.size || 'lg',
+            ...options
+        })
+        await modal.init()
+
+        if (hasCheckbox) {
+            modal.find('.modal-confirm-btn').prop('disabled', true)
+        }
+
+        modal.showBodyLoading()
+        modal.open()
+
+        try {
+            const response = await fetch(url)
+            if (!response.ok) throw new Error(`HTTP ${response.status}`)
+            const content = await response.text()
+            const bodyEl = modal.find('.modal-body').addClass('preformatted-content')
+            bodyEl.html(content)
+
+            if (hasCheckbox) {
+                const chkId = 'nui-content-chk-' + Date.now()
+                bodyEl.append(`
+                    &lt;div class="nui-content-checkbox form-check mt-3 pt-3" style="border-top: 1px solid var(--nui-border-color, #dee2e6); white-space: normal;">
+                        &lt;input class="form-check-input" type="checkbox" id="${chkId}">
+                        &lt;label class="form-check-label" for="${chkId}">${options.checkboxLabel}&lt;/label>
+                    &lt;/div>
+                `)
+                bodyEl.find(`#${chkId}`).on('change', function () {
+                    modal.find('.modal-confirm-btn').prop('disabled', !this.checked)
+                })
+            }
+        } catch (error) {
+            modal.find('.modal-body')
+                .removeClass('preformatted-content')
+                .html(`&lt;div class="alert alert-danger">Failed to load content: ${error.message}&lt;/div>`)
+        }
+
+        return modal
+    }
+}
+
+/**
+ * ConfirmDialog - Simple yes/no confirmation.
+ *
+ * @example
+ * ConfirmDialog.show({
+ *     title: 'Delete Item',
+ *     message: 'Are you sure you want to delete this item?'
+ * }).then(confirmed => {
+ *     if (confirmed) deleteItem()
+ * })
+ * @category Dialogs
+ */
+export class ConfirmDialog extends Modal {
+    /**
+     * Create a confirm dialog.
+     *
+     * @param {Object} params - Configuration object
+     * @param {string} [params.title='Confirm'] - Dialog title
+     * @param {string} [params.message] - Confirmation message
+     * @param {string} [params.confirmLabel='Yes'] - Confirm button label
+     * @param {string} [params.closeLabel='No'] - Cancel button label
+     * @param {''|'sm'|'lg'|'xl'} [params.size='sm'] - Modal size
+     */
+    constructor(params = {}) {
+        super({
+            title: params.title || 'Confirm',
+            body: params.message || params.body || 'Are you sure?',
+            confirmLabel: params.confirmLabel || 'Yes',
+            closeLabel: params.closeLabel || 'No',
+            size: params.size || 'sm',
+            ...params
+        })
+    }
+
+    /**
+     * Show a promise-based confirmation dialog.
+     * @param {Object} params - ConfirmDialog configuration
+     * @returns {Promise&lt;boolean>} Resolves true on confirm, false on dismiss
+     */
+    static show(params = {}) {
+        return new Promise((resolve) => {
+            const dialog = new ConfirmDialog(params)
+            dialog.init()
+
+            dialog.on('confirm', () => resolve(true))
+            dialog.on('close', () => resolve(false))
+
+            dialog.open()
+        })
+    }
+}
+
+/**
+ * AlertDialog - Simple alert with OK button.
+ *
+ * @example
+ * AlertDialog.show({
+ *     title: 'Error',
+ *     message: 'Something went wrong!'
+ * })
+ * @category Dialogs
+ */
+export class AlertDialog extends Modal {
+    /**
+     * Create an alert dialog.
+     *
+     * @param {Object} params - Configuration object
+     * @param {string} [params.title='Alert'] - Dialog title
+     * @param {string} [params.message] - Alert message
+     * @param {string} [params.confirmLabel='OK'] - OK button label
+     * @param {''|'sm'|'lg'|'xl'} [params.size='sm'] - Modal size
+     */
+    constructor(params = {}) {
+        super({
+            title: params.title || 'Alert',
+            body: params.message || params.body || '',
+            confirmLabel: params.confirmLabel || 'OK',
+            showClose: false,
+            size: params.size || 'sm',
+            ...params
+        })
+    }
+
+    /**
+     * Show a promise-based alert dialog.
+     * @param {Object} params - AlertDialog configuration
+     * @returns {Promise&lt;void>} Resolves when the dialog is dismissed
+     */
+    static show(params = {}) {
+        return new Promise((resolve) => {
+            const dialog = new AlertDialog(params)
+            dialog.init()
+
+            dialog.on('confirm', () => resolve())
+            dialog.on('close', () => resolve())
+
+            dialog.open()
+        })
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

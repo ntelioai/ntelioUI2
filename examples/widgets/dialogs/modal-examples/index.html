@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Examples - ntelioUI2</title>
+
+    <!-- Dependencies - jQuery and Bootstrap MUST be loaded before ES modules -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ntelioUI2 styles -->
+    <link href="../../../../css/ntelioUI.css" rel="stylesheet">
+
+    <style>
+        .demo-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .demo-section h4 {
+            margin-bottom: 1rem;
+        }
+        .result-box {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #e9ecef;
+            border-radius: 4px;
+            font-family: monospace;
+            min-height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../../../index.html">Examples</a></li>
+                <li class="breadcrumb-item"><a href="#">Widgets — Dialogs</a></li>
+                <li class="breadcrumb-item active">Modal Examples</li>
+            </ol>
+        </nav>
+
+        <h1>Modal Dialog Examples</h1>
+        <p class="lead">Demonstrates Modal, ConfirmDialog, and AlertDialog widgets.</p>
+        <hr>
+
+        <!-- Basic Modal -->
+        <div class="demo-section">
+            <h4>1. Basic Modal</h4>
+            <p>A customizable modal with title, body, and action buttons.</p>
+            <button id="btn-basic-modal" class="btn btn-primary">Open Basic Modal</button>
+            <div class="result-box" id="result-basic">Click the button to see results...</div>
+        </div>
+
+        <!-- Confirm Dialog -->
+        <div class="demo-section">
+            <h4>2. Confirm Dialog</h4>
+            <p>Promise-based confirmation dialog. Returns true/false.</p>
+            <button id="btn-confirm" class="btn btn-warning">Delete Item</button>
+            <div class="result-box" id="result-confirm">Click to confirm an action...</div>
+        </div>
+
+        <!-- Alert Dialog -->
+        <div class="demo-section">
+            <h4>3. Alert Dialog</h4>
+            <p>Simple alert with OK button.</p>
+            <button id="btn-alert" class="btn btn-info">Show Alert</button>
+            <div class="result-box" id="result-alert">Click to show alert...</div>
+        </div>
+
+        <!-- Modal Sizes -->
+        <div class="demo-section">
+            <h4>4. Modal Sizes</h4>
+            <p>Modals can be small, default, large, or extra-large.</p>
+            <button id="btn-size-sm" class="btn btn-outline-secondary btn-sm">Small</button>
+            <button id="btn-size-default" class="btn btn-outline-secondary">Default</button>
+            <button id="btn-size-lg" class="btn btn-outline-secondary">Large</button>
+            <button id="btn-size-xl" class="btn btn-outline-secondary">XL</button>
+        </div>
+
+        <!-- Custom Content -->
+        <div class="demo-section">
+            <h4>5. Custom Body Content</h4>
+            <p>Modal body can contain HTML, forms, or other widgets.</p>
+            <button id="btn-custom" class="btn btn-success">Open Form Modal</button>
+            <div class="result-box" id="result-custom">Enter data in the modal...</div>
+        </div>
+
+        <!-- Static Backdrop -->
+        <div class="demo-section">
+            <h4>6. Static Backdrop</h4>
+            <p>Modal that doesn't close when clicking outside.</p>
+            <button id="btn-static" class="btn btn-dark">Open Static Modal</button>
+        </div>
+
+        <!-- Content from URL -->
+        <div class="demo-section">
+            <h4>7. Content from URL</h4>
+            <p>Fetches HTML content from a URL and displays it in a modal. Replaces the old <code>ModalContentPopup</code> class.</p>
+            <button id="btn-content" class="btn btn-secondary">Show Terms &amp; Conditions</button>
+            <div class="result-box" id="result-content">Click to load remote content into a modal...</div>
+        </div>
+
+        <!-- Content with Checkbox -->
+        <div class="demo-section">
+            <h4>8. Content with Acceptance Checkbox</h4>
+            <p>Loads content from a URL and shows a checkbox the user must check before confirming. The <strong>Accept</strong> button stays disabled until the checkbox is ticked. Useful for terms acceptance flows.</p>
+            <button id="btn-content-checkbox" class="btn btn-secondary">Show Terms (with checkbox)</button>
+            <div class="result-box" id="result-checkbox">Click to see the checkbox variant...</div>
+        </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>

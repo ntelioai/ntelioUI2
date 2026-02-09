@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 application/PageRouter.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>application/PageRouter.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * PageRouter - Hash-based client-side routing
+ *
+ * Manages URL navigation (#/path), route registration, route-change callbacks,
+ * path component parsing, and breadcrumb label mapping.
+ *
+ * @example
+ * PageRouter.registerRoutes({ '/': 'Home', '/about': 'About' })
+ * PageRouter.onPageChange((className, subPath) => { ... })
+ * PageRouter.navigate('/about')
+ * @category Application
+ */
+export class PageRouter {
+    static pathsMap = {}
+    static labelsMap = {}
+    static currentPath = ''
+    static ERR_NOROUTE = 'NoRoute'
+    static enabled = true
+    static history = []
+
+    /**
+     * Navigate to a path. Sets location.hash which triggers popstate/hashchange.
+     *
+     * @param {string} path - Route path (e.g. '/about', './sub', 'child')
+     * @param {string} [parent] - Optional parent context
+     * @param {boolean} [reload=true] - If false, updates URL without triggering route handler
+     */
+    static navigate(path, parent, reload) {
+        this.parent = parent
+
+        if (reload === false) {
+            history.pushState(null, '', '#/' + parent + '/' + path)
+            PageRouter.currentPath = parent + '/' + path
+            return
+        }
+
+        PageRouter.history.push({ path, parent })
+
+        if (path.startsWith('/')) {
+            location.hash = path
+        } else if (path.startsWith('./')) {
+            const parts = location.hash.split('#')[1].split('/').slice(0, -1)
+            const newPath = parts.join('/') + path.substring(1)
+            location.hash = newPath
+        } else {
+            location.hash = location.hash.split('#')[1] + '/' + path
+        }
+    }
+
+    /**
+     * Register a single route.
+     * @param {string} path - URL path (e.g. '/about')
+     * @param {string} clsName - Class name or action identifier
+     * @param {string} [label] - Breadcrumb label for this path
+     */
+    static registerRoute(path, clsName, label) {
+        PageRouter.pathsMap[path] = clsName
+        PageRouter.labelsMap[path] = label
+    }
+
+    /**
+     * Register multiple routes at once.
+     * @param {Object} pathMap - { path: className } map
+     * @param {Object} [labelsMap] - { path: label } map
+     */
+    static registerRoutes(pathMap, labelsMap) {
+        for (const k in pathMap) {
+            PageRouter.registerRoute(k, pathMap[k], labelsMap?.[k] ?? null)
+        }
+    }
+
+    /**
+     * @returns {boolean} True if at root (no hash)
+     */
+    static isRoot() {
+        return location.hash === ''
+    }
+
+    /**
+     * Resolve the current URL hash to a route. Uses longest-prefix matching.
+     *
+     * @returns {{ className: string, subPath?: string, error?: string }}
+     */
+    static getRoute() {
+        let path
+        const url = location.href
+        const hashIndex = url.indexOf('#')
+
+        if (hashIndex === -1) {
+            path = '/'
+        } else {
+            path = url.slice(hashIndex + 1) || '/'
+        }
+
+        const pathComponents = path.split('/').filter(Boolean)
+
+        // Special handling for root path
+        if (path === '/' &amp;&amp; '/' in PageRouter.pathsMap) {
+            return { className: PageRouter.pathsMap['/'] }
+        }
+
+        let bestMatch = ''
+        let bestMatchComponents = []
+
+        for (const [mapPath, className] of Object.entries(PageRouter.pathsMap)) {
+            const mapComponents = mapPath.split('/').filter(Boolean)
+
+            if (PageRouter._isPathMatch(pathComponents, mapComponents) &amp;&amp;
+                mapComponents.length > bestMatchComponents.length) {
+                bestMatch = mapPath
+                bestMatchComponents = mapComponents
+            }
+        }
+
+        if (bestMatch) {
+            const result = { className: PageRouter.pathsMap[bestMatch] }
+            if (pathComponents.length > bestMatchComponents.length) {
+                result.subPath = '/' + pathComponents.slice(bestMatchComponents.length).join('/')
+            }
+            return result
+        }
+
+        return {
+            error: PageRouter.ERR_NOROUTE,
+            className: null,
+            subPath: path
+        }
+    }
+
+    /**
+     * Check if path components match a route pattern (prefix matching).
+     * @private
+     */
+    static _isPathMatch(pathComponents, mapComponents) {
+        if (mapComponents.length === 0) return true
+        return mapComponents.every((component, index) => component === pathComponents[index])
+    }
+
+    /**
+     * Get the current path as an array of components.
+     * @returns {string[]}
+     */
+    static getPathComponents() {
+        let _path = []
+        if (location.hash) _path = location.hash.substring(2).split('/')
+        if (this.parent) _path.unshift(this.parent)
+        return _path
+    }
+
+    /**
+     * @private
+     */
+    static _callHandler(handler) {
+        const route = PageRouter.getRoute()
+        if (PageRouter.enabled &amp;&amp; handler) {
+            handler(route.className, route.subPath)
+        }
+    }
+
+    /**
+     * Register a callback for route changes. Fires immediately with current route,
+     * then on every subsequent hash change.
+     *
+     * @param {Function} handler - Callback receiving (className, subPath)
+     */
+    static onPageChange(handler) {
+        PageRouter._callHandler(handler)
+        window.addEventListener('popstate', () => {
+            PageRouter._callHandler(handler)
+        })
+    }
+
+    /**
+     * Get the label for a given path (as registered via labelsMap).
+     * @param {string} path
+     * @returns {string|null}
+     */
+    static getLabel(path) {
+        return PageRouter.labelsMap[path] || null
+    }
+
+    /**
+     * Get the current path string.
+     * @returns {string} The current route path
+     */
+    static getCurrentPath() {
+        return PageRouter.currentPath
+    }
+
+    /**
+     * Get the class name mapped to the current path.
+     * @returns {string|undefined} The class name for the current route
+     */
+    static getCurrentClassName() {
+        return PageRouter.pathsMap[PageRouter.currentPath]
+    }
+
+    /**
+     * Disable route handling. Hash changes will be ignored until {@link enable} is called.
+     */
+    static disable() {
+        PageRouter.enabled = false
+    }
+
+    /**
+     * Re-enable route handling after a previous {@link disable} call.
+     */
+    static enable() {
+        PageRouter.enabled = true
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

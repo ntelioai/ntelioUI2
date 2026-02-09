@@ -1,0 +1,293 @@
+/* ─── Autoform Layout ──────────────────────────────────────────── */
+
+.autoform {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    color: var(--answer-color, #333);
+    text-align: left;
+    word-wrap: break-word;
+    border-radius: 0px 20px 20px 20px;
+}
+
+.autoform > * {
+    margin: 0;
+}
+
+/* Scoped label hiding — does NOT leak to page-level labels */
+.autoform label {
+    display: none;
+}
+
+.autoform span {
+    font-size: 0.9em;
+}
+
+/* ─── Header ──────────────────────────────────────────────────── */
+
+.autoform .autoform-header .message {
+    font-weight: bold;
+    white-space: normal;
+    text-align: left;
+    word-wrap: break-word;
+    max-width: 85%;
+    margin-bottom: 1em;
+}
+
+/* ─── Fields ──────────────────────────────────────────────────── */
+
+.autoform-field {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+}
+
+.autoform-field input[type="text"],
+.autoform-field input[type="email"],
+.autoform-field input[type="number"],
+.autoform-field input[type="password"] {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+    outline: none;
+    padding: 6px;
+    margin-bottom: 4px;
+    background: transparent;
+}
+
+.autoform-field input[type="text"]:focus,
+.autoform-field input[type="email"]:focus,
+.autoform-field input[type="number"]:focus,
+.autoform-field input[type="password"]:focus {
+    border-bottom: 1px solid #007bff;
+    background: #fefefe;
+}
+
+.autoform-field input::placeholder {
+    font-size: 0.9em;
+}
+
+/* ─── Textarea ────────────────────────────────────────────────── */
+
+.autoform-field textarea {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    padding: 6px;
+    margin-bottom: 4px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.autoform-field textarea:focus {
+    border-color: #007bff;
+    background: #fefefe;
+}
+
+/* ─── Select / Dropdown ───────────────────────────────────────── */
+
+.autoform-field select {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 6px;
+    margin-bottom: 4px;
+    outline: none;
+    background: transparent;
+}
+
+.autoform-field select:focus {
+    border-color: #007bff;
+}
+
+/* ─── Checkbox ────────────────────────────────────────────────── */
+
+.autoform .autoform-checkbox .form-check-label {
+    display: inline-block;
+    font-size: 0.9em;
+    margin-left: 4px;
+}
+
+.autoform .autoform-checkbox .form-check {
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+}
+
+.autoform .autoform-checkbox .form-check-input {
+    margin-top: 0;
+}
+
+/* ─── Range ───────────────────────────────────────────────────── */
+
+.autoform-range .range-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.autoform-range .range-value {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.autoform-range input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+}
+
+.autoform-range .range-limits {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8em;
+    color: #666;
+}
+
+/* ─── File ────────────────────────────────────────────────────── */
+
+.autoform-file input[type="file"] {
+    padding: 4px;
+    margin-bottom: 4px;
+}
+
+.autoform-file .filename {
+    font-size: 0.85em;
+    color: #555;
+}
+
+/* ─── Rating (Radio) ─────────────────────────────────────────── */
+
+.autoform-field .ratingLabel {
+    font-size: 1.2em;
+}
+
+.autoform-field .radios {
+    margin-top: 0.5em;
+    display: inline-block;
+    margin-bottom: 1em;
+}
+
+.autoform-field .radios input {
+    display: inline-block;
+    position: relative;
+    top: 0.2em;
+}
+
+.autoform-field .radios label {
+    display: inline-block;
+    font-size: 1em;
+}
+
+/* ─── Tags (multiDropdown, multiValue) ────────────────────────── */
+
+.autoform .selected-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.autoform .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #e9ecef;
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 0.85em;
+}
+
+.autoform .tag .remove-tag {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    line-height: 1;
+    padding: 0 2px;
+    color: #666;
+}
+
+.autoform .tag .remove-tag:hover {
+    color: #c00;
+}
+
+.autoform .multi-dropdown-container .input-group,
+.autoform .multi-text-container .input-group {
+    margin-bottom: 4px;
+}
+
+/* ─── Calendar / Date ─────────────────────────────────────────── */
+
+.autoform .date-picker-container .input-group {
+    margin-bottom: 4px;
+}
+
+.autoform .date-picker-trigger {
+    cursor: pointer;
+}
+
+/* ─── Footer / Buttons ────────────────────────────────────────── */
+
+.autoform-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.autoform button {
+    font-size: 1.2em;
+    background: #ccc;
+    border: 1px #ccc solid;
+    border-radius: 5px;
+    padding: 10px 8px;
+    cursor: pointer;
+}
+
+.autoform button:hover {
+    background: #eee;
+}
+
+.autoform button:active {
+    background: #fff;
+}
+
+.autoform #submit {
+    color: white;
+    background: rgb(40, 157, 40);
+    border: 0;
+}
+
+.autoform #submit:hover {
+    background: rgb(126, 192, 27);
+}
+
+.autoform #submit:active {
+    background: green;
+}
+
+/* ─── Validation Errors ───────────────────────────────────────── */
+
+.autoform-field.has-error input,
+.autoform-field.has-error textarea,
+.autoform-field.has-error select {
+    border-color: #dc3545;
+}
+
+.autoform-field.has-error input[type="text"],
+.autoform-field.has-error input[type="email"],
+.autoform-field.has-error input[type="number"],
+.autoform-field.has-error input[type="password"] {
+    border-bottom-color: #dc3545;
+}
+
+.autoform-error-message {
+    color: #dc3545;
+    font-size: 0.8em;
+    margin-top: 2px;
+    margin-bottom: 4px;
+}

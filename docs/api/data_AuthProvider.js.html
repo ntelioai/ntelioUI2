@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 data/AuthProvider.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>data/AuthProvider.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @typedef {Object} UserProfile
+ * @property {string} username  - Login name or email
+ * @property {string} id        - Unique user identifier
+ * @property {string[]} [groups] - Roles or permission groups the user belongs to
+ */
+
+/**
+ * @typedef {Object} LoginCredentials
+ * @property {string}  username    - Username or email
+ * @property {string}  password    - Password
+ * @property {boolean} [rememberMe] - Persist session across page reloads
+ */
+
+/**
+ * Abstract authentication provider.
+ *
+ * Defines the contract for login, logout, session management, and
+ * token access. Consuming applications extend this class for their
+ * platform (Scriptr.io, Firebase, OAuth, etc.) and inject the
+ * instance into LoginDialog or Application.
+ *
+ * Follows the same abstract pattern as {@link DataProvider}: abstract
+ * methods throw if not overridden, concrete event methods are provided
+ * by the base class.
+ *
+ * @abstract
+ *
+ * @example
+ * // Platform-specific implementation
+ * class ScriptrAuthProvider extends AuthProvider {
+ *     async login({ username, password, rememberMe }) {
+ *         const res = await fetch('/api/auth/login', {
+ *             method: 'POST',
+ *             headers: { 'Content-Type': 'application/json' },
+ *             body: JSON.stringify({ email: username, password })
+ *         })
+ *         if (!res.ok) throw new Error('Invalid credentials')
+ *         const data = await res.json()
+ *         this._token = data.token
+ *         this._profile = { username: data.user.login, id: data.user.login, groups: data.user.groups }
+ *         if (rememberMe) localStorage.setItem('auth_token', data.token)
+ *         this._notifyLogin(this._profile)
+ *         return this._profile
+ *     }
+ *     async logout() {
+ *         this._token = null
+ *         this._profile = null
+ *         localStorage.removeItem('auth_token')
+ *         this._notifyLogout()
+ *     }
+ *     isAuthenticated() { return !!this._token }
+ *     getToken() { return this._token }
+ *     getUserProfile() { return this._profile }
+ *     async restoreSession() {
+ *         const token = localStorage.getItem('auth_token')
+ *         if (!token) return false
+ *         this._token = token
+ *         // optionally fetch profile from server
+ *         return true
+ *     }
+ * }
+ *
+ * @example
+ * // Usage with LoginDialog
+ * import { LoginDialog } from '../application/LoginDialog.js'
+ *
+ * const auth = new ScriptrAuthProvider()
+ * const profile = await LoginDialog.open({ authProvider: auth })
+ * console.log('Logged in as', profile.username)
+ *
+ * @example
+ * // Usage in an Application startup flow
+ * const auth = new ScriptrAuthProvider()
+ * const restored = await auth.restoreSession()
+ * if (!restored) {
+ *     await LoginDialog.open({ authProvider: auth })
+ * }
+ * // auth.getToken() is now available for API calls
+ *
+ * @category Data
+ */
+export class AuthProvider {
+
+    /** @type {function[]} @private */
+    _loginListeners = []
+
+    /** @type {function[]} @private */
+    _logoutListeners = []
+
+    // ─── Abstract Methods ────────────────────────────────────────────
+
+    /**
+     * Authenticate with the given credentials.
+     *
+     * Must be implemented by subclass. Should persist the session if
+     * `rememberMe` is true, and call `this._notifyLogin(profile)` on
+     * success.
+     *
+     * @param {LoginCredentials} credentials
+     * @returns {Promise&lt;UserProfile>} The authenticated user profile
+     * @throws {Error} If authentication fails (message shown in LoginDialog)
+     * @abstract
+     */
+    async login(credentials) {
+        throw new Error('AuthProvider.login() must be implemented by subclass')
+    }
+
+    /**
+     * End the current session.
+     *
+     * Must be implemented by subclass. Should clear token, profile,
+     * and any persisted session data, then call `this._notifyLogout()`.
+     *
+     * @returns {Promise&lt;void>}
+     * @abstract
+     */
+    async logout() {
+        throw new Error('AuthProvider.logout() must be implemented by subclass')
+    }
+
+    /**
+     * Check whether a valid session exists.
+     *
+     * @returns {boolean} True if the user is currently authenticated
+     * @abstract
+     */
+    isAuthenticated() {
+        throw new Error('AuthProvider.isAuthenticated() must be implemented by subclass')
+    }
+
+    /**
+     * Return the current authentication token for API requests.
+     *
+     * @returns {string|null} Auth token, or null if not authenticated
+     * @abstract
+     */
+    getToken() {
+        throw new Error('AuthProvider.getToken() must be implemented by subclass')
+    }
+
+    /**
+     * Return the current user's profile.
+     *
+     * @returns {UserProfile|null} Profile object, or null if not authenticated
+     * @abstract
+     */
+    getUserProfile() {
+        throw new Error('AuthProvider.getUserProfile() must be implemented by subclass')
+    }
+
+    /**
+     * Attempt to restore a previous session from persistent storage
+     * (cookies, localStorage, etc.) on application startup.
+     *
+     * @returns {Promise&lt;boolean>} True if a valid session was restored
+     * @abstract
+     */
+    async restoreSession() {
+        throw new Error('AuthProvider.restoreSession() must be implemented by subclass')
+    }
+
+    // ─── Event System ────────────────────────────────────────────────
+
+    /**
+     * Register a handler called after successful login.
+     *
+     * @param {function(UserProfile):void} handler - Receives the user profile
+     * @returns {function():void} Unsubscribe function
+     */
+    onLogin(handler) {
+        this._loginListeners.push(handler)
+        return () => {
+            this._loginListeners = this._loginListeners.filter(h => h !== handler)
+        }
+    }
+
+    /**
+     * Register a handler called after logout.
+     *
+     * @param {function():void} handler
+     * @returns {function():void} Unsubscribe function
+     */
+    onLogout(handler) {
+        this._logoutListeners.push(handler)
+        return () => {
+            this._logoutListeners = this._logoutListeners.filter(h => h !== handler)
+        }
+    }
+
+    /**
+     * Notify all login listeners. Call this from your `login()`
+     * implementation after authentication succeeds.
+     *
+     * @param {UserProfile} profile - The authenticated user profile
+     * @protected
+     */
+    _notifyLogin(profile) {
+        this._loginListeners.forEach(h => h(profile))
+    }
+
+    /**
+     * Notify all logout listeners. Call this from your `logout()`
+     * implementation after the session is cleared.
+     *
+     * @protected
+     */
+    _notifyLogout() {
+        this._logoutListeners.forEach(h => h())
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "source": {
+    "include": ["core", "application", "widgets", "data", "forms", "grid", "utils"],
+    "includePattern": ".+\\.js$"
+  },
+  "plugins": [
+    "node_modules/better-docs/category"
+  ],
+  "opts": {
+    "destination": "docs/api",
+    "recurse": true,
+    "readme": "README.md",
+    "template": "node_modules/better-docs"
+  },
+  "templates": {
+    "default": {
+      "includeDate": false
+    },
+    "better-docs": {
+      "title": "ntelioUI2",
+      "navigation": true,
+      "search": true
+    }
+  }
+}

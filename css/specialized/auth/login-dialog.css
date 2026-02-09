@@ -1,0 +1,59 @@
+/**
+ * LoginDialog styles
+ */
+
+.nui-login-dialog {
+    max-width: 330px;
+    margin: 0 auto;
+    padding: 0 0.5rem;
+}
+
+.nui-login-form .form-floating:focus-within {
+    z-index: 2;
+}
+
+/* Stacked input fields with connected borders */
+.nui-login-form .form-floating:first-of-type .form-control {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.nui-login-form .form-floating:nth-of-type(2) .form-control {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* Error message */
+.nui-login-error {
+    color: var(--nui-danger, #dc3545);
+    font-size: 0.875rem;
+    text-align: center;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: rgba(220, 53, 69, 0.08);
+    border-radius: var(--nui-border-radius, 0.375rem);
+}
+
+/* Remember me */
+.nui-login-dialog .form-check-label {
+    font-size: 0.875rem;
+    color: var(--nui-text-secondary, #6c757d);
+}
+
+/* Terms text */
+.nui-login-terms {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--nui-text-muted, #adb5bd);
+    margin-top: 1rem;
+}
+
+.nui-login-terms-link {
+    color: var(--nui-primary, #0c7aa3);
+    text-decoration: none;
+}
+
+.nui-login-terms-link:hover {
+    text-decoration: underline;
+}

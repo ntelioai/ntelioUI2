@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 application/VerticalNavbar.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>application/VerticalNavbar.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * VerticalNavbar - Collapsible sidebar navigation widget
+ *
+ * Features:
+ * - Hover-to-expand with icon-only collapsed state
+ * - Main menu section + bottom section (for settings, profile, etc.)
+ * - Theme switching (light/dark) with localStorage persistence
+ * - Two built-in themes: navbar.css (transparent white) and navbar-dark.css (opaque dark)
+ *
+ * @example
+ * const navbar = new VerticalNavbar({ title: 'My App' })
+ * navbar.setMenuItems([{ icon: '&lt;svg>…&lt;/svg>', label: 'Home', url: '/home' }])
+ * navbar.setBottomItems([{ icon: '&lt;svg>…&lt;/svg>', label: 'Settings', url: '/settings' }])
+ */
+import { Widget } from '../core/Widget.js'
+import { ResourceLoader } from '../core/ResourceLoader.js'
+import { PageRouter } from './PageRouter.js'
+
+const $ = window.jQuery || window.$
+
+/** @category Application */
+export class VerticalNavbar extends Widget {
+    /**
+     * Create a new VerticalNavbar.
+     *
+     * @param {Object} params - Configuration object
+     * @param {string} [params.title='App'] - Application title shown in the sidebar header
+     */
+    constructor(params = {}) {
+        super({
+            template: `
+                &lt;div class="vertical-navbar">
+                    &lt;div class="sidebar-header">
+                        &lt;span class="menu-icon">
+                            &lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">&lt;rect x="3" y="3" width="18" height="18" rx="2"/>&lt;path d="M9 3v18"/>&lt;/svg>
+                        &lt;/span>
+                        &lt;span class="menu-label ms-2">${params.title || 'App'}&lt;/span>
+                    &lt;/div>
+                    &lt;div class="sidebar-menu">&lt;/div>
+                    &lt;div class="sidebar-bottom">&lt;/div>
+                &lt;/div>
+            `,
+            autoInit: false,
+            ...params
+        })
+        this._themeBaseUrl = new URL('../css/application/', import.meta.url).href
+    }
+
+    /**
+     * Load the sidebar theme CSS and mark the body for sidebar layout.
+     * @returns {Promise&lt;void>}
+     */
+    async init() {
+        const saved = localStorage.getItem('nui-sidebar-theme') || 'light'
+        await this._loadThemeCss(saved)
+        document.body.classList.add('with-sidebar')
+    }
+
+    /**
+     * Switch sidebar theme and persist to localStorage.
+     * @param {'light'|'dark'} theme
+     */
+    async setTheme(theme) {
+        const oldTheme = theme === 'dark' ? 'light' : 'dark'
+        const oldUrl = this._getThemeUrl(oldTheme)
+
+        const oldLink = document.querySelector(`link[href="${oldUrl}"]`)
+        if (oldLink) oldLink.remove()
+        ResourceLoader._loadedResources.delete(oldUrl)
+
+        await this._loadThemeCss(theme)
+        localStorage.setItem('nui-sidebar-theme', theme)
+    }
+
+    /**
+     * Set the main menu items (middle section).
+     * @param {Array} items - { icon, label, url, customClickHandler, type }
+     */
+    setMenuItems(items) {
+        this._renderItems(this.find('.sidebar-menu'), items)
+    }
+
+    /**
+     * Set the bottom menu items (pinned to bottom).
+     * @param {Array} items - { icon, label, url, customClickHandler, type }
+     */
+    setBottomItems(items) {
+        this._renderItems(this.find('.sidebar-bottom'), items)
+    }
+
+    /** @deprecated Placeholder — not yet implemented. */
+    setUserName() {}
+
+    // ── Private ──────────────────────────────────────────────────────
+
+    /**
+     * Build the full theme CSS URL for the given theme name.
+     * @param {'light'|'dark'} theme - Theme identifier
+     * @returns {string} Absolute URL to the theme CSS file
+     * @private
+     */
+    _getThemeUrl(theme) {
+        return this._themeBaseUrl + (theme === 'dark' ? 'navbar-dark.css' : 'navbar.css')
+    }
+
+    /**
+     * Load a theme's CSS stylesheet via ResourceLoader.
+     * @param {'light'|'dark'} theme - Theme identifier
+     * @returns {Promise&lt;HTMLLinkElement>}
+     * @private
+     */
+    async _loadThemeCss(theme) {
+        await ResourceLoader.loadCss(this._getThemeUrl(theme))
+    }
+
+    /**
+     * Render menu items into a container element.
+     * @param {jQuery} container - Target container element
+     * @param {Array&lt;{icon?: string, label: string, url?: string, customClickHandler?: Function, type?: string}>} items - Menu item definitions
+     * @private
+     */
+    _renderItems(container, items) {
+        container.empty()
+        items.forEach(item => {
+            if (item.type === 'separator') {
+                container.append('&lt;hr class="menu-separator">')
+                return
+            }
+            const el = $(`
+                &lt;div class="menu-item" data-url="${item.url || ''}">
+                    &lt;div class="menu-icon">${item.icon || ''}&lt;/div>
+                    &lt;div class="menu-label">${item.label}&lt;/div>
+                &lt;/div>
+            `)
+            el.click(() => {
+                this.find('.menu-item').removeClass('active')
+                el.addClass('active')
+                if (item.customClickHandler) return item.customClickHandler()
+                if (item.url) PageRouter.navigate(item.url)
+            })
+            container.append(el)
+        })
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

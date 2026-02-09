@@ -1,0 +1,1036 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 forms/Autoform.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>forms/Autoform.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Widget } from '../core/Widget.js'
+import { I18n } from '../utils/I18n.js'
+
+/**
+ * @typedef {'text'|'password'|'number'|'email'|'textarea'|'checkbox'|'rating'|'select'|'dropDown'|'range'|'file'|'multiDropdown'|'multiValue'|'calendar'|'date'} FieldType
+ */
+
+/**
+ * @typedef {Object} FieldOption
+ * @property {string} value  - Option value submitted with the form
+ * @property {string} label  - Display label shown in dropdowns/tags
+ */
+
+/**
+ * @typedef {Object} FieldDef
+ * @property {string}            name             - Unique field identifier (used as HTML id and data key)
+ * @property {FieldType}         type             - Input control type
+ * @property {string}            [label]          - I18n key resolved via `I18n.t()`. Falls back to `name`
+ * @property {*}                 [value]          - Initial value. Arrays for multi-types, boolean for checkbox
+ * @property {*}                 [defaultValue]   - Fallback if `value` is not set
+ * @property {string}            [placeholder]    - Input placeholder (defaults to resolved label)
+ * @property {boolean}           [required]       - Marks the field as required for validation
+ * @property {boolean}           [disabled]       - Renders the field as disabled
+ * @property {boolean}           [checked]        - Initial checked state (checkbox only)
+ * @property {boolean}           [multiple]       - Allow multiple selections (select only)
+ * @property {number}            [size]           - Visible option count (select only)
+ * @property {number}            [rows]           - Textarea row count (default 3)
+ * @property {number}            [min]            - Minimum for number/range (default 0)
+ * @property {number}            [max]            - Maximum for number/range (default 100)
+ * @property {number}            [step]           - Step increment for number/range (default 1)
+ * @property {string}            [pattern]        - Regex pattern string for validation
+ * @property {string}            [patternMessage] - Custom message when pattern fails
+ * @property {number}            [minLength]      - Minimum character length
+ * @property {number}            [maxLength]      - Maximum character length
+ * @property {Array&lt;string|FieldOption>} [options] - Choices for select/dropDown/multiDropdown
+ * @property {Array&lt;string|FieldOption>} [enum]    - Alias for options
+ * @property {string}            [dateFormat]     - jQuery datepicker format (calendar/date, default 'mm/dd/yy')
+ * @property {string}            [minDate]        - Earliest selectable date (calendar/date)
+ * @property {string}            [maxDate]        - Latest selectable date (calendar/date)
+ * @property {string}            [yearRange]      - Year dropdown range (calendar/date, default '-100:+10')
+ * @property {function(*, FieldDef, Object):string|undefined} [customValidator] - Returns error string or undefined
+ */
+
+/**
+ * @typedef {Object} AutoformConfig
+ * @property {string}      [title='']               - Header text shown above the form
+ * @property {FieldDef[]}  fields                    - Array of field definitions
+ * @property {string}      [submitLabel='Submit']    - Label for the submit button
+ * @property {string}      [secondaryLabel]          - Label for the secondary button (auto-derived from `secondaryAction`)
+ * @property {'reset'|'skip'} [secondaryAction='reset'] - Secondary button behaviour
+ * @property {boolean}     [showSecondary=true]      - Whether to show the secondary button
+ */
+
+/**
+ * @typedef {Object} SubmitPayload
+ * @property {Object&lt;string,*>} data       - Field name → value map
+ * @property {string}           stringified - HTML-formatted summary of all fields
+ */
+
+/**
+ * @typedef {Object} ValidationError
+ * @property {string}   field   - Field name
+ * @property {string}   label   - Resolved display label
+ * @property {string[]} errors  - List of error messages for this field
+ */
+
+/**
+ * @typedef {function(Autoform, FieldDef):void} FieldInitializer
+ * Post-render setup function for complex field types.
+ * Receives the form instance and the field definition.
+ */
+
+/**
+ * Declarative, config-driven form widget.
+ *
+ * Renders a complete form from a `fields` array, handles validation,
+ * provides configurable submit/reset/skip behaviour, and caches data
+ * before DOM teardown so callers always get consistent values.
+ *
+ * Supports 15 field types out of the box, including complex multi-value
+ * selectors, date pickers, and star ratings.
+ *
+ * @extends Widget
+ *
+ * @fires Autoform#submit  - `{data, stringified}` after successful validation
+ * @fires Autoform#skip    - `{stringified}` when secondary action is 'skip'
+ * @fires Autoform#reset   - (no payload) after all fields are cleared
+ *
+ * @example
+ * const form = new Autoform({
+ *     title: 'Contact Us',
+ *     fields: [
+ *         { name: 'name',  type: 'text',  label: 'name',  required: true },
+ *         { name: 'email', type: 'email', label: 'email', pattern: '^[^@]+@[^@]+\\.[^@]+$' },
+ *         { name: 'message', type: 'textarea', label: 'message', rows: 4 }
+ *     ]
+ * })
+ * form.on('submit', ({ data, stringified }) => console.log(data))
+ * form.init().then(() => form.appendTo($('#container')))
+ * @category Forms
+ */
+export class Autoform extends Widget {
+    /** @type {string} Event name emitted on successful form submission */
+    static SUBMIT_EVENT = 'submit'
+    /** @type {string} Event name emitted when the form is skipped (chatbot mode) */
+    static SKIP_EVENT = 'skip'
+    /** @type {string} Event name emitted after form fields are reset */
+    static RESET_EVENT = 'reset'
+
+    /** @type {string} Outer shell template with header, form slot, and footer buttons */
+    static template = `
+        &lt;div class="autoform">
+            &lt;div class="autoform-header">
+                &lt;div class="message">{{title}}&lt;/div>
+            &lt;/div>
+            &lt;form>&lt;/form>
+            &lt;div class="autoform-footer">
+                &lt;button id="submit" type="button">{{submitLabel}}&lt;/button>
+                &lt;button id="secondary" type="button">{{secondaryLabel}}&lt;/button>
+            &lt;/div>
+        &lt;/div>`
+
+    // ─── Field Templates ────────────────────────────────────────────
+
+    /**
+     * HTML templates keyed by {@link FieldType}.
+     * Placeholders use `{{key}}` syntax resolved by {@link _resolveFieldValues}.
+     * @type {Object&lt;FieldType, string>}
+     */
+    static templates = {
+        text: `
+            &lt;div class="autoform-field">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;input type="text" id="{{name}}" name="{{name}}" placeholder="{{placeholder}}" value="{{value}}" {{required}} {{disabled}}>
+            &lt;/div>`,
+        password: `
+            &lt;div class="autoform-field">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;input type="password" id="{{name}}" name="{{name}}" placeholder="{{placeholder}}" {{required}} {{disabled}}>
+            &lt;/div>`,
+        number: `
+            &lt;div class="autoform-field">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;input type="number" id="{{name}}" name="{{name}}" placeholder="{{placeholder}}" value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}" {{required}} {{disabled}}>
+            &lt;/div>`,
+        email: `
+            &lt;div class="autoform-field">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;input type="email" id="{{name}}" name="{{name}}" placeholder="{{placeholder}}" value="{{value}}" {{required}} {{disabled}}>
+            &lt;/div>`,
+        textarea: `
+            &lt;div class="autoform-field">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;textarea id="{{name}}" name="{{name}}" rows="{{rows}}" placeholder="{{placeholder}}" {{required}} {{disabled}}>{{value}}&lt;/textarea>
+            &lt;/div>`,
+        checkbox: `
+            &lt;div class="autoform-field autoform-checkbox">
+                &lt;div class="form-check">
+                    &lt;input type="checkbox" class="form-check-input" id="{{name}}" name="{{name}}" {{checked}} {{disabled}}>
+                    &lt;label class="form-check-label" for="{{name}}">{{label}}&lt;/label>
+                &lt;/div>
+            &lt;/div>`,
+        rating: `
+            &lt;div class="autoform-field">
+                &lt;span class="ratingLabel">{{label}}&lt;/span>
+                &lt;div class="radios">
+                    &lt;input type="radio" id="{{name}}-very-satisfied" name="{{name}}" value="very-satisfied">
+                    &lt;label for="{{name}}-very-satisfied">Very Satisfied&lt;/label>&lt;br>
+                    &lt;input type="radio" id="{{name}}-satisfied" name="{{name}}" value="satisfied">
+                    &lt;label for="{{name}}-satisfied">Satisfied&lt;/label>&lt;br>
+                    &lt;input type="radio" id="{{name}}-neutral" name="{{name}}" value="neutral">
+                    &lt;label for="{{name}}-neutral">Neutral&lt;/label>&lt;br>
+                    &lt;input type="radio" id="{{name}}-dissatisfied" name="{{name}}" value="dissatisfied">
+                    &lt;label for="{{name}}-dissatisfied">Dissatisfied&lt;/label>&lt;br>
+                    &lt;input type="radio" id="{{name}}-very-dissatisfied" name="{{name}}" value="very-dissatisfied">
+                    &lt;label for="{{name}}-very-dissatisfied">Very Dissatisfied&lt;/label>&lt;br>
+                &lt;/div>
+            &lt;/div>`,
+        select: `
+            &lt;div class="autoform-field">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;select class="form-select" id="{{name}}" name="{{name}}" {{required}} {{multiple}} {{size}} {{disabled}}>
+                    {{options}}
+                &lt;/select>
+            &lt;/div>`,
+        dropDown: `
+            &lt;div class="autoform-field">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;select class="form-select" id="{{name}}" name="{{name}}" {{required}} {{disabled}}>
+                    {{options}}
+                &lt;/select>
+            &lt;/div>`,
+        range: `
+            &lt;div class="autoform-field autoform-range">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;div class="range-wrapper">
+                    &lt;span class="range-value" id="{{name}}-label">{{value}}&lt;/span>
+                    &lt;input type="range" id="{{name}}" name="{{name}}" min="{{min}}" max="{{max}}" step="{{step}}" value="{{value}}" {{disabled}}>
+                    &lt;div class="range-limits">
+                        &lt;span>{{min}}&lt;/span>
+                        &lt;span>{{max}}&lt;/span>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>`,
+        file: `
+            &lt;div class="autoform-field autoform-file">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;input type="file" id="{{name}}" name="{{name}}" {{required}} {{disabled}}>
+                &lt;span class="filename" id="{{name}}-fileName">&lt;/span>
+            &lt;/div>`,
+        multiDropdown: `
+            &lt;div class="autoform-field multi-dropdown-container" data-name="{{name}}">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;div class="selected-tags" id="{{name}}-tags">&lt;/div>
+                &lt;div class="input-group">
+                    &lt;select id="{{name}}-select" class="form-select" {{disabled}}>
+                        {{options}}
+                    &lt;/select>
+                    &lt;button type="button" id="{{name}}-add" class="btn btn-primary" {{disabled}}>
+                        &lt;i class="fas fa-plus">&lt;/i>
+                    &lt;/button>
+                &lt;/div>
+                &lt;input type="hidden" id="{{name}}" name="{{name}}" value='{{value}}'>
+            &lt;/div>`,
+        multiValue: `
+            &lt;div class="autoform-field multi-text-container" data-name="{{name}}">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;div class="selected-tags" id="{{name}}-tags">&lt;/div>
+                &lt;div class="input-group">
+                    &lt;input type="text" id="{{name}}-input" class="form-control" placeholder="{{placeholder}}" {{disabled}}>
+                    &lt;button type="button" id="{{name}}-add" class="btn btn-primary" {{disabled}}>
+                        &lt;i class="fas fa-plus">&lt;/i>
+                    &lt;/button>
+                &lt;/div>
+                &lt;input type="hidden" id="{{name}}" name="{{name}}" value='{{value}}'>
+            &lt;/div>`,
+        calendar: `
+            &lt;div class="autoform-field date-picker-container" data-name="{{name}}">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;div class="input-group">
+                    &lt;input type="text" class="form-control date-picker-input" id="{{name}}" name="{{name}}"
+                           placeholder="{{placeholder}}" value="{{value}}" {{disabled}} {{required}} readonly>
+                    &lt;button type="button" class="btn btn-outline-secondary date-picker-trigger" id="{{name}}-trigger" {{disabled}}>
+                        &lt;i class="fas fa-calendar-alt">&lt;/i>
+                    &lt;/button>
+                &lt;/div>
+            &lt;/div>`,
+        date: `
+            &lt;div class="autoform-field date-picker-container" data-name="{{name}}">
+                &lt;label for="{{name}}">{{label}}&lt;/label>
+                &lt;div class="input-group">
+                    &lt;input type="text" class="form-control date-picker-input" id="{{name}}" name="{{name}}"
+                           placeholder="{{placeholder}}" value="{{value}}" {{disabled}} {{required}} readonly>
+                    &lt;button type="button" class="btn btn-outline-secondary date-picker-trigger" id="{{name}}-trigger" {{disabled}}>
+                        &lt;i class="fas fa-calendar-alt">&lt;/i>
+                    &lt;/button>
+                &lt;/div>
+            &lt;/div>`
+    }
+
+    // ─── Field Initializers (post-render setup for complex types) ───
+
+    /**
+     * Post-render initializers for complex field types.
+     * Each entry is a {@link FieldInitializer} keyed by {@link FieldType}.
+     * Called automatically by {@link _initializeFields} after HTML is appended.
+     * @type {Object&lt;FieldType, FieldInitializer>}
+     */
+    static fieldInitializers = {
+        range: (form, field) => {
+            const name = field.name
+            const rangeInput = form.find(`#${name}`)
+            const rangeLabel = form.find(`#${name}-label`)
+            rangeLabel.text(rangeInput.val())
+            rangeInput.on('input', () => {
+                rangeLabel.text(rangeInput.val())
+            })
+        },
+
+        multiDropdown: (form, field) => {
+            const name = field.name
+            const select = form.find(`#${name}-select`)
+            const addButton = form.find(`#${name}-add`)
+            const hiddenInput = form.find(`#${name}`)
+            const tagsContainer = form.find(`#${name}-tags`)
+
+            const allOptions = Array.isArray(field.options) ? field.options
+                : Array.isArray(field.enum) ? field.enum : []
+
+            function getValues() {
+                try {
+                    const parsed = JSON.parse(hiddenInput.val())
+                    return Array.isArray(parsed) ? parsed : []
+                } catch { return [] }
+            }
+
+            function setValues(values) {
+                hiddenInput.val(JSON.stringify(values))
+                renderTags(values)
+            }
+
+            function getLabelFromValue(value) {
+                const match = allOptions.find(opt =>
+                    (typeof opt === 'string') ? opt === value : opt.value === value
+                )
+                if (typeof match === 'string') return match
+                return match?.label || value
+            }
+
+            function renderTags(values) {
+                tagsContainer.html('')
+                values.forEach((val, idx) => {
+                    const label = getLabelFromValue(val)
+                    tagsContainer.append(`
+                        &lt;span class="tag">${label}
+                            &lt;button class="remove-tag" data-index="${idx}">&amp;times;&lt;/button>
+                        &lt;/span>
+                    `)
+                })
+                updateSelectOptions(values)
+            }
+
+            function updateSelectOptions(values) {
+                select.html('&lt;option value="" disabled selected>Select an option&lt;/option>')
+                allOptions.forEach(option => {
+                    const val = typeof option === 'string' ? option : option.value
+                    const label = typeof option === 'string' ? option : option.label
+                    if (!values.includes(val)) {
+                        select.append(`&lt;option value="${val}">${label}&lt;/option>`)
+                    }
+                })
+            }
+
+            renderTags(getValues())
+
+            addButton.on('click', () => {
+                const val = select.val()
+                if (!val) return
+                const values = getValues()
+                if (!values.includes(val)) {
+                    values.push(val)
+                    setValues(values)
+                    select.prop('selectedIndex', 0)
+                }
+            })
+
+            tagsContainer.on('click', '.remove-tag', function () {
+                const index = $(this).data('index')
+                const values = getValues()
+                values.splice(index, 1)
+                setValues(values)
+            })
+        },
+
+        multiValue: (form, field) => {
+            const name = field.name
+            const input = form.find(`#${name}-input`)
+            const addButton = form.find(`#${name}-add`)
+            const hiddenInput = form.find(`#${name}`)
+            const tagsContainer = form.find(`#${name}-tags`)
+
+            function getValues() {
+                try {
+                    const parsed = JSON.parse(hiddenInput.val())
+                    return Array.isArray(parsed) ? parsed : []
+                } catch { return [] }
+            }
+
+            function setValues(values) {
+                hiddenInput.val(JSON.stringify(values))
+                renderTags(values)
+            }
+
+            function renderTags(values) {
+                tagsContainer.html('')
+                values.forEach((val, idx) => {
+                    tagsContainer.append(`
+                        &lt;span class="tag">${val}
+                            &lt;button class="remove-tag" data-index="${idx}">&amp;times;&lt;/button>
+                        &lt;/span>
+                    `)
+                })
+            }
+
+            renderTags(getValues())
+            addButton.prop('disabled', true)
+
+            addButton.on('click', () => {
+                const val = input.val().trim()
+                if (!val) return
+                const values = getValues()
+                if (!values.includes(val)) {
+                    values.push(val)
+                    setValues(values)
+                    input.val('')
+                    addButton.prop('disabled', true)
+                }
+            })
+
+            input.on('input', () => {
+                const val = input.val().trim()
+                const values = getValues()
+                addButton.prop('disabled', !val || values.includes(val))
+            })
+
+            input.on('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault()
+                    addButton.trigger('click')
+                }
+            })
+
+            tagsContainer.on('click', '.remove-tag', function () {
+                const index = $(this).data('index')
+                const values = getValues()
+                values.splice(index, 1)
+                setValues(values)
+            })
+        },
+
+        calendar: (form, field) => {
+            const name = field.name
+            const input = form.find(`#${name}`)
+            const trigger = form.find(`#${name}-trigger`)
+            const dateFormat = field.dateFormat || 'mm/dd/yy'
+
+            // Use jQuery datepicker if available, otherwise fallback to native date input
+            if ($.fn.datepicker) {
+                input.datepicker({
+                    dateFormat: dateFormat,
+                    minDate: field.minDate || null,
+                    maxDate: field.maxDate || null,
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: field.yearRange || '-100:+10',
+                    showButtonPanel: true
+                })
+                trigger.on('click', () => {
+                    if (!input.prop('disabled')) input.datepicker('show')
+                })
+            } else {
+                // Fallback: convert to native date input
+                input.prop('readonly', false)
+                input.prop('type', 'date')
+                trigger.on('click', () => {
+                    if (!input.prop('disabled')) input.trigger('click')
+                })
+            }
+        }
+    }
+
+    // Alias: date initializer = calendar initializer
+    static { Autoform.fieldInitializers.date = Autoform.fieldInitializers.calendar }
+
+    // ─── Constructor ────────────────────────────────────────────────
+
+    /**
+     * @param {AutoformConfig} attrs - Form configuration
+     */
+    constructor(attrs = {}) {
+        const secondaryAction = attrs.secondaryAction || 'reset'
+        const defaultSecondaryLabel = secondaryAction === 'skip' ? 'Skip' : 'Reset'
+
+        const params = {
+            template: Autoform.template,
+            autoInit: false,
+            submitLabel: attrs.submitLabel || 'Submit',
+            secondaryLabel: attrs.secondaryLabel || defaultSecondaryLabel,
+            ...attrs
+        }
+        super(params)
+
+        this.fields = attrs.fields || []
+        this.secondaryAction = secondaryAction
+        this.showSecondary = attrs.showSecondary !== false
+        this._lastData = null
+        this._lastStringified = null
+
+        I18n.loadTranslations('en', {
+            youSkipped: 'You skipped the form.'
+        })
+    }
+
+    /**
+     * Shallow-merge two config objects. `map1` properties win over `map2`.
+     * @param {Object} map1 - High-priority overrides
+     * @param {Object} map2 - Base defaults
+     * @returns {Object} Merged config
+     */
+    static merge(map1, map2) {
+        const merged = {}
+        for (const key in map2) merged[key] = map2[key]
+        for (const key in map1) merged[key] = map1[key]
+        return merged
+    }
+
+    // ─── Lifecycle ──────────────────────────────────────────────────
+
+    /**
+     * Load CSS, render all fields, run initializers, and wire up buttons.
+     * Call manually since `autoInit` is `false`.
+     * @returns {Promise&lt;void>}
+     */
+    async init() {
+        Widget.loadCss('../css/forms/autoform.css', import.meta.url)
+        if (!this.showSecondary) this.find('#secondary').hide()
+        this._renderFields()
+        this._initializeFields()
+        this._attachEventHandlers()
+    }
+
+    /**
+     * Widget lifecycle hook — caches form data before the DOM is removed
+     * so that {@link getData} and {@link stringify} still return values
+     * after the form is destroyed.
+     */
+    beforeDestroy() {
+        // Cache data before DOM is removed
+        if (!this._lastData) {
+            try { this._lastData = this._extractData() } catch (e) { /* DOM may already be gone */ }
+        }
+        if (!this._lastStringified) {
+            try { this._lastStringified = this._buildStringify() } catch (e) { /* DOM may already be gone */ }
+        }
+    }
+
+    // ─── Overridable Hooks ──────────────────────────────────────────
+
+    /**
+     * Called after validation passes, just before the form is destroyed.
+     * Override in subclasses to perform side-effects or cancel submission.
+     * @param {Object&lt;string,*>} data - Validated field data
+     * @returns {false|void} Return `false` to prevent submit and keep the form open
+     */
+    onBeforeSubmit(data) {
+        // Override in subclasses
+    }
+
+    /**
+     * Called when validation fails. Default implementation highlights invalid fields.
+     * Override to provide custom error display (e.g. toast notifications).
+     * @param {ValidationError[]} errors
+     */
+    onValidationError(errors) {
+        this._showFieldErrors(errors)
+    }
+
+    // ─── Rendering ──────────────────────────────────────────────────
+
+    /**
+     * Iterate {@link fields}, resolve each template, and append to the `&lt;form>` element.
+     * @private
+     */
+    _renderFields() {
+        const formEl = this.find('form')
+        this.fields.forEach(field => {
+            const tmpl = Autoform.templates[field.type]
+            if (!tmpl) {
+                console.warn(`Autoform: Unknown field type "${field.type}" for field "${field.name}"`)
+                return
+            }
+            const values = this._resolveFieldValues(field)
+            const html = tmpl.trim().replace(/\{\{([^}]+)\}\}/g, (match, key) => {
+                return values[key] !== undefined ? values[key] : ''
+            })
+            formEl.append(html)
+        })
+    }
+
+    /**
+     * Build the `{{key}}` → value map used to resolve a field's template.
+     * Handles I18n label resolution, HTML attribute flags, and JSON serialization for multi-types.
+     * @param {FieldDef} field
+     * @returns {Object&lt;string, string|number>}
+     * @private
+     */
+    _resolveFieldValues(field) {
+        const label = field.label ? I18n.t(field.label) : field.name
+        const values = {
+            name: field.name,
+            label: label,
+            value: field.value || field.defaultValue || '',
+            placeholder: field.placeholder || label,
+            min: field.min ?? 0,
+            max: field.max ?? 100,
+            step: field.step ?? 1,
+            rows: field.rows ?? 3,
+            required: field.required ? 'required="required"' : '',
+            disabled: field.disabled ? 'disabled' : '',
+            checked: field.checked ? 'checked' : '',
+            multiple: field.multiple ? 'multiple="multiple"' : '',
+            size: field.size ? `size="${field.size}"` : '',
+            options: this._renderOptions(field)
+        }
+
+        // For multi-types, ensure value is a JSON array string
+        if (field.type === 'multiDropdown' || field.type === 'multiValue') {
+            const arr = Array.isArray(field.value) ? field.value : []
+            values.value = JSON.stringify(arr)
+        }
+
+        return values
+    }
+
+    /**
+     * Render `&lt;option>` elements for select/dropDown/multiDropdown fields.
+     * Accepts both string arrays and `{value, label}` object arrays.
+     * @param {FieldDef} field
+     * @returns {string} HTML string of `&lt;option>` elements
+     * @private
+     */
+    _renderOptions(field) {
+        const optionsList = field.options || field.enum
+        if (!Array.isArray(optionsList) || optionsList.length === 0) {
+            return '&lt;option value="" disabled selected>No options available&lt;/option>'
+        }
+        let html = '&lt;option value="" disabled selected>Select...&lt;/option>'
+        optionsList.forEach(option => {
+            const val = typeof option === 'string' ? option : option.value
+            const label = typeof option === 'string' ? option : option.label
+            const selected = val === field.defaultValue ? ' selected' : ''
+            html += `&lt;option value="${val}"${selected}>${label}&lt;/option>`
+        })
+        return html
+    }
+
+    /**
+     * Run post-render initializers for complex field types (range, multiDropdown, etc.).
+     * @private
+     */
+    _initializeFields() {
+        this.fields.forEach(field => {
+            const initializer = Autoform.fieldInitializers[field.type]
+            if (initializer) initializer(this, field)
+        })
+    }
+
+    // ─── Event Handlers ─────────────────────────────────────────────
+
+    /**
+     * Wire up submit and secondary (reset/skip) button click handlers.
+     * Submit flow: clear errors → validate → cache data → onBeforeSubmit → emit → destroy.
+     * @private
+     */
+    _attachEventHandlers() {
+        this.find('#submit').on('click', () => {
+            this._clearFieldErrors()
+
+            const errors = this.validate()
+            if (errors.length > 0) {
+                this.onValidationError(errors)
+                return
+            }
+
+            // Cache data before destroying DOM
+            this._lastData = this._extractData()
+            this._lastStringified = this._buildStringify()
+
+            const result = this.onBeforeSubmit(this._lastData)
+            if (result === false) return
+
+            this.emit(Autoform.SUBMIT_EVENT, {
+                data: this._lastData,
+                stringified: this._lastStringified
+            })
+
+            this.destroy()
+        })
+
+        this.find('#secondary').on('click', () => {
+            if (this.secondaryAction === 'skip') {
+                this._lastStringified = I18n.t('youSkipped')
+                this.emit(Autoform.SKIP_EVENT, {
+                    stringified: this._lastStringified
+                })
+                this.destroy()
+            } else {
+                this.reset()
+            }
+        })
+    }
+
+    /**
+     * Reset all fields to their initial values (from the field definitions).
+     * Multi-value types re-run their initializers to rebuild tag UI.
+     * Emits {@link Autoform.RESET_EVENT}.
+     */
+    reset() {
+        this._clearFieldErrors()
+        this.fields.forEach(field => {
+            const name = field.name
+            switch (field.type) {
+                case 'checkbox':
+                    this.find(`#${name}`).prop('checked', !!field.checked)
+                    break
+                case 'rating':
+                    this.find(`input[name="${name}"]`).prop('checked', false)
+                    break
+                case 'multiDropdown':
+                case 'multiValue': {
+                    const arr = Array.isArray(field.value) ? field.value : []
+                    this.find(`#${name}`).val(JSON.stringify(arr))
+                    // Re-run initializer to rebuild tags
+                    const initializer = Autoform.fieldInitializers[field.type]
+                    if (initializer) initializer(this, field)
+                    break
+                }
+                case 'range': {
+                    const val = field.value || field.defaultValue || field.min || 0
+                    this.find(`#${name}`).val(val)
+                    this.find(`#${name}-label`).text(val)
+                    break
+                }
+                default:
+                    this.find(`#${name}`).val(field.value || field.defaultValue || '')
+            }
+        })
+        this.emit(Autoform.RESET_EVENT)
+    }
+
+    // ─── Validation ─────────────────────────────────────────────────
+
+    /**
+     * Validate all fields against their constraints (required, pattern, min/max, custom).
+     * @returns {ValidationError[]} Empty array if valid
+     */
+    validate() {
+        const errors = []
+        const allData = this._extractData()
+
+        this.fields.forEach(field => {
+            const value = allData[field.name]
+            const fieldErrors = this._validateField(field, value, allData)
+            if (fieldErrors.length > 0) {
+                errors.push({
+                    field: field.name,
+                    label: field.label ? I18n.t(field.label) : field.name,
+                    errors: fieldErrors
+                })
+            }
+        })
+
+        return errors
+    }
+
+    /**
+     * Validate a single field value against its definition constraints.
+     * @param {FieldDef} field
+     * @param {*} value - Current field value
+     * @param {Object&lt;string,*>} allData - All field values (for cross-field validators)
+     * @returns {string[]} Error messages (empty if valid)
+     * @private
+     */
+    _validateField(field, value, allData) {
+        const errors = []
+        const isEmpty = value === null || value === undefined || value === '' ||
+            (Array.isArray(value) &amp;&amp; value.length === 0)
+
+        if (field.required &amp;&amp; isEmpty) {
+            errors.push('This field is required')
+            return errors
+        }
+
+        if (isEmpty) return errors
+
+        if (field.pattern) {
+            const regex = new RegExp(field.pattern)
+            if (!regex.test(String(value))) {
+                errors.push(field.patternMessage || 'Invalid format')
+            }
+        }
+
+        if (field.minLength &amp;&amp; String(value).length &lt; field.minLength) {
+            errors.push(`Minimum ${field.minLength} characters`)
+        }
+
+        if (field.maxLength &amp;&amp; String(value).length > field.maxLength) {
+            errors.push(`Maximum ${field.maxLength} characters`)
+        }
+
+        if (field.min !== undefined &amp;&amp; (field.type === 'number' || field.type === 'range')) {
+            if (Number(value) &lt; field.min) errors.push(`Minimum value is ${field.min}`)
+        }
+
+        if (field.max !== undefined &amp;&amp; (field.type === 'number' || field.type === 'range')) {
+            if (Number(value) > field.max) errors.push(`Maximum value is ${field.max}`)
+        }
+
+        if (field.customValidator) {
+            const result = field.customValidator(value, field, allData)
+            if (result) errors.push(result)
+        }
+
+        return errors
+    }
+
+    /**
+     * Add `.has-error` class and error message divs to invalid fields.
+     * @param {ValidationError[]} errors
+     * @private
+     */
+    _showFieldErrors(errors) {
+        errors.forEach(({ field, errors: msgs }) => {
+            const el = this.find(`#${field}`).closest('.autoform-field')
+            el.addClass('has-error')
+            msgs.forEach(msg => {
+                el.append(`&lt;div class="autoform-error-message">${msg}&lt;/div>`)
+            })
+        })
+    }
+
+    /**
+     * Remove all validation error indicators and messages from the form.
+     * @private
+     */
+    _clearFieldErrors() {
+        this.find('.autoform-field').removeClass('has-error')
+        this.find('.autoform-error-message').remove()
+    }
+
+    // ─── Data Extraction ────────────────────────────────────────────
+
+    /**
+     * Get all field values as a plain object.
+     * Safe to call after destroy — returns the cached snapshot.
+     * @returns {Object&lt;string,*>} Field name → value map
+     */
+    getData() {
+        if (this._destroyed || !this.node) return this._lastData || {}
+        return this._extractData()
+    }
+
+    /**
+     * Read current values from the live DOM for every field.
+     * Handles type-specific extraction (checkbox → boolean, multi → array, file → FileList).
+     * @returns {Object&lt;string,*>}
+     * @private
+     */
+    _extractData() {
+        const data = {}
+        this.fields.forEach(field => {
+            const name = field.name
+            switch (field.type) {
+                case 'rating':
+                    const checked = this.find(`input[name="${name}"]:checked`)
+                    data[name] = checked.length > 0 ? checked.val() : null
+                    break
+                case 'checkbox':
+                    data[name] = this.find(`#${name}`).prop('checked')
+                    break
+                case 'multiDropdown':
+                case 'multiValue':
+                    try { data[name] = JSON.parse(this.find(`#${name}`).val()) || [] }
+                    catch { data[name] = [] }
+                    break
+                case 'file':
+                    data[name] = this.find(`#${name}`)[0]?.files || null
+                    break
+                default:
+                    data[name] = this.find(`#${name}`).val()
+            }
+        })
+        return data
+    }
+
+    /**
+     * Build a `FormData` object suitable for multipart/form-data uploads.
+     * File fields are appended as `File` objects; arrays are JSON-stringified.
+     * @returns {FormData}
+     */
+    getFormData() {
+        const data = this._extractData()
+        const formData = new FormData()
+        this.fields.forEach(field => {
+            if (field.type === 'file') {
+                const files = this.find(`#${field.name}`)[0]?.files
+                if (files &amp;&amp; files.length > 0) {
+                    for (let i = 0; i &lt; files.length; i++) formData.append(field.name, files[i])
+                }
+            } else {
+                const val = data[field.name]
+                formData.append(field.name, Array.isArray(val) ? JSON.stringify(val) : val ?? '')
+            }
+        })
+        return formData
+    }
+
+    /**
+     * Human-readable HTML summary of all field values.
+     * Safe to call after destroy — returns the cached snapshot.
+     * @returns {string} HTML string with `&lt;p>` elements per field
+     */
+    stringify() {
+        if (this._destroyed || !this.node) return this._lastStringified || ''
+        return this._buildStringify()
+    }
+
+    /**
+     * Generate the HTML summary from live DOM data.
+     * @returns {string}
+     * @private
+     */
+    _buildStringify() {
+        const data = this._extractData()
+        let s = ''
+        this.fields.forEach(field => {
+            const label = field.label ? I18n.t(field.label) : field.name
+            const value = data[field.name]
+            if (field.type === 'checkbox') {
+                s += `&lt;p>${label}: ${value ? 'Yes' : 'No'}&lt;/p>\n`
+            } else if (Array.isArray(value)) {
+                s += `&lt;p>${label}: ${value.join(', ')}&lt;/p>\n`
+            } else {
+                s += `&lt;p>${label}: ${value || ''}&lt;/p>\n`
+            }
+        })
+        return s
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

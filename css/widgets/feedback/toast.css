@@ -1,0 +1,110 @@
+/**
+ * Toast notification styles
+ */
+
+/* Container - fixed top-right, auto-created by Toast.js */
+.nui-toast-container {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 1080;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: none;
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Individual toast */
+.nui-toast {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem 1rem;
+    border-radius: var(--nui-border-radius, 0.375rem);
+    background: var(--nui-toast-bg, #ffffff);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-left: 4px solid var(--nui-toast-accent, #0dcaf0);
+    pointer-events: auto;
+    min-height: 48px;
+    font-size: 0.875rem;
+
+    /* Entry animation: start off-screen right */
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.nui-toast-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.nui-toast-hiding {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+/* Type-specific accent colors */
+.nui-toast-success {
+    --nui-toast-accent: var(--nui-success, #198754);
+}
+
+.nui-toast-error {
+    --nui-toast-accent: var(--nui-danger, #dc3545);
+}
+
+.nui-toast-warning {
+    --nui-toast-accent: var(--nui-warning, #ffc107);
+}
+
+.nui-toast-info {
+    --nui-toast-accent: var(--nui-info, #0dcaf0);
+}
+
+/* Icon */
+.nui-toast-icon {
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+    color: var(--nui-toast-accent);
+    display: flex;
+    align-items: center;
+}
+
+/* Message */
+.nui-toast-message {
+    flex: 1;
+    color: var(--nui-text-primary, #212529);
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+/* Close button */
+.nui-toast-close {
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: var(--nui-text-muted, #adb5bd);
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.15s ease-in-out;
+}
+
+.nui-toast-close:hover {
+    opacity: 1;
+    color: var(--nui-text-primary, #212529);
+}
+
+/* Responsive: full width on small screens */
+@media (max-width: 480px) {
+    .nui-toast-container {
+        top: 0.5rem;
+        right: 0.5rem;
+        left: 0.5rem;
+        max-width: none;
+    }
+}
