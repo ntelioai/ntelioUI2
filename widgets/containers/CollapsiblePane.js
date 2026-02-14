@@ -270,4 +270,5 @@ export class CollapsiblePane extends Widget {
      * No-op — pointer event listeners are cleaned up automatically when DOM is removed.
      */
     beforeDestroy() {
+    }
 }

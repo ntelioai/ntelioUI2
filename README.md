@@ -40,7 +40,7 @@ That's it. No `npm install`. No `webpack.config.js`. No waiting.
 
 Most UI frameworks demand you learn a curriculum before you can change a button color. ntelioUI2 takes a different approach: the browser already has a DOM, ES6 modules are a web standard, and jQuery + Bootstrap solve 80% of the UI surface area. So we built on that instead of abstracting it away.
 
-New developers build widgets on day one. Production features ship in a week. See [the full story](docs/posts/why-i-built-a-ui-framework-in-2022.md).
+New developers build widgets on day one. Production features ship in a week. See [the full story](docs/posts/why-i-built-a-ui-framework-in-2023.md).
 
 ## Project Structure
 

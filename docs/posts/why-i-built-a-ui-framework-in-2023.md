@@ -1,10 +1,10 @@
-# I Built a UI Framework in 2022 While Everyone Was Using React. Here's Why.
+# I Built a UI Framework in 2023 While Everyone Was Using React. Here's Why.
 
-In 2022, React was the rising king. Every job post demanded it. The kids ("kids" compared to this particular quinquagenarian) built their careers on it. Every tutorial taught it. Every conference talked about it. The world was a virtual DOM with a million dangling tools and node modules. After all, who could argue with the sophistication of Meta's engineering powerhouses?
+In 2023, React was the rising king. Every job post demanded it. The kids ("kids" compared to this particular quinquagenarian) built their careers on it. Every tutorial taught it. Every conference talked about it. The world was a virtual DOM with a million dangling tools and node modules. After all, who could argue with the sophistication of Meta's engineering powerhouses?
 
 So back then, if you had told a room of developers you were building a UI widget library from scratch — with jQuery — they'd look at you like you're a cryogenically frozen creature from the 2000s who just thawed.
 
-Here's the thing though. When I started building ntelio.ai in 2022, I knew we'd need a lot of UI work. And I knew exactly how that story ends with the latest, coolest frameworks — because I'd lived it. Through the 2010s, our services team at elementn delivered dozens of enterprise projects. We integrated jQuery, Dojo Toolkit, two Angulars, and React across various clients. Each one came with its own learning curve, its own toolchain drama, and its own hit to our productivity and bottom line. So when I looked at the "hipster" frameworks my new hires idolized, I saw neither innovation nor productivity. I saw the same expensive pattern repeating itself. It was clear that things could be simpler.
+Here's the thing though. When I started building ntelio.ai in 2023, I knew we'd need a lot of UI work. And I knew exactly how that story ends with the latest, coolest frameworks — because I'd lived it. Through the 2010s, our services team at elementn delivered dozens of enterprise projects. We integrated jQuery, Dojo Toolkit, two Angulars, and React across various clients. Each one came with its own learning curve, its own toolchain drama, and its own hit to our productivity and bottom line. So when I looked at the "hipster" frameworks my new hires idolized, I saw neither innovation nor productivity. I saw the same expensive pattern repeating itself. It was clear that things could be simpler.
 
 ## Don't read this as a manifesto against React! (it is ;)
 
@@ -55,7 +55,7 @@ And this was **before AI coding agents were a thing.** Just developers, a simple
 
 In the years since, I watched React go from class components to hooks to server components to server actions. Each shift essentially told developers: "Remember everything you learned? Forget it. Here's the new way."
 
-Meanwhile, our codebase looked the same as it did in 2022. Because we built on web standards that don't change:
+Meanwhile, our codebase looked the same as it did in 2023. Because we built on web standards that don't change:
 
 - **ES6 modules** — supported in every browser, stable since 2018
 - **CSS custom properties** — native theming, no runtime overhead

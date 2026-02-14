@@ -34,5 +34,8 @@
     "better-docs": "^2.7.3",
     "clean-jsdoc-theme": "^4.3.0",
     "jsdoc": "^4.0.5"
+  },
+  "dependencies": {
+    "playwright": "^1.58.2"
   }
 }
