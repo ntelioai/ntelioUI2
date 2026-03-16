@@ -1,0 +1,188 @@
+/* ── KanbanBoard ─────────────────────────────────────────────── */
+
+.nui-kanban {
+    --nui-kanban-column-width: 280px;
+    --nui-kanban-column-bg: var(--nui-bg-secondary, #f8f9fa);
+    --nui-kanban-card-bg: var(--nui-bg-primary, #ffffff);
+    --nui-kanban-gap: var(--nui-spacing-md, 1rem);
+    --nui-kanban-card-radius: var(--nui-border-radius, 0.375rem);
+
+    display: flex;
+    gap: var(--nui-kanban-gap);
+    overflow-x: auto;
+    padding: var(--nui-spacing-sm, 0.5rem);
+    min-height: 200px;
+    height: 100%;
+    font-family: var(--nui-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+}
+
+/* ── Column ─────────────────────────────────────────────────── */
+
+.nui-kanban-column {
+    flex: 1 1 0;
+    min-width: var(--nui-kanban-column-width);
+    display: flex;
+    flex-direction: column;
+    background: var(--nui-kanban-column-bg);
+    border-radius: var(--nui-kanban-card-radius);
+    border: 1px solid var(--nui-border-color, #dee2e6);
+    max-height: 100%;
+    min-height: 0;
+}
+
+/* ── Column Header ──────────────────────────────────────────── */
+
+.nui-kanban-column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+    font-weight: 600;
+    font-size: var(--nui-font-size-sm, 0.875rem);
+    border-bottom: 1px solid var(--nui-border-color, #dee2e6);
+    color: var(--nui-text-primary, #212529);
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.nui-kanban-column-count {
+    background: var(--nui-bg-tertiary, #e9ecef);
+    color: var(--nui-text-secondary, #6c757d);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    min-width: 1.5rem;
+    text-align: center;
+}
+
+/* ── Column Body (dragula container) ────────────────────────── */
+
+.nui-kanban-column-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 60px;
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+
+.nui-kanban-card {
+    background: var(--nui-kanban-card-bg);
+    border: 1px solid var(--nui-border-color, #dee2e6);
+    border-radius: var(--nui-kanban-card-radius);
+    padding: 0.6rem 0.75rem;
+    cursor: grab;
+    transition: box-shadow 0.15s ease-in-out, transform 0.15s ease-in-out;
+    font-size: var(--nui-font-size-sm, 0.875rem);
+}
+
+.nui-kanban-card:hover {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.nui-kanban-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.nui-kanban-card-title {
+    flex: 1;
+    font-weight: 500;
+    color: var(--nui-text-primary, #212529);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nui-kanban-card-icon {
+    flex-shrink: 0;
+    color: var(--nui-text-secondary, #6c757d);
+}
+
+.nui-kanban-card-badge {
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    background: var(--nui-primary, #0c7aa3);
+    color: #fff;
+}
+
+.nui-kanban-card-subtitle {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    color: var(--nui-text-secondary, #6c757d);
+    line-height: 1.35;
+}
+
+/* ── Drag States (dragula classes) ───────────────────────────── */
+
+.gu-mirror.nui-kanban-card {
+    opacity: 0.85;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: rotate(2deg);
+    cursor: grabbing;
+}
+
+.gu-transit.nui-kanban-card {
+    opacity: 0.3;
+}
+
+.nui-kanban-card.nui-no-drag {
+    cursor: default;
+}
+
+/* ── Selected card ──────────────────────────────────────────── */
+
+.nui-kanban-card.nui-selected {
+    border-color: var(--nui-primary, #0c7aa3);
+    box-shadow: 0 0 0 2px rgba(12, 122, 163, 0.25);
+}
+
+/* ── Group Header ────────────────────────────────────────────── */
+
+.nui-kanban-group-header {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--nui-text-secondary, #6c757d);
+    padding: 0.3rem 0.2rem 0.15rem;
+    margin-top: 0.25rem;
+    user-select: none;
+}
+
+.nui-kanban-group-header:first-child {
+    margin-top: 0;
+}
+
+.nui-kanban-group-count {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--nui-text-muted, #adb5bd);
+    margin-left: 0.25rem;
+}
+
+/* ── Empty state ─────────────────────────────────────────────── */
+
+.nui-kanban-column-empty {
+    text-align: center;
+    padding: 1.5rem 0.5rem;
+    color: var(--nui-text-muted, #adb5bd);
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+
+@media (max-width: 576px) {
+    .nui-kanban {
+        --nui-kanban-column-width: 240px;
+    }
+}

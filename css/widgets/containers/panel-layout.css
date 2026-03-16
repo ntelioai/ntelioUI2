@@ -1,0 +1,206 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PanelLayout — Multi-panel layout with open / closed / minimized states
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Root Container ──────────────────────────────────────────────── */
+
+.nui-panel-layout {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* ── Panel Base ──────────────────────────────────────────────────── */
+
+.nui-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background: var(--nui-panel-bg, #ffffff);
+    border: 1px solid var(--nui-panel-border-color, var(--nui-border-color, #dee2e6));
+    transition: flex-basis 0.3s ease, min-width 0.3s ease, max-width 0.3s ease,
+                opacity 0.2s ease, border-width 0.3s ease;
+}
+
+/* ── State: Open (non-main) ──────────────────────────────────────── */
+
+.nui-panel.nui-panel-open:not(.nui-panel-main) {
+    flex: 0 0 auto;
+    /* flex-basis set inline by JS */
+}
+
+/* ── State: Main Panel ───────────────────────────────────────────── */
+
+.nui-panel.nui-panel-main {
+    flex: 1 1 auto;
+    min-width: 120px;
+}
+
+.nui-panel-main > .nui-panel-resize-handle {
+    display: none;
+}
+
+.nui-panel-main .nui-panel-header-actions {
+    display: none;
+}
+
+/* ── State: Closed ───────────────────────────────────────────────── */
+
+.nui-panel.nui-panel-closed {
+    flex-basis: 0px !important;
+    min-width: 0px !important;
+    max-width: 0px !important;
+    border-width: 0;
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.nui-panel.nui-panel-closed .nui-panel-content,
+.nui-panel.nui-panel-closed .nui-panel-header,
+.nui-panel.nui-panel-closed .nui-panel-resize-handle {
+    display: none;
+}
+
+/* ── State: Minimized ────────────────────────────────────────────── */
+
+.nui-panel.nui-panel-minimized {
+    flex-basis: 30px !important;
+    min-width: 30px !important;
+    max-width: 30px;
+}
+
+.nui-panel.nui-panel-minimized .nui-panel-content {
+    display: none;
+}
+
+.nui-panel.nui-panel-minimized .nui-panel-resize-handle {
+    display: none;
+}
+
+.nui-panel.nui-panel-minimized .nui-panel-header {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    padding: 0.65em 0.3em;
+    justify-content: flex-end;
+    border-bottom: none;
+    height: 100%;
+    cursor: pointer;
+}
+
+.nui-panel.nui-panel-minimized .nui-panel-header-actions {
+    display: none;
+}
+
+.nui-panel.nui-panel-minimized[data-side="left"] .nui-panel-header {
+    border-right: 1px solid var(--nui-panel-border-color, var(--nui-border-color, #dee2e6));
+}
+
+.nui-panel.nui-panel-minimized[data-side="right"] .nui-panel-header {
+    border-left: 1px solid var(--nui-panel-border-color, var(--nui-border-color, #dee2e6));
+}
+
+/* ── Header ──────────────────────────────────────────────────────── */
+
+.nui-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5em 0.65em;
+    background: var(--nui-panel-header-bg, #f8f9fa);
+    border-bottom: 1px solid var(--nui-panel-border-color, var(--nui-border-color, #dee2e6));
+    flex-shrink: 0;
+    user-select: none;
+    gap: 0.5em;
+    min-height: 38px;
+}
+
+.nui-panel-title {
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--nui-panel-title-color, var(--nui-text-primary, #212529));
+}
+
+/* ── Header Action Buttons ───────────────────────────────────────── */
+
+.nui-panel-header-actions {
+    display: flex;
+    gap: 0.25em;
+    flex-shrink: 0;
+}
+
+.nui-panel-btn {
+    background: none;
+    border: none;
+    padding: 2px 5px;
+    cursor: pointer;
+    color: var(--nui-panel-icon-color, #6c757d);
+    font-size: 0.7rem;
+    border-radius: 3px;
+    line-height: 1;
+    transition: background 0.15s, color 0.15s;
+}
+
+.nui-panel-btn:hover {
+    background: var(--nui-panel-btn-hover-bg, #e9ecef);
+    color: var(--nui-text-primary, #212529);
+}
+
+/* ── Content Area ────────────────────────────────────────────────── */
+
+.nui-panel-content {
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 0;
+}
+
+/* ── Resize Handle ───────────────────────────────────────────────── */
+
+.nui-panel-resize-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    cursor: col-resize;
+    z-index: 10;
+    background: transparent;
+    transition: background-color 0.15s;
+}
+
+.nui-panel-resize-handle:hover,
+.nui-panel-resize-handle.nui-active {
+    background: var(--nui-panel-handle-active-color, var(--nui-primary, #0c7aa3));
+    opacity: 0.4;
+}
+
+.nui-panel[data-side="left"] > .nui-panel-resize-handle {
+    right: 0;
+}
+
+.nui-panel[data-side="right"] > .nui-panel-resize-handle {
+    left: 0;
+}
+
+/* ── Resizing State (disable transitions during drag) ────────────── */
+
+.nui-panel-layout.nui-resizing,
+.nui-panel-layout.nui-resizing .nui-panel {
+    transition: none !important;
+}
+
+.nui-panel-layout.nui-resizing * {
+    user-select: none !important;
+}
+
+/* ── No-header variant ───────────────────────────────────────────── */
+
+.nui-panel-header.nui-panel-no-header {
+    display: none;
+}

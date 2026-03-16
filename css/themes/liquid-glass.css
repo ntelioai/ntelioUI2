@@ -1,0 +1,232 @@
+/**
+ * ntelioUI2 Liquid Glass Theme
+ *
+ * Frosted-glass aesthetic inspired by Apple visionOS / iOS 26.
+ * Loads on top of default.css — all rules scoped under
+ * body[data-nui-theme="glass"] so they have zero effect until activated.
+ *
+ * Activate:  document.body.dataset.nuiTheme = 'glass'
+ * Deactivate: delete document.body.dataset.nuiTheme
+ */
+
+/* ── Canvas Background ────────────────────────────────────────── */
+
+body[data-nui-theme="glass"] {
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(120, 180, 255, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(180, 120, 255, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(100, 220, 200, 0.2) 0%, transparent 50%),
+        linear-gradient(135deg, #e8edf5 0%, #f0e8f5 50%, #e8f0f5 100%);
+    background-attachment: fixed;
+
+    /* Override theme variables */
+    --nui-bg-primary: rgba(255, 255, 255, 0.55);
+    --nui-bg-secondary: rgba(255, 255, 255, 0.35);
+    --nui-bg-tertiary: rgba(255, 255, 255, 0.25);
+    --nui-border-color: rgba(255, 255, 255, 0.45);
+    --nui-border-radius: 1rem;
+    --nui-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --nui-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --nui-shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Application Shell ────────────────────────────────────────── */
+
+body[data-nui-theme="glass"] .ntelioApp {
+    background: transparent;
+}
+
+body[data-nui-theme="glass"] #content-wrapper {
+    background: transparent;
+}
+
+body[data-nui-theme="glass"] #footer {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────── */
+
+body[data-nui-theme="glass"] #content-wrapper::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+body[data-nui-theme="glass"] #content-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+/* ── Cards (Kanban, Assignment Board) ─────────────────────────── */
+
+body[data-nui-theme="glass"] .nui-kanban-card,
+body[data-nui-theme="glass"] .nui-assignment-card {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+body[data-nui-theme="glass"] .nui-kanban-card:hover,
+body[data-nui-theme="glass"] .nui-assignment-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* ── Columns / Lanes / Panels ─────────────────────────────────── */
+
+body[data-nui-theme="glass"] .nui-kanban-column,
+body[data-nui-theme="glass"] .nui-assignment-lane,
+body[data-nui-theme="glass"] .nui-assignment-source,
+body[data-nui-theme="glass"] .nui-collapsible-pane {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* ── Column / Lane / Pane Headers ─────────────────────────────── */
+
+body[data-nui-theme="glass"] .nui-kanban-column-header,
+body[data-nui-theme="glass"] .nui-assignment-lane-header,
+body[data-nui-theme="glass"] .nui-assignment-source-header,
+body[data-nui-theme="glass"] .nui-collapsible-pane-header {
+    background: rgba(255, 255, 255, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+body[data-nui-theme="glass"] .nui-collapsible-pane-header:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Count Badges ─────────────────────────────────────────────── */
+
+body[data-nui-theme="glass"] .nui-kanban-column-count,
+body[data-nui-theme="glass"] .nui-assignment-lane-count,
+body[data-nui-theme="glass"] .nui-assignment-source-count {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Assignment Board Specifics ───────────────────────────────── */
+
+body[data-nui-theme="glass"] .nui-assignment-search-input {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+body[data-nui-theme="glass"] .nui-assignment-search-input:focus {
+    background: rgba(255, 255, 255, 0.55);
+}
+
+body[data-nui-theme="glass"] .nui-assignment-group-header:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+body[data-nui-theme="glass"] .nui-assignment-trash {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+body[data-nui-theme="glass"] .nui-assignment-trash.nui-drag-hover {
+    background: rgba(220, 53, 69, 0.1);
+    border-color: rgba(220, 53, 69, 0.5);
+}
+
+/* ── Modal ────────────────────────────────────────────────────── */
+
+body[data-nui-theme="glass"] .nui-modal .modal-content {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 1.25rem;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* ── Toast ────────────────────────────────────────────────────── */
+
+body[data-nui-theme="glass"] .nui-toast {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ── BreadCrumbs ──────────────────────────────────────────────── */
+
+body[data-nui-theme="glass"] .nui-breadcrumbs {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 0.75rem;
+}
+
+body[data-nui-theme="glass"] .nui-crumb {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+body[data-nui-theme="glass"] .nui-crumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+body[data-nui-theme="glass"] .nui-crumb-active {
+    background: rgba(12, 122, 163, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* ── Sidebar Widget ───────────────────────────────────────────── */
+
+body[data-nui-theme="glass"] .nui-sidebar-item:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+body[data-nui-theme="glass"] .nui-sidebar-item.active {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Bootstrap .card Override (Dashboard, etc.) ───────────────── */
+
+body[data-nui-theme="glass"] .page .card {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* ── Bootstrap .table Override ────────────────────────────────── */
+
+body[data-nui-theme="glass"] .page .table {
+    --bs-table-bg: transparent;
+}
+
+body[data-nui-theme="glass"] .page .table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-bg-type: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Bootstrap .alert Override ────────────────────────────────── */
+
+body[data-nui-theme="glass"] .page .alert {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* ── DataControl / Grid ───────────────────────────────────────── */
+
+body[data-nui-theme="glass"] .nui-data-control {
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 1rem;
+}

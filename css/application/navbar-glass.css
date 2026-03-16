@@ -1,0 +1,177 @@
+/**
+ * Liquid Glass navbar theme
+ *
+ * Frosted-glass sidebar with translucent background and blur.
+ * Load via: VerticalNavbar.setTheme('glass')
+ */
+
+.vertical-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    transition: width 0.3s ease;
+    overflow: hidden;
+
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 0 24px 24px 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    padding: 0 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: calc(100vh - 20px);
+    width: 60px;
+}
+
+.vertical-navbar:hover {
+    width: 200px;
+    border-radius: 0 32px 32px 0;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Header / logo area */
+.vertical-navbar .sidebar-header {
+    padding: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    min-height: 48px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: var(--nui-cerulean, #0c7aa3);
+}
+
+.vertical-navbar .sidebar-header .menu-icon svg {
+    stroke: var(--nui-cerulean, #0c7aa3);
+}
+
+/* Menu */
+.vertical-navbar .sidebar-menu {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px 0;
+    max-height: calc(100vh - 200px);
+}
+
+/* Menu items */
+.vertical-navbar .menu-item {
+    position: relative;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-sizing: border-box;
+    margin: 0 4px;
+    color: #333;
+}
+
+.vertical-navbar .menu-item:hover {
+    border-radius: 0 16px 16px 16px;
+    background: rgba(255, 255, 255, 0.45);
+    color: var(--nui-cerulean, #0c7aa3);
+}
+
+.vertical-navbar .menu-item:hover .menu-label {
+    color: var(--nui-cerulean, #0c7aa3);
+}
+
+.vertical-navbar .menu-item.active {
+    background: rgba(12, 122, 163, 0.12);
+    border-left: 3px solid var(--nui-cerulean, #0c7aa3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.vertical-navbar .menu-item.active:hover {
+    background: rgba(12, 122, 163, 0.18);
+    color: #333;
+}
+
+.vertical-navbar .menu-item.active:hover .menu-label {
+    color: #333;
+}
+
+/* Icons */
+.vertical-navbar .menu-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: absolute;
+    left: 18px;
+}
+
+.vertical-navbar .menu-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Collapsed: center icons */
+.vertical-navbar:not(:hover) .menu-icon {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Expanded: icons go to fixed left position */
+.vertical-navbar:hover .menu-icon {
+    left: 18px;
+    transform: translateX(0);
+}
+
+/* Labels */
+.vertical-navbar .menu-label {
+    font-family: Lato, sans-serif;
+    font-size: 14px;
+    color: #333;
+    margin-left: 42px;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.vertical-navbar:hover .menu-label {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Separator */
+.vertical-navbar .menu-separator {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 1px;
+    height: 4px;
+    margin: 10px 5px;
+    width: auto;
+    pointer-events: none;
+}
+
+/* Bottom section */
+.vertical-navbar .sidebar-bottom {
+    padding: 15px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+}
+
+/* Push content to the right when sidebar is present */
+body.with-sidebar .ntelioApp {
+    margin-left: 68px;
+}
+
+body.with-sidebar #content-wrapper {
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}

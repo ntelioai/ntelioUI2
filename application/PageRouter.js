@@ -96,7 +96,7 @@ export class PageRouter {
 
         // Special handling for root path
         if (path === '/' && '/' in PageRouter.pathsMap) {
-            return { className: PageRouter.pathsMap['/'] }
+            return { className: PageRouter.pathsMap['/'], path: '/' }
         }
 
         let bestMatch = ''
@@ -113,7 +113,7 @@ export class PageRouter {
         }
 
         if (bestMatch) {
-            const result = { className: PageRouter.pathsMap[bestMatch] }
+            const result = { className: PageRouter.pathsMap[bestMatch], path: bestMatch }
             if (pathComponents.length > bestMatchComponents.length) {
                 result.subPath = '/' + pathComponents.slice(bestMatchComponents.length).join('/')
             }

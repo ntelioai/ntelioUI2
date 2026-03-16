@@ -1,0 +1,391 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 widgets/containers/CollapsiblePane.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Containers</h2><h3>Classes</h3><ul><li><a href="CollapsiblePane.html">CollapsiblePane</a></li><li><a href="KanbanBoard.html">KanbanBoard</a></li><li><a href="SourceAssignmentBoard.html">SourceAssignmentBoard</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li><li><a href="ScriptrAuthProvider.html">ScriptrAuthProvider</a></li><li><a href="ScriptrDataProvider.html">ScriptrDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="LocalSessionStorage.html">LocalSessionStorage</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>widgets/containers/CollapsiblePane.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * CollapsiblePane - Resizable collapsible pane for multi-pane layouts
+ *
+ * A pane that can be collapsed to a thin strip and resized by dragging.
+ * Designed for LEFT / CENTER / RIGHT multi-pane layouts using flexbox.
+ *
+ * @example
+ * const left = new CollapsiblePane({
+ *     title: 'Explorer',
+ *     dir: CollapsiblePane.LEFT,
+ *     width: 250
+ * })
+ * left.appendTo($('#layout'))
+ * await left.init()
+ *
+ * left.collapse()       // toggle
+ * left.collapse(true)   // force collapsed
+ * left.isCollapsed()    // query
+ *
+ * left.on('collapse', ({ collapsed }) => { ... })
+ * left.on('resize', ({ width }) => { ... })
+ */
+import { Widget } from '../../core/Widget.js'
+import { ResourceLoader } from '../../core/ResourceLoader.js'
+
+const $ = window.jQuery || window.$
+
+/** @category Containers */
+export class CollapsiblePane extends Widget {
+    /** @type {number} Direction constant for left-aligned panes */
+    static LEFT = 1
+    /** @type {number} Direction constant for center (fill) panes */
+    static CENTER = 2
+    /** @type {number} Direction constant for right-aligned panes */
+    static RIGHT = 3
+
+    /** @type {Object} Default configuration values */
+    static defaults = {
+        title: 'Pane',
+        dir: 1, // LEFT
+        width: 200,
+        minWidth: 100,
+        maxWidth: 600,
+        collapsible: true,
+        resizable: true
+    }
+
+    /**
+     * Create a new CollapsiblePane.
+     *
+     * @param {Object} params - Configuration object
+     * @param {string} [params.title='Pane'] - Header title
+     * @param {1|2|3} [params.dir=1] - Direction (LEFT=1, CENTER=2, RIGHT=3)
+     * @param {number} [params.width=200] - Initial width in pixels (ignored for CENTER)
+     * @param {number} [params.minWidth=100] - Minimum resize width
+     * @param {number} [params.maxWidth=600] - Maximum resize width
+     * @param {boolean} [params.collapsible=true] - Allow collapsing via header click
+     * @param {boolean} [params.resizable=true] - Allow drag-to-resize
+     */
+    constructor(params = {}) {
+        const config = { ...CollapsiblePane.defaults, ...params }
+        const dir = config.dir
+        const isCenter = dir === CollapsiblePane.CENTER
+
+        const dirName = dir === CollapsiblePane.RIGHT ? 'right'
+            : dir === CollapsiblePane.CENTER ? 'center'
+            : 'left'
+
+        // Icon: chevron points toward the edge the pane collapses into
+        const iconClass = dir === CollapsiblePane.RIGHT
+            ? 'fa-chevron-right'
+            : 'fa-chevron-left'
+
+        const template = `
+            &lt;div class="nui-collapsible-pane" data-dir="${dirName}">
+                &lt;div class="nui-pane-header${isCenter || !config.collapsible ? ' nui-no-collapse' : ''}">
+                    &lt;span class="nui-pane-title">${config.title}&lt;/span>
+                    ${!isCenter &amp;&amp; config.collapsible ? `&lt;i class="fas ${iconClass} nui-pane-collapse-icon">&lt;/i>` : ''}
+                &lt;/div>
+                &lt;div class="nui-pane-content">&lt;/div>
+                ${!isCenter &amp;&amp; config.resizable ? '&lt;div class="nui-pane-resize-handle">&lt;/div>' : ''}
+            &lt;/div>
+        `
+
+        super({ template, autoInit: false, ...params })
+
+        this._config = config
+        this._dir = dir
+        this._dirName = dirName
+        this._width = isCenter ? 0 : config.width
+        this._collapsed = false
+
+        // Set initial width for non-center panes
+        if (!isCenter) {
+            this.node.css('flex-basis', config.width + 'px')
+        }
+    }
+
+    /**
+     * Load pane CSS and bind collapse/resize interactions.
+     * @returns {Promise&lt;void>}
+     */
+    async init() {
+        await ResourceLoader.loadCss('../../css/widgets/containers/collapsible-pane.css', import.meta.url)
+
+        if (this._config.collapsible &amp;&amp; this._dir !== CollapsiblePane.CENTER) {
+            this._bindCollapse()
+        }
+
+        if (this._config.resizable &amp;&amp; this._dir !== CollapsiblePane.CENTER) {
+            this._bindResize()
+        }
+    }
+
+    // ── Public API ──────────────────────────────────────────────────
+
+    /**
+     * Toggle or set collapsed state.
+     * @param {boolean} [force] - true = collapse, false = expand, undefined = toggle
+     * @returns {boolean} New collapsed state
+     */
+    collapse(force) {
+        if (this._dir === CollapsiblePane.CENTER) return false
+
+        const shouldCollapse = force !== undefined ? force : !this._collapsed
+
+        if (shouldCollapse === this._collapsed) return this._collapsed
+
+        if (shouldCollapse) {
+            // Store current width before collapsing
+            this._width = parseInt(this.node.css('flex-basis')) || this._width
+            this.node.addClass('collapsed')
+            this._collapsed = true
+            this.emit('collapse', { collapsed: true, width: this._width })
+        } else {
+            this.node.removeClass('collapsed')
+            this.node.css({
+                'flex-basis': this._width + 'px',
+                'max-width': ''
+            })
+            this._collapsed = false
+            this.emit('expand', { width: this._width })
+        }
+
+        return this._collapsed
+    }
+
+    /**
+     * @returns {boolean} Whether pane is collapsed
+     */
+    isCollapsed() {
+        return this._collapsed
+    }
+
+    /**
+     * Get or set the pane width (for non-center panes).
+     * @param {number} [width] - New width in px. Omit to get current.
+     * @returns {number} Current width
+     */
+    width(width) {
+        if (width !== undefined &amp;&amp; this._dir !== CollapsiblePane.CENTER) {
+            this._width = Math.max(this._config.minWidth, Math.min(this._config.maxWidth, width))
+            if (!this._collapsed) {
+                this.node.css('flex-basis', this._width + 'px')
+            }
+        }
+        return this._width
+    }
+
+    /**
+     * Add a child widget to the pane content area.
+     */
+    add(widget) {
+        this.find('.nui-pane-content').append(widget.get ? widget.get() : widget.node)
+        if (widget._parent !== this) {
+            this._widgets.push(widget)
+            widget._parent = this
+        }
+        return widget
+    }
+
+    /**
+     * Set the content area HTML directly.
+     * @param {string|jQuery} content - HTML string or jQuery element
+     */
+    setContent(content) {
+        const el = this.find('.nui-pane-content')
+        if (typeof content === 'string') {
+            el.html(content)
+        } else {
+            el.empty().append(content)
+        }
+        return this
+    }
+
+    /**
+     * Clear the content area.
+     */
+    clear() {
+        // Destroy child widgets first
+        ;[...this._widgets].forEach(w => w.destroy())
+        this.find('.nui-pane-content').empty()
+        return this
+    }
+
+    // ── Private ─────────────────────────────────────────────────────
+
+    /**
+     * Bind click-to-collapse on the pane header.
+     * @private
+     */
+    _bindCollapse() {
+        this.find('.nui-pane-header').on('click', () => {
+            this.collapse()
+        })
+    }
+
+    /**
+     * Bind pointer-drag resizing on the resize handle.
+     * Uses native Pointer Events for drag tracking.
+     * @private
+     */
+    _bindResize() {
+        const handle = this.node.find('> .nui-pane-resize-handle')[0]
+        if (!handle) return
+
+        const isRight = this._dir === CollapsiblePane.RIGHT
+
+        handle.addEventListener('pointerdown', (e) => {
+            if (this._collapsed) return
+            e.preventDefault()
+
+            const startX = e.clientX
+            const startWidth = parseInt(this.node.css('flex-basis')) || this._width
+
+            handle.setPointerCapture(e.pointerId)
+            handle.classList.add('nui-active')
+            this.node.addClass('nui-resizing')
+
+            const onMove = (e) => {
+                const delta = isRight
+                    ? startX - e.clientX   // Right pane: drag left = wider
+                    : e.clientX - startX   // Left pane: drag right = wider
+
+                const newWidth = Math.max(
+                    this._config.minWidth,
+                    Math.min(this._config.maxWidth, startWidth + delta)
+                )
+
+                this.node.css('flex-basis', newWidth + 'px')
+                this._width = newWidth
+            }
+
+            const onUp = (e) => {
+                handle.releasePointerCapture(e.pointerId)
+                handle.classList.remove('nui-active')
+                this.node.removeClass('nui-resizing')
+                handle.removeEventListener('pointermove', onMove)
+                handle.removeEventListener('pointerup', onUp)
+
+                this.emit('resize', { width: this._width })
+            }
+
+            handle.addEventListener('pointermove', onMove)
+            handle.addEventListener('pointerup', onUp)
+        })
+    }
+
+    /**
+     * No-op — pointer event listeners are cleaned up automatically when DOM is removed.
+     */
+    beforeDestroy() {
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

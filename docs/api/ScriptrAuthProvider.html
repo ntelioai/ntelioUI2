@@ -1,0 +1,3148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 ScriptrAuthProvider</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Containers</h2><h3>Classes</h3><ul><li><a href="CollapsiblePane.html">CollapsiblePane</a></li><li><a href="KanbanBoard.html">KanbanBoard</a></li><li><a href="SourceAssignmentBoard.html">SourceAssignmentBoard</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li><li><a href="ScriptrAuthProvider.html">ScriptrAuthProvider</a></li><li><a href="ScriptrDataProvider.html">ScriptrDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="LocalSessionStorage.html">LocalSessionStorage</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Class</p>
+                    <h1>ScriptrAuthProvider</h1>
+                </header>
+                
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>ScriptrAuthProvider<span class="signature">(config)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">Scriptr.io authentication provider for ntelioUI2.
+
+Bridges the ntelioUI2 <a href="AuthProvider.html">AuthProvider</a> interface to scriptr.io's
+user-token authentication system via ntelioMiddleware REST API.
+
+Supports single-tenant (direct) and multi-tenant (provisioning) modes.
+Session persistence uses cookies (30-day expiry when `rememberMe` is set).</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class='vertical-section'>
+                <div class="members">
+                    <div class="member">
+                        <div class=name>
+                            <span class="tag">Constructor</span>
+                        </div>
+                        
+
+
+    
+    <h4 class="name" id="ScriptrAuthProvider">
+        <a class="href-link" href="#ScriptrAuthProvider">#</a>
+        
+        <span class="code-name">
+            
+                new ScriptrAuthProvider<span class="signature">(config)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+            <th>Attributes</th>
+            
+
+            
+            <th>Default</th>
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>config</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">Object</code>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last"></td>
+</tr>
+
+  
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>serverUrl</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">scriptr.io instance URL (e.g. 'https://myinstance.scriptrapps.io')</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>anonymousToken</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">string</code>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+      </td>
+  
+
+  <td class="description last">Anonymous token for unauthenticated login requests</td>
+</tr>
+
+  
+    
+<tr class="deep-level-1">
+  
+      <td class="name"><code>multiTenant</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">boolean</code>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+      <td class="default">
+      
+          false
+      
+      </td>
+  
+
+  <td class="description last">Enable multi-tenant provisioning flow</td>
+</tr>
+
+  
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line31">line 31</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>import { ScriptrAuthProvider } from './data/ScriptrAuthProvider.js'
+import { LoginDialog } from './application/LoginDialog.js'
+
+const auth = new ScriptrAuthProvider({
+    serverUrl: 'https://myinstance.scriptrapps.io',
+    anonymousToken: 'YOUR_ANON_TOKEN'
+})
+
+const restored = await auth.restoreSession()
+if (!restored) {
+    await LoginDialog.open({ authProvider: auth })
+}
+// auth.getToken() is now available for API calls</code></pre>
+    
+
+
+
+                    </div>
+                </div>
+            </div>
+        
+    
+    </div>
+    
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="AuthProvider.html">AuthProvider</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="ScriptrAuthProvider.html">ScriptrAuthProvider</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Members</h1>
+            <div class="members">
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<code class="param-type">string</code>
+|
+
+<code class="param-type">null</code>
+
+
+    </span>
+
+<h4 class="name" id="_anonymousToken">
+    <a class="href-link" href="#_anonymousToken">#</a>
+    
+    <span class="code-name">
+        _anonymousToken
+    </span>
+    
+</h4>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line43">line 43</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<code class="param-type">string</code>
+|
+
+<code class="param-type">null</code>
+
+
+    </span>
+
+<h4 class="name" id="_authKey">
+    <a class="href-link" href="#_authKey">#</a>
+    
+    <span class="code-name">
+        _authKey
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    Multi-tenant auth key
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line49">line 49</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<code class="param-type">Array.&lt;function()></code>
+
+
+    </span>
+
+<h4 class="name" id="_loginListeners">
+    <a class="href-link" href="#_loginListeners">#</a>
+    
+    <span class="code-name">
+        _loginListeners
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    @private
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#_loginListeners">AuthProvider#_loginListeners</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_AuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_AuthProvider.js.html">data/AuthProvider.js</a>, <a href="data_AuthProvider.js.html#line86">line 86</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<code class="param-type">Array.&lt;function()></code>
+
+
+    </span>
+
+<h4 class="name" id="_logoutListeners">
+    <a class="href-link" href="#_logoutListeners">#</a>
+    
+    <span class="code-name">
+        _logoutListeners
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    @private
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#_logoutListeners">AuthProvider#_logoutListeners</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_AuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_AuthProvider.js.html">data/AuthProvider.js</a>, <a href="data_AuthProvider.js.html#line89">line 89</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<code class="param-type">boolean</code>
+
+
+    </span>
+
+<h4 class="name" id="_multiTenant">
+    <a class="href-link" href="#_multiTenant">#</a>
+    
+    <span class="code-name">
+        _multiTenant
+    </span>
+    
+</h4>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line46">line 46</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="_profile">
+    <a class="href-link" href="#_profile">#</a>
+    
+    <span class="code-name">
+        _profile
+    </span>
+    
+</h4>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line37">line 37</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<code class="param-type">string</code>
+
+
+    </span>
+
+<h4 class="name" id="_serverUrl">
+    <a class="href-link" href="#_serverUrl">#</a>
+    
+    <span class="code-name">
+        _serverUrl
+    </span>
+    
+</h4>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line40">line 40</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<code class="param-type">string</code>
+|
+
+<code class="param-type">null</code>
+
+
+    </span>
+
+<h4 class="name" id="_subAccountUrl">
+    <a class="href-link" href="#_subAccountUrl">#</a>
+    
+    <span class="code-name">
+        _subAccountUrl
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    Multi-tenant sub-account server URL
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line52">line 52</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<code class="param-type">string</code>
+|
+
+<code class="param-type">null</code>
+
+
+    </span>
+
+<h4 class="name" id="_token">
+    <a class="href-link" href="#_token">#</a>
+    
+    <span class="code-name">
+        _token
+    </span>
+    
+</h4>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line34">line 34</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Methods</h1>
+            <div class="members">
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="_clearCookies">
+        <a class="href-link" href="#_clearCookies">#</a>
+        
+        <span class="code-name">
+            
+                _clearCookies<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Clear session cookies. @private
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line196">line 196</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="_getBaseUrl">
+        <a class="href-link" href="#_getBaseUrl">#</a>
+        
+        <span class="code-name">
+            
+                _getBaseUrl<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line161">line 161</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>The effective base URL (sub-account in multi-tenant, or main server)</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">string</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="_notifyLogin">
+        <a class="href-link" href="#_notifyLogin">#</a>
+        
+            
+                <span class='tag'>protected</span>
+            
+        
+        <span class="code-name">
+            
+                _notifyLogin<span class="signature">(profile)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Notify all login listeners. Call this from your `login()`
+implementation after authentication succeeds.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>profile</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type"><a href="global.html#UserProfile">UserProfile</a></code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">The authenticated user profile</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#_notifyLogin">AuthProvider#_notifyLogin</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_AuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_AuthProvider.js.html">data/AuthProvider.js</a>, <a href="data_AuthProvider.js.html#line198">line 198</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="_notifyLogout">
+        <a class="href-link" href="#_notifyLogout">#</a>
+        
+            
+                <span class='tag'>protected</span>
+            
+        
+        <span class="code-name">
+            
+                _notifyLogout<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Notify all logout listeners. Call this from your `logout()`
+implementation after the session is cleared.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#_notifyLogout">AuthProvider#_notifyLogout</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_AuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_AuthProvider.js.html">data/AuthProvider.js</a>, <a href="data_AuthProvider.js.html#line208">line 208</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="_saveCookies">
+        <a class="href-link" href="#_saveCookies">#</a>
+        
+        <span class="code-name">
+            
+                _saveCookies<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Persist session to cookies (30-day expiry). @private
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line183">line 183</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getApiBaseUrl">
+        <a class="href-link" href="#getApiBaseUrl">#</a>
+        
+        <span class="code-name">
+            
+                getApiBaseUrl<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Return the base URL for authenticated API calls.
+In multi-tenant mode after login, routes through api.scriptrapps.io.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line170">line 170</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">string</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getRestApiBaseUrl">
+        <a class="href-link" href="#getRestApiBaseUrl">#</a>
+        
+        <span class="code-name">
+            
+                getRestApiBaseUrl<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line178">line 178</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>REST API base path for ntelioMiddleware</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">string</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getToken">
+        <a class="href-link" href="#getToken">#</a>
+        
+        <span class="code-name">
+            
+                getToken<span class="signature">()</span><span class="type-signature"> &rarr; {string|null}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#getToken">AuthProvider#getToken</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line140">line 140</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">string</code>
+|
+
+<code class="param-type">null</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getUserProfile">
+        <a class="href-link" href="#getUserProfile">#</a>
+        
+        <span class="code-name">
+            
+                getUserProfile<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#getUserProfile">AuthProvider#getUserProfile</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line145">line 145</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isAuthenticated">
+        <a class="href-link" href="#isAuthenticated">#</a>
+        
+        <span class="code-name">
+            
+                isAuthenticated<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#isAuthenticated">AuthProvider#isAuthenticated</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line133">line 133</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">boolean</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="login">
+        <a class="href-link" href="#login">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+        
+        <span class="code-name">
+            
+                login<span class="signature">()</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Authenticate against scriptr.io.
+
+Single-tenant: POST to `/ntelioMiddleware/server/public/api/core/v1/users/auth/login`
+Multi-tenant:  POST to `/ntelioMiddleware/server/public/api/app/v1/provisioning/auth/login`
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+
+  <td class="type">
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#login">AuthProvider#login</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line79">line 79</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Throws:</label></div>
+        <div class="column is-10">
+            
+                    
+<div class="columns">
+    
+    <div class='param-desc column is-7'>If authentication fails</div>
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+<code class="param-type">Error</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="logout">
+        <a class="href-link" href="#logout">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+        
+        <span class="code-name">
+            
+                logout<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#logout">AuthProvider#logout</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line123">line 123</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">Promise.&lt;void></code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="onLogin">
+        <a class="href-link" href="#onLogin">#</a>
+        
+        <span class="code-name">
+            
+                onLogin<span class="signature">(handler)</span><span class="type-signature"> &rarr; {function}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Register a handler called after successful login.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>handler</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">function</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last">Receives the user profile</td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#onLogin">AuthProvider#onLogin</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_AuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_AuthProvider.js.html">data/AuthProvider.js</a>, <a href="data_AuthProvider.js.html#line171">line 171</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>Unsubscribe function</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">function</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="onLogout">
+        <a class="href-link" href="#onLogout">#</a>
+        
+        <span class="code-name">
+            
+                onLogout<span class="signature">(handler)</span><span class="type-signature"> &rarr; {function}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Register a handler called after logout.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>handler</code></td>
+  
+
+  <td class="type">
+  
+      
+<code class="param-type">function</code>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#onLogout">AuthProvider#onLogout</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_AuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_AuthProvider.js.html">data/AuthProvider.js</a>, <a href="data_AuthProvider.js.html#line184">line 184</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'>Unsubscribe function</div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">function</code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="restoreSession">
+        <a class="href-link" href="#restoreSession">#</a>
+        
+            
+                <span class='tag'>async</span>
+            
+        
+        <span class="code-name">
+            
+                restoreSession<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        Attempt to restore a previous session from cookies.
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AuthProvider.html#restoreSession">AuthProvider#restoreSession</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="data_ScriptrAuthProvider.js.html" class="button">View Source</a>
+            <span>
+                <a href="data_ScriptrAuthProvider.js.html">data/ScriptrAuthProvider.js</a>, <a href="data_ScriptrAuthProvider.js.html#line153">line 153</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<code class="param-type">Promise.&lt;boolean></code>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

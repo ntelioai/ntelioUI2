@@ -169,6 +169,10 @@ export class Application extends Widget {
         PageRouter.onPageChange((className, subPath) => {
             this.changePage(className, subPath)
             this._updateBreadcrumbs()
+            if (this.navbar?.setActiveRoute) {
+                const route = PageRouter.getRoute()
+                this.navbar.setActiveRoute(route.path || '/')
+            }
         })
     }
 

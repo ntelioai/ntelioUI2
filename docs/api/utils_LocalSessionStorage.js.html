@@ -1,0 +1,247 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 utils/LocalSessionStorage.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Containers</h2><h3>Classes</h3><ul><li><a href="CollapsiblePane.html">CollapsiblePane</a></li><li><a href="KanbanBoard.html">KanbanBoard</a></li><li><a href="SourceAssignmentBoard.html">SourceAssignmentBoard</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li><li><a href="ScriptrAuthProvider.html">ScriptrAuthProvider</a></li><li><a href="ScriptrDataProvider.html">ScriptrDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="LocalSessionStorage.html">LocalSessionStorage</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>utils/LocalSessionStorage.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * LocalSessionStorage — key-value persistence backed by `localStorage`.
+ *
+ * All keys are automatically prefixed to avoid collisions with other
+ * libraries.  Values are JSON-serialized so any serializable type can
+ * be stored directly.
+ *
+ * Designed for subclassing: override the core methods (`setItem`,
+ * `getItem`, `removeItem`, `clear`, `keys`) to swap in a server-side
+ * backend while keeping the same public API.
+ *
+ * @category Utilities
+ *
+ * @example
+ * // Store and retrieve a value
+ * LocalSessionStorage.setItem('sidebar.collapsed', true)
+ * LocalSessionStorage.getItem('sidebar.collapsed', false) // true
+ *
+ * @example
+ * // Subclass with a different prefix
+ * class AppStorage extends LocalSessionStorage {
+ *     static prefix = 'myapp.'
+ * }
+ *
+ * @example
+ * // Subclass with a server backend
+ * class ServerStorage extends LocalSessionStorage {
+ *     static async setItem(key, value) {
+ *         await fetch('/api/storage', {
+ *             method: 'POST',
+ *             body: JSON.stringify({ key: this.prefix + key, value })
+ *         })
+ *     }
+ * }
+ */
+export class LocalSessionStorage {
+
+    /**
+     * Key prefix applied to every storage operation.
+     * @type {string}
+     */
+    static prefix = 'ntelio.admin.'
+
+    // ─── Write ───────────────────────────────────────────────────
+
+    /**
+     * Store a value under the given key.
+     * The value is JSON-serialized before writing.
+     *
+     * @param {string} key   - Storage key (prefix is added automatically)
+     * @param {*}      value - Any JSON-serializable value
+     */
+    static setItem(key, value) {
+        try {
+            localStorage.setItem(this.prefix + key, JSON.stringify(value))
+        } catch (error) {
+            console.error('LocalSessionStorage.setItem:', error)
+        }
+    }
+
+    // ─── Read ────────────────────────────────────────────────────
+
+    /**
+     * Retrieve a previously stored value.
+     *
+     * @param {string} key            - Storage key
+     * @param {*}      [defaultValue] - Returned when the key does not exist
+     * @returns {*} The deserialized value, or `defaultValue`
+     */
+    static getItem(key, defaultValue) {
+        try {
+            const raw = localStorage.getItem(this.prefix + key)
+            return raw !== null ? JSON.parse(raw) : defaultValue
+        } catch (error) {
+            console.error('LocalSessionStorage.getItem:', error)
+            return defaultValue
+        }
+    }
+
+    /**
+     * Check whether a key exists in storage.
+     *
+     * @param {string} key - Storage key
+     * @returns {boolean}
+     */
+    static has(key) {
+        return localStorage.getItem(this.prefix + key) !== null
+    }
+
+    // ─── Delete ──────────────────────────────────────────────────
+
+    /**
+     * Remove a single key from storage.
+     *
+     * @param {string} key - Storage key to remove
+     */
+    static removeItem(key) {
+        try {
+            localStorage.removeItem(this.prefix + key)
+        } catch (error) {
+            console.error('LocalSessionStorage.removeItem:', error)
+        }
+    }
+
+    /**
+     * Remove all keys that belong to this storage prefix.
+     * Keys from other prefixes are left untouched.
+     */
+    static clear() {
+        try {
+            this.keys().forEach(key => localStorage.removeItem(this.prefix + key))
+        } catch (error) {
+            console.error('LocalSessionStorage.clear:', error)
+        }
+    }
+
+    // ─── Enumeration ─────────────────────────────────────────────
+
+    /**
+     * List all keys stored under this prefix (without the prefix).
+     *
+     * @returns {string[]} Unprefixed key names
+     */
+    static keys() {
+        const prefixLen = this.prefix.length
+        return Object.keys(localStorage)
+            .filter(k => k.startsWith(this.prefix))
+            .map(k => k.slice(prefixLen))
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

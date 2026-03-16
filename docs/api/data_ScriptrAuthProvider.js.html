@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 data/ScriptrAuthProvider.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Containers</h2><h3>Classes</h3><ul><li><a href="CollapsiblePane.html">CollapsiblePane</a></li><li><a href="KanbanBoard.html">KanbanBoard</a></li><li><a href="SourceAssignmentBoard.html">SourceAssignmentBoard</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li><li><a href="ScriptrAuthProvider.html">ScriptrAuthProvider</a></li><li><a href="ScriptrDataProvider.html">ScriptrDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="LocalSessionStorage.html">LocalSessionStorage</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>data/ScriptrAuthProvider.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { AuthProvider } from './AuthProvider.js'
+
+/**
+ * Scriptr.io authentication provider for ntelioUI2.
+ *
+ * Bridges the ntelioUI2 {@link AuthProvider} interface to scriptr.io's
+ * user-token authentication system via ntelioMiddleware REST API.
+ *
+ * Supports single-tenant (direct) and multi-tenant (provisioning) modes.
+ * Session persistence uses cookies (30-day expiry when `rememberMe` is set).
+ *
+ * @extends AuthProvider
+ *
+ * @example
+ * import { ScriptrAuthProvider } from './data/ScriptrAuthProvider.js'
+ * import { LoginDialog } from './application/LoginDialog.js'
+ *
+ * const auth = new ScriptrAuthProvider({
+ *     serverUrl: 'https://myinstance.scriptrapps.io',
+ *     anonymousToken: 'YOUR_ANON_TOKEN'
+ * })
+ *
+ * const restored = await auth.restoreSession()
+ * if (!restored) {
+ *     await LoginDialog.open({ authProvider: auth })
+ * }
+ * // auth.getToken() is now available for API calls
+ *
+ * @category Data
+ */
+export class ScriptrAuthProvider extends AuthProvider {
+
+    /** @type {string|null} */
+    _token = null
+
+    /** @type {import('./AuthProvider.js').UserProfile|null} */
+    _profile = null
+
+    /** @type {string} */
+    _serverUrl = ''
+
+    /** @type {string|null} */
+    _anonymousToken = null
+
+    /** @type {boolean} */
+    _multiTenant = false
+
+    /** @type {string|null} Multi-tenant auth key */
+    _authKey = null
+
+    /** @type {string|null} Multi-tenant sub-account server URL */
+    _subAccountUrl = null
+
+    /**
+     * @param {Object} config
+     * @param {string} config.serverUrl       - scriptr.io instance URL (e.g. 'https://myinstance.scriptrapps.io')
+     * @param {string} [config.anonymousToken] - Anonymous token for unauthenticated login requests
+     * @param {boolean} [config.multiTenant=false] - Enable multi-tenant provisioning flow
+     */
+    constructor(config = {}) {
+        super()
+        this._serverUrl = config.serverUrl || ''
+        this._anonymousToken = config.anonymousToken || null
+        this._multiTenant = config.multiTenant === true
+    }
+
+    // ─── Abstract Method Implementations ──────────────────────────
+
+    /**
+     * Authenticate against scriptr.io.
+     *
+     * Single-tenant: POST to `/ntelioMiddleware/server/public/api/core/v1/users/auth/login`
+     * Multi-tenant:  POST to `/ntelioMiddleware/server/public/api/app/v1/provisioning/auth/login`
+     *
+     * @param {import('./AuthProvider.js').LoginCredentials} credentials
+     * @returns {Promise&lt;import('./AuthProvider.js').UserProfile>}
+     * @throws {Error} If authentication fails
+     */
+    async login({ username, password, rememberMe } = {}) {
+        const loginUrl = this._multiTenant
+            ? `${this._getBaseUrl()}/ntelioMiddleware/server/public/api/app/v1/provisioning/auth/login`
+            : `${this._getBaseUrl()}/ntelioMiddleware/server/public/api/core/v1/users/auth/login`
+
+        const res = await fetch(loginUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this._anonymousToken || ''}`
+            },
+            credentials: 'include',
+            body: JSON.stringify({ email: username, password })
+        })
+
+        const data = typeof res.ok &amp;&amp; await res.json()
+        if (!res.ok) throw new Error(data?.error?.message || 'Login failed')
+
+        // Handle scriptr.io error responses (200 status but error in body)
+        if (data.error) throw new Error(data.error.message || 'Login failed')
+        if (!data.token) throw new Error('Login failed: no token received')
+
+        // Store token and profile
+        this._token = data.token
+        this._profile = {
+            username: data.user.login,
+            id: data.user.login,
+            groups: data.user.groups || []
+        }
+
+        // Handle multi-tenant sub-account routing
+        if (this._multiTenant &amp;&amp; data.businessAccount?.serverUrl) {
+            this._authKey = data.businessAccount.authKey
+            this._subAccountUrl = data.businessAccount.serverUrl
+        }
+
+        // Persist session
+        if (rememberMe) this._saveCookies()
+
+        this._notifyLogin(this._profile)
+        return this._profile
+    }
+
+    /** @returns {Promise&lt;void>} */
+    async logout() {
+        this._token = null
+        this._profile = null
+        this._authKey = null
+        this._subAccountUrl = null
+        this._clearCookies()
+        this._notifyLogout()
+    }
+
+    /** @returns {boolean} */
+    isAuthenticated() {
+        if (this._token) return true
+        // Attempt cookie restore
+        return this._restoreFromCookies()
+    }
+
+    /** @returns {string|null} */
+    getToken() {
+        return this._token
+    }
+
+    /** @returns {import('./AuthProvider.js').UserProfile|null} */
+    getUserProfile() {
+        return this._profile
+    }
+
+    /**
+     * Attempt to restore a previous session from cookies.
+     * @returns {Promise&lt;boolean>}
+     */
+    async restoreSession() {
+        if (this._token) return true
+        return this._restoreFromCookies()
+    }
+
+    // ─── Helpers ──────────────────────────────────────────────────
+
+    /** @returns {string} The effective base URL (sub-account in multi-tenant, or main server) */
+    _getBaseUrl() {
+        return this._subAccountUrl || this._serverUrl
+    }
+
+    /**
+     * Return the base URL for authenticated API calls.
+     * In multi-tenant mode after login, routes through api.scriptrapps.io.
+     * @returns {string}
+     */
+    getApiBaseUrl() {
+        if (this._multiTenant &amp;&amp; this._subAccountUrl) {
+            return 'https://api.scriptrapps.io'
+        }
+        return this._serverUrl
+    }
+
+    /** @returns {string} REST API base path for ntelioMiddleware */
+    getRestApiBaseUrl() {
+        return `${this.getApiBaseUrl()}/ntelioMiddleware/server/api`
+    }
+
+    /** Persist session to cookies (30-day expiry). @private */
+    _saveCookies() {
+        const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString()
+        const opts = `expires=${expires}; path=/; SameSite=Strict; Secure`
+        document.cookie = `nui_token=${encodeURIComponent(this._token)}; ${opts}`
+        document.cookie = `nui_profile=${encodeURIComponent(JSON.stringify(this._profile))}; ${opts}`
+        if (this._multiTenant &amp;&amp; this._authKey) {
+            document.cookie = `nui_mode=multi-tenant; ${opts}`
+            document.cookie = `nui_authKey=${encodeURIComponent(this._authKey)}; ${opts}`
+            document.cookie = `nui_subUrl=${encodeURIComponent(this._subAccountUrl)}; ${opts}`
+        }
+    }
+
+    /** Clear session cookies. @private */
+    _clearCookies() {
+        const clear = 'expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict; Secure'
+        ;['nui_token', 'nui_profile', 'nui_mode', 'nui_authKey', 'nui_subUrl']
+            .forEach(name => { document.cookie = `${name}=; ${clear}` })
+    }
+
+    /**
+     * Try to restore session state from cookies.
+     * @returns {boolean} True if restored successfully
+     * @private
+     */
+    _restoreFromCookies() {
+        const token = this._getCookie('nui_token')
+        const profileStr = this._getCookie('nui_profile')
+        if (!token || !profileStr) return false
+
+        try {
+            this._token = token
+            this._profile = JSON.parse(profileStr)
+
+            if (this._getCookie('nui_mode') === 'multi-tenant') {
+                this._authKey = this._getCookie('nui_authKey')
+                this._subAccountUrl = this._getCookie('nui_subUrl')
+            }
+            return true
+        } catch {
+            this._clearCookies()
+            return false
+        }
+    }
+
+    /**
+     * Read a cookie by name.
+     * @param {string} name
+     * @returns {string|null}
+     * @private
+     */
+    _getCookie(name) {
+        const match = document.cookie
+            .split(';')
+            .map(c => c.trim())
+            .find(c => c.startsWith(name + '='))
+        if (!match) return null
+        try { return decodeURIComponent(match.substring(name.length + 1)) }
+        catch { return null }
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

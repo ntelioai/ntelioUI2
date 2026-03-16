@@ -1,0 +1,654 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ntelioUI2 widgets/containers/KanbanBoard.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#$">$</a></li></ul></div><div class="category"><h2>Application</h2><h3>Classes</h3><ul><li><a href="Application.html">Application</a></li><li><a href="LoginDialog.html">LoginDialog</a></li><li><a href="Page.html">Page</a></li><li><a href="PageNotFound.html">PageNotFound</a></li><li><a href="PageRouter.html">PageRouter</a></li><li><a href="VerticalNavbar.html">VerticalNavbar</a></li></ul></div><div class="category"><h2>Containers</h2><h3>Classes</h3><ul><li><a href="CollapsiblePane.html">CollapsiblePane</a></li><li><a href="KanbanBoard.html">KanbanBoard</a></li><li><a href="SourceAssignmentBoard.html">SourceAssignmentBoard</a></li></ul></div><div class="category"><h2>Core</h2><h3>Classes</h3><ul><li><a href="EventBusClass.html">EventBusClass</a></li><li><a href="ResourceLoader.html">ResourceLoader</a></li><li><a href="Widget.html">Widget</a></li></ul></div><div class="category"><h2>Data</h2><h3>Classes</h3><ul><li><a href="AuthProvider.html">AuthProvider</a></li><li><a href="DataProvider.html">DataProvider</a></li><li><a href="JsonDataProvider.html">JsonDataProvider</a></li><li><a href="ScriptrAuthProvider.html">ScriptrAuthProvider</a></li><li><a href="ScriptrDataProvider.html">ScriptrDataProvider</a></li></ul></div><div class="category"><h2>Dialogs</h2><h3>Classes</h3><ul><li><a href="AlertDialog.html">AlertDialog</a></li><li><a href="ConfirmDialog.html">ConfirmDialog</a></li><li><a href="Modal.html">Modal</a></li></ul></div><div class="category"><h2>Feedback</h2><h3>Classes</h3><ul><li><a href="Toast.html">Toast</a></li></ul></div><div class="category"><h2>Forms</h2><h3>Classes</h3><ul><li><a href="Autoform.html">Autoform</a></li></ul></div><div class="category"><h2>Grid</h2><h3>Classes</h3><ul><li><a href="DataControl.html">DataControl</a></li><li><a href="DataControlGrid.html">DataControlGrid</a></li><li><a href="PaginationControls.html">PaginationControls</a></li><li><a href="Toolbar.html">Toolbar</a></li></ul></div><div class="category"><h2>Navigation</h2><h3>Classes</h3><ul><li><a href="BreadCrumbs.html">BreadCrumbs</a></li><li><a href="Sidebar.html">Sidebar</a></li></ul></div><div class="category"><h2>Utilities</h2><h3>Classes</h3><ul><li><a href="I18n.html">I18n</a></li><li><a href="LocalSessionStorage.html">LocalSessionStorage</a></li><li><a href="ModuleManager.html">ModuleManager</a></li><li><a href="UIUtils.html">UIUtils</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>widgets/containers/KanbanBoard.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * KanbanBoard — Multi-column drag-and-drop Kanban board.
+ *
+ * Each column is backed by a {@link DataProvider}. Cards can be dragged
+ * between columns (transfer) or reordered within a column (reorder).
+ * Uses the [dragula](https://github.com/bevacqua/dragula) library for
+ * drag-and-drop, loaded automatically via CDN.
+ *
+ * @extends Widget
+ * @category Containers
+ *
+ * @fires KanbanBoard#transfer - Card moved to a different column: `{ item, fromColumn, toColumn, index }`
+ * @fires KanbanBoard#reorder  - Card reordered within the same column: `{ item, column, fromIndex, toIndex }`
+ * @fires KanbanBoard#select   - Card clicked: `{ item, column }`
+ *
+ * @example
+ * const board = new KanbanBoard({
+ *     columns: [
+ *         { id: 'todo',  title: 'To Do',       dataProvider: todoDP },
+ *         { id: 'doing', title: 'In Progress',  dataProvider: doingDP },
+ *         { id: 'done',  title: 'Done',         dataProvider: doneDP }
+ *     ],
+ *     cardFields: { title: 'name', subtitle: 'description', badge: 'priority' },
+ *     draggable: true
+ * })
+ * board.appendTo($('#container'))
+ * await board.init()
+ *
+ * board.on('transfer', (data) => console.log('Moved:', data))
+ * board.on('select',   (data) => console.log('Selected:', data))
+ */
+import { Widget } from '../../core/Widget.js'
+import { ResourceLoader } from '../../core/ResourceLoader.js'
+
+const $ = window.jQuery || window.$
+
+const DRAGULA_JS  = 'https://cdn.jsdelivr.net/npm/dragula@3.7.3/dist/dragula.min.js'
+const DRAGULA_CSS = 'https://cdn.jsdelivr.net/npm/dragula@3.7.3/dist/dragula.min.css'
+
+const template = `&lt;div class="nui-kanban">&lt;/div>`
+
+/**
+ * @typedef {Object} KanbanColumnConfig
+ * @property {string}       id           - Unique column identifier
+ * @property {string}       title        - Display title
+ * @property {DataProvider} dataProvider  - Data source for this column
+ * @property {function(Object):string} [renderCard] - Per-column custom card renderer
+ * @property {string}       [groupBy]    - Per-column groupBy override
+ * @property {string[]}     [groupOrder] - Per-column groupOrder override
+ */
+
+/** @category Containers */
+export class KanbanBoard extends Widget {
+
+    /**
+     * @param {Object} params
+     * @param {KanbanColumnConfig[]} params.columns       - Column definitions
+     * @param {Object}  [params.cardFields]               - Field mapping for default card rendering
+     * @param {string}  [params.cardFields.title]          - Row field for card title
+     * @param {string}  [params.cardFields.subtitle]       - Row field for subtitle
+     * @param {string}  [params.cardFields.badge]          - Row field for badge text
+     * @param {string}  [params.cardFields.icon]           - Row field for icon CSS class
+     * @param {function(Object, KanbanColumnConfig):string} [params.renderCard] - Global custom card renderer
+     * @param {boolean} [params.draggable=true]            - Enable drag-and-drop
+     * @param {string}  [params.columnWidth]               - CSS width override (e.g. '300px')
+     * @param {string}  [params.groupBy]                   - Field name to group cards by within each column
+     * @param {string[]} [params.groupOrder]               - Explicit group display order (unlisted values appear at end)
+     */
+    constructor(params = {}) {
+        super({ ...params, template, autoInit: false })
+
+        this._columns = params.columns || []
+        this._cardFields = params.cardFields || {}
+        this._renderCard = params.renderCard || null
+        this._draggable = params.draggable !== false
+        this._groupBy = params.groupBy || null
+        this._groupOrder = params.groupOrder || null
+
+        /** @private  id -> { config, $body, rows, unsubscribes } */
+        this._columnMap = {}
+        /** @private  dragula instance */
+        this._drake = null
+        /** @private */
+        this._selectedItem = null
+        /** @private */
+        this._selectedColumn = null
+        /** @private  suppress auto-refresh during drop */
+        this._dropping = false
+    }
+
+    // ── Lifecycle ───────────────────────────────────────────────
+
+    async init() {
+        // 1. Load styles
+        await ResourceLoader.loadCss('../../css/widgets/containers/kanban-board.css', import.meta.url)
+
+        // 2. Load dragula (JS + CSS in parallel)
+        await Promise.all([
+            ResourceLoader.loadScript(DRAGULA_JS),
+            ResourceLoader.loadCss(DRAGULA_CSS)
+        ])
+
+        // 3. Build column map
+        this._columns.forEach(col => {
+            this._columnMap[col.id] = {
+                config: col,
+                $body: null,
+                rows: [],
+                unsubscribes: []
+            }
+        })
+
+        // 4. Render columns and cards
+        await this.render()
+
+        // 5. Init dragula
+        if (this._draggable) {
+            this._initDragula()
+        }
+
+        // 6. Wire DataProvider listeners
+        this._wireDataProviderListeners()
+
+        // 7. Card click handler (delegated)
+        this._attachCardClickHandlers()
+    }
+
+    async render() {
+        const container = this.get()
+        container.empty()
+
+        if (this.params.columnWidth) {
+            container.css('--nui-kanban-column-width', this.params.columnWidth)
+        }
+
+        for (const colConfig of this._columns) {
+            const colInfo = this._columnMap[colConfig.id]
+
+            // Fetch data
+            const pageResult = await colConfig.dataProvider.getPage()
+            colInfo.rows = pageResult.rows
+
+            // Build column DOM
+            const $column = $(`
+                &lt;div class="nui-kanban-column" data-column-id="${colConfig.id}">
+                    &lt;div class="nui-kanban-column-header">
+                        &lt;span class="nui-kanban-column-title">${colConfig.title}&lt;/span>
+                        &lt;span class="nui-kanban-column-count">${pageResult.totalRows}&lt;/span>
+                    &lt;/div>
+                    &lt;div class="nui-kanban-column-body">&lt;/div>
+                &lt;/div>
+            `)
+
+            const $body = $column.find('.nui-kanban-column-body')
+            colInfo.$body = $body
+
+            this._renderCards($body, pageResult.rows, colConfig)
+            container.append($column)
+        }
+    }
+
+    beforeDestroy() {
+        if (this._drake) {
+            this._drake.destroy()
+            this._drake = null
+        }
+
+        Object.values(this._columnMap).forEach(colInfo => {
+            colInfo.unsubscribes.forEach(fn => fn())
+        })
+
+        this.get().off('click', '.nui-kanban-card')
+    }
+
+    // ── Public API ──────────────────────────────────────────────
+
+    /**
+     * Refresh all columns by re-fetching from their DataProviders.
+     * @returns {Promise&lt;void>}
+     */
+    async refresh() {
+        if (this._drake) {
+            this._drake.destroy()
+            this._drake = null
+        }
+
+        await this.render()
+
+        if (this._draggable) {
+            this._initDragula()
+        }
+    }
+
+    /**
+     * Refresh a single column by ID.
+     * @param {string} columnId
+     * @returns {Promise&lt;void>}
+     */
+    async refreshColumn(columnId) {
+        const colInfo = this._columnMap[columnId]
+        if (!colInfo) return
+
+        const pageResult = await colInfo.config.dataProvider.getPage()
+        colInfo.rows = pageResult.rows
+
+        this._renderCards(colInfo.$body, pageResult.rows, colInfo.config)
+        this._updateColumnCount(columnId)
+
+        // Rebuild dragula since DOM changed
+        if (this._drake) {
+            this._drake.destroy()
+            this._initDragula()
+        }
+    }
+
+    /**
+     * Add a column dynamically.
+     * @param {KanbanColumnConfig} colConfig
+     * @returns {Promise&lt;void>}
+     */
+    async addColumn(colConfig) {
+        this._columns.push(colConfig)
+        this._columnMap[colConfig.id] = {
+            config: colConfig,
+            $body: null,
+            rows: [],
+            unsubscribes: []
+        }
+
+        // Wire listener for the new column
+        const unsub = colConfig.dataProvider.onDataChange(() => {
+            this.refreshColumn(colConfig.id)
+        })
+        this._columnMap[colConfig.id].unsubscribes.push(unsub)
+
+        await this.refresh()
+    }
+
+    /**
+     * Remove a column by ID.
+     * @param {string} columnId
+     * @returns {Promise&lt;void>}
+     */
+    async removeColumn(columnId) {
+        this._columns = this._columns.filter(c => c.id !== columnId)
+
+        const colInfo = this._columnMap[columnId]
+        if (colInfo) {
+            colInfo.unsubscribes.forEach(fn => fn())
+        }
+        delete this._columnMap[columnId]
+
+        await this.refresh()
+    }
+
+    /**
+     * Get the currently selected item.
+     * @returns {{ item: Object, column: string } | null}
+     */
+    getSelected() {
+        return this._selectedItem
+            ? { item: this._selectedItem, column: this._selectedColumn }
+            : null
+    }
+
+    /**
+     * Clear selection.
+     */
+    clearSelection() {
+        this.find('.nui-kanban-card').removeClass('nui-selected')
+        this._selectedItem = null
+        this._selectedColumn = null
+    }
+
+    /**
+     * Get all column IDs.
+     * @returns {string[]}
+     */
+    getColumnIds() {
+        return this._columns.map(c => c.id)
+    }
+
+    // ── Private: Rendering ──────────────────────────────────────
+
+    /** @private */
+    _renderCards($body, rows, colConfig) {
+        $body.empty()
+
+        if (rows.length === 0) {
+            $body.html('&lt;div class="nui-kanban-column-empty">No items&lt;/div>')
+            return
+        }
+
+        const groupByField = colConfig.groupBy || this._groupBy
+        if (groupByField) {
+            const groupOrder = colConfig.groupOrder || this._groupOrder
+            const groups = this._groupRows(rows, groupByField, groupOrder)
+            groups.forEach(group => {
+                $body.append(
+                    `&lt;div class="nui-kanban-group-header">${group.label} &lt;span class="nui-kanban-group-count">${group.rows.length}&lt;/span>&lt;/div>`
+                )
+                group.rows.forEach(row => {
+                    $body.append(this._buildCardHtml(row, colConfig.dataProvider.getKey(row), colConfig))
+                })
+            })
+        } else {
+            rows.forEach(row => {
+                const key = colConfig.dataProvider.getKey(row)
+                $body.append(this._buildCardHtml(row, key, colConfig))
+            })
+        }
+    }
+
+    /**
+     * Group rows by a field value.
+     * @param {Object[]} rows
+     * @param {string}   field      - Field name to group by
+     * @param {string[]} [order]    - Explicit group order
+     * @returns {Array&lt;{ label: string, rows: Object[] }>}
+     * @private
+     */
+    _groupRows(rows, field, order) {
+        const map = {}
+        rows.forEach(row => {
+            const val = row[field] ?? ''
+            const label = String(val) || '(none)'
+            if (!map[label]) map[label] = []
+            map[label].push(row)
+        })
+
+        let labels = Object.keys(map)
+        if (order) {
+            labels.sort((a, b) => {
+                const ia = order.indexOf(a)
+                const ib = order.indexOf(b)
+                if (ia === -1 &amp;&amp; ib === -1) return a.localeCompare(b)
+                if (ia === -1) return 1
+                if (ib === -1) return -1
+                return ia - ib
+            })
+        } else {
+            labels.sort()
+        }
+
+        return labels.map(label => ({ label, rows: map[label] }))
+    }
+
+    /** @private */
+    _buildCardHtml(row, key, colConfig) {
+        const escapedKey = String(key).replace(/"/g, '&amp;quot;')
+
+        // Priority 1: per-column renderCard
+        if (colConfig.renderCard) {
+            return `&lt;div class="nui-kanban-card" data-key="${escapedKey}">${colConfig.renderCard(row)}&lt;/div>`
+        }
+
+        // Priority 2: global renderCard
+        if (this._renderCard) {
+            return `&lt;div class="nui-kanban-card" data-key="${escapedKey}">${this._renderCard(row, colConfig)}&lt;/div>`
+        }
+
+        // Priority 3: field mapping
+        const fields = this._cardFields
+        const title    = fields.title    ? (row[fields.title] ?? '')    : ''
+        const subtitle = fields.subtitle ? (row[fields.subtitle] ?? '') : ''
+        const badge    = fields.badge    ? (row[fields.badge] ?? '')    : ''
+        const icon     = fields.icon     ? (row[fields.icon] ?? '')     : ''
+
+        let html = `&lt;div class="nui-kanban-card" data-key="${escapedKey}">`
+        html += '&lt;div class="nui-kanban-card-header">'
+
+        if (icon)  html += `&lt;span class="nui-kanban-card-icon">&lt;i class="${icon}">&lt;/i>&lt;/span>`
+        if (title) html += `&lt;span class="nui-kanban-card-title">${title}&lt;/span>`
+        if (badge) html += `&lt;span class="nui-kanban-card-badge">${badge}&lt;/span>`
+
+        html += '&lt;/div>'
+
+        if (subtitle) html += `&lt;div class="nui-kanban-card-subtitle">${subtitle}&lt;/div>`
+
+        html += '&lt;/div>'
+        return html
+    }
+
+    /**
+     * Try to detect the key field name from a DataProvider.
+     * @private
+     */
+    _resolveKeyField(dataProvider) {
+        if (dataProvider._keyField) return dataProvider._keyField
+        // Fallback: check common field names
+        return null
+    }
+
+    /** @private */
+    _updateColumnCount(columnId) {
+        const info = this._columnMap[columnId]
+        this.find(`.nui-kanban-column[data-column-id="${columnId}"] .nui-kanban-column-count`)
+            .text(info.rows.length)
+    }
+
+    // ── Private: Dragula ────────────────────────────────────────
+
+    /** @private */
+    _initDragula() {
+        const containers = Object.values(this._columnMap)
+            .filter(c => c.$body)
+            .map(c => c.$body[0])
+
+        this._drake = window.dragula(containers, {
+            moves: (el) => {
+                return el.classList.contains('nui-kanban-card') &amp;&amp;
+                       !el.classList.contains('nui-no-drag')
+            },
+            accepts: (el, target) => {
+                return target.classList.contains('nui-kanban-column-body')
+            },
+            direction: 'vertical'
+        })
+
+        this._drake.on('drop', (el, target, source, sibling) => {
+            this._onDrop(el, target, source, sibling)
+        })
+    }
+
+    /** @private */
+    async _onDrop(el, target, source, sibling) {
+        const $el = $(el)
+        const key = String($el.data('key'))
+        const fromColumnId = $(source).closest('.nui-kanban-column').data('column-id')
+        const toColumnId   = $(target).closest('.nui-kanban-column').data('column-id')
+
+        const toIndex = Array.from(target.children)
+            .filter(c => c.classList.contains('nui-kanban-card'))
+            .indexOf(el)
+
+        const fromColumn = this._columnMap[fromColumnId]
+        const toColumn   = this._columnMap[toColumnId]
+
+        const item = fromColumn.rows.find(r =>
+            String(fromColumn.config.dataProvider.getKey(r)) === key
+        )
+
+        if (!item) {
+            console.warn('KanbanBoard: dropped item not found in source data')
+            return
+        }
+
+        if (fromColumnId === toColumnId) {
+            // Same-column reorder
+            const fromIndex = fromColumn.rows.findIndex(r =>
+                String(fromColumn.config.dataProvider.getKey(r)) === key
+            )
+
+            fromColumn.rows.splice(fromIndex, 1)
+            fromColumn.rows.splice(toIndex, 0, item)
+
+            this.emit('reorder', {
+                item: { ...item },
+                column: fromColumnId,
+                fromIndex,
+                toIndex
+            })
+        } else {
+            // Build save payload — strip the source key so the target provider
+            // creates a new record instead of trying to update a non-existent one
+            const keyField = this._resolveKeyField(fromColumn.config.dataProvider)
+            const saveData = { ...item }
+            if (keyField) delete saveData[keyField]
+
+            // Suppress auto-refresh from DataProvider listeners during transfer
+            this._dropping = true
+            try {
+                await fromColumn.config.dataProvider.delete(key)
+                await toColumn.config.dataProvider.save(saveData)
+            } finally {
+                this._dropping = false
+            }
+
+            // Update local caches
+            const fromIdx = fromColumn.rows.findIndex(r =>
+                String(fromColumn.config.dataProvider.getKey(r)) === key
+            )
+            if (fromIdx > -1) fromColumn.rows.splice(fromIdx, 1)
+            toColumn.rows.splice(toIndex, 0, item)
+
+            this._updateColumnCount(fromColumnId)
+            this._updateColumnCount(toColumnId)
+
+            this.emit('transfer', {
+                item: { ...item },
+                fromColumn: fromColumnId,
+                toColumn: toColumnId,
+                index: toIndex
+            })
+        }
+    }
+
+    // ── Private: Events ─────────────────────────────────────────
+
+    /** @private */
+    _attachCardClickHandlers() {
+        this.get().on('click', '.nui-kanban-card', (e) => {
+            const $card = $(e.currentTarget)
+            const key = String($card.data('key'))
+            const columnId = $card.closest('.nui-kanban-column').data('column-id')
+
+            // Toggle selection
+            this.find('.nui-kanban-card').removeClass('nui-selected')
+            $card.addClass('nui-selected')
+
+            const colInfo = this._columnMap[columnId]
+            const item = colInfo.rows.find(r =>
+                String(colInfo.config.dataProvider.getKey(r)) === key
+            )
+
+            this._selectedItem = item ? { ...item } : null
+            this._selectedColumn = columnId
+
+            this.emit('select', {
+                item: item ? { ...item } : null,
+                column: columnId
+            })
+        })
+    }
+
+    /** @private */
+    _wireDataProviderListeners() {
+        Object.entries(this._columnMap).forEach(([columnId, colInfo]) => {
+            const unsub = colInfo.config.dataProvider.onDataChange(() => {
+                if (!this._dropping) {
+                    this.refreshColumn(columnId)
+                }
+            })
+            colInfo.unsubscribes.push(unsub)
+        })
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>
