@@ -48,7 +48,19 @@
     display: none;
 }
 
-/* ── State: Closed ───────────────────────────────────────────────── */
+/* ── State: Closing (animating to zero — children stay visible) ──── */
+
+.nui-panel.nui-panel-closing {
+    flex-basis: 0px !important;
+    min-width: 0px !important;
+    max-width: 0px !important;
+    border-width: 0;
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* ── State: Closed (final — children hidden for perf) ────────────── */
 
 .nui-panel.nui-panel-closed {
     flex-basis: 0px !important;

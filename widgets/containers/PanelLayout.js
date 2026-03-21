@@ -153,9 +153,13 @@ export class PanelLayout extends Widget {
         const entry = this._panels.get(panelId)
         if (!entry || entry.config.main || entry.state === 'open') return this
 
+        // Cancel any in-progress close animation
+        if (entry._closeTimer) { clearTimeout(entry._closeTimer); entry._closeTimer = null }
+        entry.$panel.off('transitionend')
+
         entry.state = 'open'
         entry.$panel
-            .removeClass('nui-panel-closed nui-panel-minimized')
+            .removeClass('nui-panel-closed nui-panel-minimized nui-panel-closing')
             .addClass('nui-panel-open')
             .css('flex-basis', entry.width + 'px')
 
@@ -177,9 +181,30 @@ export class PanelLayout extends Widget {
         }
 
         entry.state = 'closed'
+
+        // Clear any pending close timer
+        if (entry._closeTimer) { clearTimeout(entry._closeTimer); entry._closeTimer = null }
+
+        // Animate: use closing class (no display:none on children) so content
+        // stays visible while flex-basis transitions to 0
         entry.$panel
-            .removeClass('nui-panel-open nui-panel-minimized')
-            .addClass('nui-panel-closed')
+            .removeClass('nui-panel-open nui-panel-minimized nui-panel-closed')
+            .addClass('nui-panel-closing')
+
+        // After transition completes, swap to the full closed state
+        const finish = () => {
+            entry.$panel.off('transitionend', onEnd)
+            entry._closeTimer = null
+            if (entry.state !== 'closed') return // open() was called during animation
+            entry.$panel.removeClass('nui-panel-closing').addClass('nui-panel-closed')
+        }
+        const onEnd = (e) => {
+            if (e.originalEvent.propertyName !== 'flex-basis') return
+            clearTimeout(entry._closeTimer)
+            finish()
+        }
+        entry.$panel.on('transitionend', onEnd)
+        entry._closeTimer = setTimeout(finish, 350) // safety fallback
 
         this.emit('panelClose', { id: panelId })
         return this
