@@ -600,7 +600,7 @@ export class Widget {
      */
     showLoading(node) {
         const n = node || this.node
-        ResourceLoader.loadCss('css/core/loading.css', import.meta.url)
+        ResourceLoader.loadCss('../css/core/loading.css', import.meta.url)
 
         if (!this.loadingOverlay) {
             const template = this.loadingOverlayTemplate || Widget.loadingOverlayTemplate
