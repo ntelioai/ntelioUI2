@@ -221,3 +221,68 @@
     outline: 2px solid var(--nui-primary, #0c7aa3);
     outline-offset: -3px;
 }
+
+/* ── Fullscreen control tab — pane-colored, sits in the tab strip ─── */
+
+.nui-fs-tab-control {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--fs-tab-size);
+    min-height: 34px;
+    padding: 4px;
+    background: var(--fs-pane-bg);
+    border: 1px solid var(--fs-pane-border);
+    color: var(--fs-tab-text);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    z-index: 2;
+}
+
+.nui-fs-tab-control:hover {
+    background: #f8f9fa;
+    color: var(--nui-primary, #0c7aa3);
+}
+
+.nui-fs-tab-control:focus-visible {
+    outline: 2px solid var(--nui-primary, #0c7aa3);
+    outline-offset: -3px;
+}
+
+/* Left-side: round outer corners, merge inner edge into pane */
+.nui-file-stack[data-tab-side="left"] .nui-fs-tab-control {
+    border-radius: 8px 0 0 8px;
+    box-shadow: -2px 2px 4px var(--fs-tab-shadow);
+    border-right-color: transparent;
+    margin-right: -1px;
+}
+
+/* Right-side: mirror */
+.nui-file-stack[data-tab-side="right"] .nui-fs-tab-control {
+    border-radius: 0 8px 8px 0;
+    box-shadow: 2px 2px 4px var(--fs-tab-shadow);
+    border-left-color: transparent;
+    margin-left: -1px;
+}
+
+/* Horizontal label orientation: control widens to match other tabs */
+.nui-file-stack[data-label-orientation="horizontal"] .nui-fs-tab-control {
+    width: auto;
+    min-width: 110px;
+    min-height: var(--fs-tab-size);
+}
+
+/* ── Fullscreen mode ──────────────────────────────────────────────── */
+
+.nui-file-stack.nui-fs-fullscreen {
+    background: #eef0f2;
+    padding: 16px;
+}
+
+.nui-file-stack:fullscreen {
+    background: #eef0f2;
+    padding: 16px;
+}

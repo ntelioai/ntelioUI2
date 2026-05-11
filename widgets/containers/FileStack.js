@@ -119,6 +119,7 @@ export class FileStack extends Widget {
      * @param {'vertical'|'horizontal'} [params.labelOrientation='vertical'] - Tab label orientation
      * @param {number}   [params.tabSize=36]                          - Tab thickness in px (vertical: width; horizontal: min-height)
      * @param {number}   [params.tabSpacing=4]                        - Gap between tabs in px
+     * @param {boolean}  [params.fullscreenButton=true]               - Show a fullscreen toggle icon at the top-left
      */
     constructor(params = {}) {
         const template = `<div class="nui-file-stack"></div>`
@@ -142,6 +143,7 @@ export class FileStack extends Widget {
         this._tabSpacing = Number.isFinite(params.tabSpacing) ? params.tabSpacing : 4
 
         this._fileConfigs = files.map(f => ({ ...FILE_DEFAULTS, ...f }))
+        this._fullscreenButton = params.fullscreenButton !== false
 
         /** @private  id → { config, $tab, $file, proxy, childWidgets } */
         this._files = new Map()
@@ -176,6 +178,8 @@ export class FileStack extends Widget {
         const $tabs = $('<div class="nui-fs-tabs" role="tablist"></div>')
         const $pane = $('<div class="nui-fs-pane"></div>')
         this.node.append($tabs).append($pane)
+
+        if (this._fullscreenButton) this._buildFullscreenTab($tabs)
 
         for (const config of this._fileConfigs) {
             const $tab = this._buildTab(config)
@@ -319,6 +323,21 @@ export class FileStack extends Widget {
         return this
     }
 
+    /**
+     * Toggle native fullscreen on the widget root.
+     * @returns {this}
+     */
+    toggleFullscreen() {
+        const el = this.node[0]
+        if (document.fullscreenElement === el) {
+            if (document.exitFullscreen) document.exitFullscreen()
+        } else if (el && el.requestFullscreen) {
+            const p = el.requestFullscreen()
+            if (p && p.catch) p.catch(err => console.warn('[FileStack] fullscreen denied:', err))
+        }
+        return this
+    }
+
     // ── Private ─────────────────────────────────────────────────────
 
     /** @private */
@@ -354,7 +373,37 @@ export class FileStack extends Widget {
         })
     }
 
+    /** @private  Build the pane-colored fullscreen control tab at the top of the strip. */
+    _buildFullscreenTab($tabs) {
+        const $btn = $(`
+            <button type="button" class="nui-fs-tab-control" title="Toggle fullscreen" aria-label="Toggle fullscreen">
+                <i class="fas fa-expand"></i>
+            </button>
+        `)
+        $tabs.append($btn)
+        this._$fullscreenBtn = $btn
+
+        $btn.on('click', (e) => {
+            e.stopPropagation()
+            this.toggleFullscreen()
+        })
+
+        this._fsChangeHandler = () => {
+            const isFs = document.fullscreenElement === this.node[0]
+            $btn.find('i').attr('class', isFs ? 'fas fa-compress' : 'fas fa-expand')
+            this.node.toggleClass('nui-fs-fullscreen', isFs)
+        }
+        document.addEventListener('fullscreenchange', this._fsChangeHandler)
+    }
+
     beforeDestroy() {
+        if (this._fsChangeHandler) {
+            document.removeEventListener('fullscreenchange', this._fsChangeHandler)
+            this._fsChangeHandler = null
+        }
+        if (document.fullscreenElement === this.node[0] && document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {})
+        }
         for (const entry of this._files.values()) {
             for (const w of entry.childWidgets) {
                 if (w && w.destroy) w.destroy()
