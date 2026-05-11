@@ -103,13 +103,15 @@
                 box-shadow 0.18s ease, opacity 0.18s ease;
 }
 
-/* Tinted tabs (inactive) — light wash of the tint */
+/* Tinted tabs (inactive) — light wash of the tint.
+   --fs-tab-tint-base lets a theme swap the "white" anchor for a dark equivalent
+   in dark mode. Defaults to white for legacy callers. */
 .nui-fs-tab[style*="--fs-tint"] {
-    background: color-mix(in srgb, var(--fs-tint) 22%, white);
+    background: color-mix(in srgb, var(--fs-tint) 22%, var(--fs-tab-tint-base, white));
 }
 
 .nui-fs-tab:hover {
-    background: color-mix(in srgb, var(--fs-tint, #dee2e6) 38%, white);
+    background: color-mix(in srgb, var(--fs-tint, #dee2e6) 38%, var(--fs-tab-tint-base, white));
 }
 
 /* ── Left-side geometry ───────────────────────────────────────────── */
@@ -122,7 +124,7 @@
 }
 
 .nui-file-stack[data-tab-side="left"] .nui-fs-tab.nui-fs-active {
-    background: color-mix(in srgb, var(--fs-tint, #ffffff) 55%, white);
+    background: color-mix(in srgb, var(--fs-tint, #ffffff) 55%, var(--fs-tab-tint-base, white));
     transform: translateX(0);
     border-right-color: transparent;
     margin-right: -1px;
@@ -145,7 +147,7 @@
 }
 
 .nui-file-stack[data-tab-side="right"] .nui-fs-tab.nui-fs-active {
-    background: color-mix(in srgb, var(--fs-tint, #ffffff) 55%, white);
+    background: color-mix(in srgb, var(--fs-tint, #ffffff) 55%, var(--fs-tab-tint-base, white));
     transform: translateX(0);
     border-left-color: transparent;
     margin-left: -1px;
