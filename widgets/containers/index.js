@@ -3,3 +3,4 @@
  */
 
 export { CollapsiblePane } from './CollapsiblePane.js'
+export { FileStack } from './FileStack.js'

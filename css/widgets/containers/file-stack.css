@@ -1,0 +1,223 @@
+/* ═══════════════════════════════════════════════════════════════════
+   FileStack — Tabbed stack of files with folder-style side tabs
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Root ─────────────────────────────────────────────────────────── */
+
+.nui-file-stack {
+    --fs-tab-size: 36px;
+    --fs-tab-spacing: 4px;
+    --fs-pane-bg: var(--nui-panel-bg, #ffffff);
+    --fs-pane-border: var(--nui-panel-border-color, var(--nui-border-color, #dee2e6));
+    --fs-tab-bg-default: #f1f3f5;
+    --fs-tab-text: var(--nui-text-primary, #212529);
+    --fs-tab-shadow: rgba(0, 0, 0, 0.10);
+
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.nui-file-stack *,
+.nui-file-stack *::before,
+.nui-file-stack *::after {
+    box-sizing: border-box;
+}
+
+.nui-file-stack[data-tab-side="right"] {
+    flex-direction: row-reverse;
+}
+
+/* ── Tab strip ────────────────────────────────────────────────────── */
+
+.nui-fs-tabs {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--fs-tab-spacing);
+    padding: var(--fs-tab-spacing) 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+/* Hide scrollbar in webkit while still allowing scroll */
+.nui-fs-tabs::-webkit-scrollbar {
+    width: 6px;
+}
+.nui-fs-tabs::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+
+/* ── Pane ─────────────────────────────────────────────────────────── */
+
+.nui-fs-pane {
+    flex: 1 1 auto;
+    position: relative;
+    background: var(--fs-pane-bg);
+    border: 1px solid var(--fs-pane-border);
+    border-radius: 4px;
+    overflow: hidden;
+    min-width: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* ── File panes (one per file, only active is visible) ────────────── */
+
+.nui-fs-file {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+.nui-fs-file.nui-fs-hidden {
+    display: none;
+}
+
+/* ── Tab base ─────────────────────────────────────────────────────── */
+
+.nui-fs-tab {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 6px;
+    min-height: 80px;
+    width: var(--fs-tab-size);
+    background: var(--fs-tab-bg-default);
+    border: 1px solid var(--fs-pane-border);
+    color: var(--fs-tab-text);
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.18s ease, background 0.18s ease,
+                box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+/* Tinted tabs (inactive) — light wash of the tint */
+.nui-fs-tab[style*="--fs-tint"] {
+    background: color-mix(in srgb, var(--fs-tint) 22%, white);
+}
+
+.nui-fs-tab:hover {
+    background: color-mix(in srgb, var(--fs-tint, #dee2e6) 38%, white);
+}
+
+/* ── Left-side geometry ───────────────────────────────────────────── */
+
+.nui-file-stack[data-tab-side="left"] .nui-fs-tab {
+    border-radius: 8px 0 0 8px;
+    box-shadow: -2px 2px 4px var(--fs-tab-shadow);
+    transform: translateX(4px);
+    z-index: 1;
+}
+
+.nui-file-stack[data-tab-side="left"] .nui-fs-tab.nui-fs-active {
+    background: color-mix(in srgb, var(--fs-tint, #ffffff) 55%, white);
+    transform: translateX(0);
+    border-right-color: transparent;
+    margin-right: -1px;
+    z-index: 3;
+    box-shadow: -3px 2px 5px var(--fs-tab-shadow);
+}
+
+/* Plain (no tint) active tab fallback */
+.nui-file-stack[data-tab-side="left"] .nui-fs-tab.nui-fs-active:not([style*="--fs-tint"]) {
+    background: var(--fs-pane-bg);
+}
+
+/* ── Right-side geometry ──────────────────────────────────────────── */
+
+.nui-file-stack[data-tab-side="right"] .nui-fs-tab {
+    border-radius: 0 8px 8px 0;
+    box-shadow: 2px 2px 4px var(--fs-tab-shadow);
+    transform: translateX(-4px);
+    z-index: 1;
+}
+
+.nui-file-stack[data-tab-side="right"] .nui-fs-tab.nui-fs-active {
+    background: color-mix(in srgb, var(--fs-tint, #ffffff) 55%, white);
+    transform: translateX(0);
+    border-left-color: transparent;
+    margin-left: -1px;
+    z-index: 3;
+    box-shadow: 3px 2px 5px var(--fs-tab-shadow);
+}
+
+.nui-file-stack[data-tab-side="right"] .nui-fs-tab.nui-fs-active:not([style*="--fs-tint"]) {
+    background: var(--fs-pane-bg);
+}
+
+/* ── Label orientation: vertical ──────────────────────────────────── */
+
+.nui-file-stack[data-label-orientation="vertical"] .nui-fs-tab-label {
+    writing-mode: vertical-rl;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-height: 100%;
+}
+
+/* Left side, vertical: rotate so text reads bottom-up */
+.nui-file-stack[data-tab-side="left"][data-label-orientation="vertical"] .nui-fs-tab-label {
+    transform: rotate(180deg);
+}
+
+.nui-file-stack[data-label-orientation="vertical"] .nui-fs-tab {
+    flex-direction: column;
+    padding: 10px 4px;
+}
+
+/* ── Label orientation: horizontal ────────────────────────────────── */
+
+.nui-file-stack[data-label-orientation="horizontal"] .nui-fs-tab {
+    width: auto;
+    min-width: 110px;
+    min-height: var(--fs-tab-size);
+    padding: 6px 12px;
+    flex-direction: row;
+}
+
+.nui-file-stack[data-label-orientation="horizontal"] .nui-fs-tab-label {
+    writing-mode: horizontal-tb;
+    transform: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* ── Icon ─────────────────────────────────────────────────────────── */
+
+.nui-fs-tab-icon {
+    font-size: 0.95em;
+    flex-shrink: 0;
+    opacity: 0.85;
+}
+
+.nui-fs-tab.nui-fs-active .nui-fs-tab-icon {
+    opacity: 1;
+}
+
+/* ── Disabled ─────────────────────────────────────────────────────── */
+
+.nui-fs-tab.nui-fs-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ── Focus accessibility ──────────────────────────────────────────── */
+
+.nui-fs-tab:focus-visible {
+    outline: 2px solid var(--nui-primary, #0c7aa3);
+    outline-offset: -3px;
+}

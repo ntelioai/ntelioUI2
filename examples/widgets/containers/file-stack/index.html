@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FileStack - ntelioUI2</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../../../../css/ntelioUI.css" rel="stylesheet">
+
+    <style>
+        body { margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; }
+        .top-bar {
+            flex-shrink: 0;
+            padding: 10px 16px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .top-bar h5 { margin: 0 0 6px 0; }
+        .stack-wrapper {
+            flex: 1 1 auto;
+            padding: 16px;
+            background: #eef0f2;
+            overflow: hidden;
+            display: flex;
+        }
+        #stack-host {
+            flex: 1 1 auto;
+            min-height: 0;
+            min-width: 0;
+        }
+        .event-log {
+            flex-shrink: 0;
+            height: 110px;
+            border-top: 1px solid #dee2e6;
+            padding: 6px 12px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.8rem;
+            background: #fafafa;
+            white-space: pre-wrap;
+        }
+
+        /* Content inside files */
+        .demo-content { padding: 20px 28px; }
+        .demo-content h4 { margin-top: 0; }
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 14px;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px 14px;
+        }
+        .stat-card .label { font-size: 0.72rem; color: #6c757d; text-transform: uppercase; letter-spacing: 0.04em; }
+        .stat-card .value { font-size: 1.3rem; font-weight: 600; color: #212529; }
+        .task-list { list-style: none; padding: 0; margin: 0; }
+        .task-list li {
+            display: flex; align-items: center; gap: 10px;
+            padding: 8px 14px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.88rem;
+        }
+        .task-list li:hover { background: #f8f9fa; }
+        .task-list .pri-high   { color: #d33; }
+        .task-list .pri-medium { color: #d80; }
+        .task-list .pri-low    { color: #888; }
+        .notes-pad {
+            width: 100%; height: 100%; min-height: 240px;
+            padding: 16px 20px;
+            border: 0;
+            outline: 0;
+            resize: none;
+            background: #fffdf3;
+            font-family: 'Courier New', monospace;
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+        .kanban-host {
+            height: 100%;
+            min-height: 0;
+            padding: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1" style="font-size: 0.85em;">
+                <li class="breadcrumb-item"><a href="../../../index.html">Examples</a></li>
+                <li class="breadcrumb-item active">FileStack</li>
+            </ol>
+        </nav>
+        <h5>FileStack — Folder-Style Tabbed Stack</h5>
+        <div class="d-flex gap-2 flex-wrap align-items-center">
+            <button id="btn-flip-side"   class="btn btn-outline-primary btn-sm">Tab side: Left</button>
+            <button id="btn-flip-labels" class="btn btn-outline-primary btn-sm">Labels: Vertical</button>
+            <label class="ms-2" style="font-size: 0.85em;">Jump to:
+                <select id="sel-jump" class="form-select form-select-sm d-inline-block" style="width: auto;"></select>
+            </label>
+            <button id="btn-toggle-disable" class="btn btn-outline-secondary btn-sm">Disable "tasks"</button>
+            <button id="btn-clear-log"   class="btn btn-outline-dark btn-sm ms-auto">Clear Log</button>
+        </div>
+    </div>
+
+    <div class="stack-wrapper">
+        <div id="stack-host"></div>
+    </div>
+
+    <div id="event-log" class="event-log">Event log — `select` events appear here.</div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
