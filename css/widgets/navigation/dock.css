@@ -1,0 +1,251 @@
+/*
+ * Dock - macOS-style application dock with fisheye magnification
+ *
+ * Supports two orientations (vertical / horizontal) selected via modifier
+ * classes on the root element. The tooltip side and magnification grow
+ * direction are also driven by modifier classes (.nui-dock-tt-{side}).
+ *
+ * The dock paints a glass-blur background by default but every visual
+ * facet is overridable via CSS variables (see :root section below).
+ */
+
+:root {
+    /* Dock chrome */
+    --nui-dock-bg: rgba(30, 30, 30, 0.55);
+    --nui-dock-border: 1px solid rgba(255, 255, 255, 0.14);
+    --nui-dock-radius: 18px;
+    --nui-dock-padding: 8px;
+    --nui-dock-gap: 6px;
+    --nui-dock-shadow: 0 12px 36px rgba(0, 0, 0, 0.42);
+
+    /* Item chrome */
+    --nui-dock-item-size: 44px;
+    --nui-dock-item-bg: rgba(255, 255, 255, 0.16);
+    --nui-dock-item-border: 1px solid rgba(255, 255, 255, 0.18);
+    --nui-dock-item-radius: 12px;
+    --nui-dock-item-color: #fefefe;
+
+    --nui-dock-item-hover-bg: rgba(255, 255, 255, 0.28);
+    --nui-dock-item-hover-border-color: rgba(255, 255, 255, 0.32);
+
+    --nui-dock-item-active-bg: rgba(37, 211, 102, 0.32);
+    --nui-dock-item-active-border-color: rgba(37, 211, 102, 0.55);
+    --nui-dock-item-active-dot: rgba(255, 255, 255, 0.9);
+
+    /* Separator */
+    --nui-dock-sep-color: rgba(255, 255, 255, 0.22);
+    --nui-dock-sep-thickness: 1px;
+    --nui-dock-sep-length: 24px;
+
+    /* Label */
+    --nui-dock-label-color: rgba(255, 255, 255, 0.72);
+    --nui-dock-label-size: 9.5px;
+
+    /* Tooltip */
+    --nui-dock-tt-bg: rgba(4, 58, 60, 0.95);
+    --nui-dock-tt-color: #fefefe;
+    --nui-dock-tt-radius: 7px;
+    --nui-dock-tt-offset: 10px;
+
+    /* Transitions */
+    --nui-dock-transition: transform .12s ease-out, background .2s ease, border-color .2s ease;
+}
+
+/* ── Root ───────────────────────────────────────────────────────────── */
+.nui-dock {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--nui-dock-gap);
+    padding: var(--nui-dock-padding);
+    background: var(--nui-dock-bg);
+    border: var(--nui-dock-border);
+    border-radius: var(--nui-dock-radius);
+    box-shadow: var(--nui-dock-shadow);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.nui-dock-vertical {
+    flex-direction: column;
+}
+.nui-dock-horizontal {
+    flex-direction: row;
+}
+
+/* ── Item button ────────────────────────────────────────────────────── */
+.nui-dock-item {
+    position: relative;
+    flex: 0 0 auto;
+    width: var(--nui-dock-item-size);
+    height: var(--nui-dock-item-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: var(--nui-dock-item-bg);
+    border: var(--nui-dock-item-border);
+    border-radius: var(--nui-dock-item-radius);
+    color: var(--nui-dock-item-color);
+    cursor: pointer;
+    /* transform is set inline by the magnification JS — CSS only handles
+       the colour-state and a fast transition to smooth inter-frame moves. */
+    transition: var(--nui-dock-transition);
+}
+.nui-dock-item:hover {
+    background: var(--nui-dock-item-hover-bg);
+    border-color: var(--nui-dock-item-hover-border-color);
+    z-index: 2;
+}
+/* Pressed feedback without touching `transform` (JS owns transform). */
+.nui-dock-item:active { filter: brightness(.92); }
+
+.nui-dock-item.is-disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.nui-dock-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-size: 22px;     /* sensible default for icon fonts */
+    pointer-events: none;
+}
+.nui-dock-icon svg { width: 22px; height: 22px; display: block; }
+.nui-dock-icon img { width: 22px; height: 22px; display: block; object-fit: contain; }
+
+/* ── Active marker (small dot on the outer edge, away from tooltip) ─── */
+.nui-dock-item.is-active {
+    background: var(--nui-dock-item-active-bg);
+    border-color: var(--nui-dock-item-active-border-color);
+}
+.nui-dock-item.is-active::after {
+    content: '';
+    position: absolute;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--nui-dock-item-active-dot);
+}
+/* Dot placement is mirrored relative to where the tooltip lives — the
+   dot pokes out the opposite edge. */
+.nui-dock-tt-left  .nui-dock-item.is-active::after { right: -7px;  top: 50%; transform: translateY(-50%); }
+.nui-dock-tt-right .nui-dock-item.is-active::after { left:  -7px;  top: 50%; transform: translateY(-50%); }
+.nui-dock-tt-top   .nui-dock-item.is-active::after { bottom:-7px; left: 50%; transform: translateX(-50%); }
+.nui-dock-tt-bottom.nui-dock-item.is-active::after,
+.nui-dock-tt-bottom .nui-dock-item.is-active::after { top: -7px; left: 50%; transform: translateX(-50%); }
+
+/* ── Separator ──────────────────────────────────────────────────────── */
+.nui-dock-sep {
+    flex: 0 0 auto;
+    background: var(--nui-dock-sep-color);
+}
+.nui-dock-vertical .nui-dock-sep {
+    width: var(--nui-dock-sep-length);
+    height: var(--nui-dock-sep-thickness);
+    margin: 4px 0;
+}
+.nui-dock-horizontal .nui-dock-sep {
+    width: var(--nui-dock-sep-thickness);
+    height: var(--nui-dock-sep-length);
+    margin: 0 4px;
+}
+
+/* ── Label (floats outside the dock body) ───────────────────────────── */
+.nui-dock-label {
+    position: absolute;
+    text-align: center;
+    font-size: var(--nui-dock-label-size);
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: var(--nui-dock-label-color);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+    white-space: normal;
+}
+/* Vertical dock → label above */
+.nui-dock-vertical .nui-dock-label {
+    bottom: calc(100% + 8px);
+    left: 0; right: 0;
+}
+/* Horizontal dock → label to the left */
+.nui-dock-horizontal .nui-dock-label {
+    right: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: right;
+}
+
+/* ── Tooltip bubble ─────────────────────────────────────────────────── */
+.nui-dock-tip {
+    position: absolute;
+    padding: 5px 10px;
+    background: var(--nui-dock-tt-bg);
+    color: var(--nui-dock-tt-color);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    white-space: nowrap;
+    border-radius: var(--nui-dock-tt-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease;
+}
+.nui-dock-tip::after {
+    content: '';
+    position: absolute;
+    border: 4px solid transparent;
+}
+.nui-dock-item:hover .nui-dock-tip,
+.nui-dock-item:focus-visible .nui-dock-tip { opacity: 1; }
+
+/* Tooltip placement per side. The triangle on ::after points back at the
+   button so the tooltip reads like a speech bubble pinned to the icon. */
+.nui-dock-tt-left .nui-dock-tip {
+    right: calc(100% + var(--nui-dock-tt-offset));
+    top: 50%;
+    transform: translateY(-50%);
+}
+.nui-dock-tt-left .nui-dock-tip::after {
+    left: 100%;
+    top: 50%; margin-top: -4px;
+    border-left-color: var(--nui-dock-tt-bg);
+}
+
+.nui-dock-tt-right .nui-dock-tip {
+    left: calc(100% + var(--nui-dock-tt-offset));
+    top: 50%;
+    transform: translateY(-50%);
+}
+.nui-dock-tt-right .nui-dock-tip::after {
+    right: 100%;
+    top: 50%; margin-top: -4px;
+    border-right-color: var(--nui-dock-tt-bg);
+}
+
+.nui-dock-tt-top .nui-dock-tip {
+    bottom: calc(100% + var(--nui-dock-tt-offset));
+    left: 50%;
+    transform: translateX(-50%);
+}
+.nui-dock-tt-top .nui-dock-tip::after {
+    top: 100%;
+    left: 50%; margin-left: -4px;
+    border-top-color: var(--nui-dock-tt-bg);
+}
+
+.nui-dock-tt-bottom .nui-dock-tip {
+    top: calc(100% + var(--nui-dock-tt-offset));
+    left: 50%;
+    transform: translateX(-50%);
+}
+.nui-dock-tt-bottom .nui-dock-tip::after {
+    bottom: 100%;
+    left: 50%; margin-left: -4px;
+    border-bottom-color: var(--nui-dock-tt-bg);
+}

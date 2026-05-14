@@ -1,10 +1,11 @@
 /**
  * Navigation Widgets Example
  *
- * Demonstrates BreadCrumbs and Sidebar widgets.
+ * Demonstrates BreadCrumbs, Sidebar, and Dock widgets.
  */
 import { BreadCrumbs } from '../../../widgets/navigation/BreadCrumbs.js'
 import { Sidebar } from '../../../widgets/navigation/Sidebar.js'
+import { Dock } from '../../../widgets/navigation/Dock.js'
 
 const $ = window.jQuery || window.$
 
@@ -78,6 +79,69 @@ sidebar.on('select', (url) => {
     ])
 })
 
+// ─── Dock Demo (vertical) ────────────────────────────────────────────
+
+// Helper: wrap a Material Symbol name in an icon-font tag. The Dock widget
+// itself doesn't care which icon system you use — `icon` accepts any HTML.
+const sym = (name) => `<i class="material-symbols-outlined" style="font-size:22px">${name}</i>`
+
+const dockVert = new Dock({
+    orientation: 'vertical',
+    tooltipSide: 'left',
+    label: 'Demo<br>Control',
+    active: 'home',
+    items: [
+        { id: 'home',    icon: sym('home'),         tooltip: 'Home' },
+        { id: 'profile', icon: sym('person'),       tooltip: 'Profile' },
+        { type: 'separator' },
+        { id: 'reset',   icon: sym('restart_alt'),  tooltip: 'Reset chat' },
+        { type: 'separator' },
+        { id: 'clear',   icon: sym('delete_sweep'), tooltip: 'Clear messages' }
+    ]
+})
+dockVert.appendTo('#dock-vertical-mount')
+dockVert.init()
+
+dockVert.on('select', ({ id, item }) => {
+    $('#dock-output').text(`select → id=${id}  tooltip=${item.tooltip}`)
+    // For toggle-style items (home / profile) reflect the selection visually.
+    if (id === 'home' || id === 'profile') dockVert.setActive(id)
+})
+
+$('#dock-btn-active-a').click(() => dockVert.setActive('home'))
+$('#dock-btn-active-b').click(() => dockVert.setActive('profile'))
+$('#dock-btn-active-none').click(() => dockVert.setActive(null))
+$('#dock-btn-replace').click(() => dockVert.setItems([
+    { id: 'search',   icon: sym('search'),        tooltip: 'Search' },
+    { id: 'inbox',    icon: sym('inbox'),         tooltip: 'Inbox' },
+    { id: 'starred',  icon: sym('star'),          tooltip: 'Starred' },
+    { type: 'separator' },
+    { id: 'archive',  icon: sym('archive'),       tooltip: 'Archive' }
+]))
+
+// ─── Dock Demo (horizontal) ──────────────────────────────────────────
+
+const dockHoriz = new Dock({
+    orientation: 'horizontal',
+    tooltipSide: 'top',
+    active: 'mail',
+    items: [
+        { id: 'finder',   icon: sym('folder_open'),   tooltip: 'Finder' },
+        { id: 'mail',     icon: sym('mail'),          tooltip: 'Mail' },
+        { id: 'calendar', icon: sym('event'),         tooltip: 'Calendar' },
+        { type: 'separator' },
+        { id: 'music',    icon: sym('library_music'), tooltip: 'Music' },
+        { id: 'photos',   icon: sym('image'),         tooltip: 'Photos' },
+        { type: 'separator' },
+        { id: 'trash',    icon: sym('delete'),        tooltip: 'Trash' }
+    ]
+})
+dockHoriz.appendTo('#dock-horizontal-mount')
+dockHoriz.init()
+dockHoriz.on('select', ({ id }) => dockHoriz.setActive(id))
+
 // Expose for console
 window.crumbs = crumbs
 window.sidebar = sidebar
+window.dockVert = dockVert
+window.dockHoriz = dockHoriz
